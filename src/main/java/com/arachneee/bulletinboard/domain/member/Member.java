@@ -1,9 +1,9 @@
-package com.arachneee.bulletinboard.domain;
+package com.arachneee.bulletinboard.domain.member;
 
 import lombok.Data;
 
 @Data
-public class User {
+public class Member {
 
 	private Long id;
 	private String loginId;
