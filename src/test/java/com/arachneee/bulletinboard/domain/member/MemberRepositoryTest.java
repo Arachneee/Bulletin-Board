@@ -3,8 +3,6 @@ package com.arachneee.bulletinboard.domain.member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.arachneee.bulletinboard.domain.member.Member;
-import com.arachneee.bulletinboard.domain.member.MemberRepository;
 
 public class MemberRepositoryTest {
 
@@ -17,7 +15,7 @@ public class MemberRepositoryTest {
 		userA.setLoginId("userA");
 		userA.setPassword("1234");
 
-		MemberRepository userRepository = new MemberRepository();
+		MemoryMemberRepository userRepository = new MemoryMemberRepository();
 
 		//when
 		userRepository.save(userA);
