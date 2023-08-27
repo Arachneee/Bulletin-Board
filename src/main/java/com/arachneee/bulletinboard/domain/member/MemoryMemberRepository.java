@@ -5,6 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class MemoryMemberRepository implements MemberRepository {
 
@@ -14,10 +17,12 @@ public class MemoryMemberRepository implements MemberRepository {
 	public Member save(Member member) {
 		member.setId(++sequence);
 		memberTable.put(member.getId(), member);
+		log.info("save member id={}", member.getId());
 		return member;
 	}
 
 	public Member findById(Long id) {
+		log.info("find member id={}", id);
 		return memberTable.get(id);
 	}
 
