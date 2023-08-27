@@ -1,4 +1,4 @@
-package com.arachneee.bulletinboard.domain;
+package com.arachneee.bulletinboard.domain.post;
 
 import java.time.LocalDate;
 
