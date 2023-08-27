@@ -7,5 +7,6 @@ public interface MemberRepository {
 	Member save(Member member);
 	Member findById(Long id);
 	Optional<Member> findByName(String name);
+	Optional<Member> findByLoginId(String loginId);
 	List<Member> findAll();
 }
