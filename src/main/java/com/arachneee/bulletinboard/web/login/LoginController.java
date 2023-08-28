@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -29,7 +30,9 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
+	public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
+						@RequestParam(defaultValue = "/") String redirectURL,
+						HttpServletRequest request) {
 		if (bindingResult.hasErrors()) {
 			return "login/loginForm";
 		}
@@ -47,7 +50,7 @@ public class LoginController {
 		session.setAttribute(SessionConst.LOGIN_MEMBER, member);
 
 		log.info("로그인 성공");
-		return "redirect:/";
+		return "redirect:" + redirectURL;
 	}
 
 	@PostMapping("/logout")
