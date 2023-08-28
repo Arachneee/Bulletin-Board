@@ -1,4 +1,4 @@
-package com.arachneee.bulletinboard.service;
+package com.arachneee.bulletinboard.domain.login;
 
 import org.springframework.stereotype.Service;
 

@@ -45,6 +45,7 @@ public class MemoryMemberRepository implements MemberRepository {
 		return new ArrayList<>(memberTable.values());
 	}
 
+
 	public void clear() {
 		memberTable.clear();
 	}

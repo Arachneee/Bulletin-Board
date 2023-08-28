@@ -1,16 +1,18 @@
-package com.arachneee.bulletinboard.controller;
+package com.arachneee.bulletinboard.web.login;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.arachneee.bulletinboard.domain.member.Member;
-import com.arachneee.bulletinboard.form.LoginForm;
-import com.arachneee.bulletinboard.service.LoginService;
+import com.arachneee.bulletinboard.domain.login.LoginService;
+import com.arachneee.bulletinboard.web.session.SessionConst;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,18 +29,34 @@ public class LoginController {
 	}
 
 	@PostMapping("/login")
-	public String login(@ModelAttribute LoginForm loginForm, HttpServletRequest request) {
+	public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
+		if (bindingResult.hasErrors()) {
+			return "login/loginForm";
+		}
+
 		log.info("로그인 시도");
 		Member member = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
 
 		if (member == null) {
+			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
 			log.info("로그인 실패");
 			return "login/loginForm";
 		}
 
 		HttpSession session = request.getSession();
-		session.setAttribute("loginMember", member);
+		session.setAttribute(SessionConst.LOGIN_MEMBER, member);
+
 		log.info("로그인 성공");
+		return "redirect:/";
+	}
+
+	@PostMapping("/logout")
+	public String logout(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+
 		return "redirect:/";
 	}
 
