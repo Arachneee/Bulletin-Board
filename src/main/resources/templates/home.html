@@ -13,6 +13,24 @@
   <div class="row">
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
+              th:onclick="|location.href='@{/post}'|">
+        게시판 보기
+      </button>
+    </div>
+    <div class="col">
+      <button class="w-100 btn btn-dark btn-lg"
+              onclick="location.href='items.html'"
+              th:onclick="|location.href='@{/post/add}'|" type="button">
+        게시판 글쓰기
+      </button>
+    </div>
+  </div>
+</div>
+<hr class="my-4">
+<div class="container" style="max-width: 600px">
+  <div class="row">
+    <div class="col">
+      <button class="w-100 btn btn-secondary btn-lg" type="button"
               th:onclick="|location.href='@{/members/add}'|">
         회원 가입
       </button>
@@ -25,6 +43,7 @@
       </button>
     </div>
   </div>
+</div>
   <hr class="my-4">
 </div> <!-- /container -->
 </body>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.arachneee.bulletinboard.domain.member.Member;
 import com.arachneee.bulletinboard.domain.member.MemberRepository;
+import com.arachneee.bulletinboard.domain.member.MemberService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/members")
 public class MemberController {
 
-	private final MemberRepository memberRepository;
+	private final MemberService memberService;
 
 	@GetMapping("/add")
 	public String addMember(@ModelAttribute Member member) {
@@ -30,30 +31,24 @@ public class MemberController {
 	}
 
 	@PostMapping("/add")
-	public String save(@Valid @ModelAttribute Member member, BindingResult bindingResult) {
+	public String saveMember(@Valid @ModelAttribute Member member, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "members/addMemberForm";
 		}
 
-		if (isDuplicatedLoginId(member)) {
+		if (memberService.isDuplicatedLoginId(member)) {
 			bindingResult.rejectValue("loginId","duplicated" ,"중복된 아이디입니다");
 			return "members/addMemberForm";
 		}
 
-		if (isDuplicatedName(member)) {
+		if (memberService.isDuplicatedName(member)) {
 			bindingResult.rejectValue("name","duplicated" ,"중복된 이름입니다");
 			return "members/addMemberForm";
 		}
 
-		memberRepository.save(member);
+		memberService.save(member);
 		return "redirect:/";
 	}
 
-	private boolean isDuplicatedLoginId(Member member) {
-		return memberRepository.findByLoginId(member.getLoginId()).isPresent();
-	}
 
-	private boolean isDuplicatedName(Member member) {
-		return memberRepository.findByName(member.getName()).isPresent();
-	}
 }
