@@ -1,6 +1,4 @@
-package com.arachneee.bulletinboard.web.member;
-
-import java.util.Optional;
+package com.arachneee.bulletinboard.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -9,9 +7,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.arachneee.bulletinboard.domain.member.Member;
-import com.arachneee.bulletinboard.domain.member.MemberRepository;
-import com.arachneee.bulletinboard.domain.member.MemberService;
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.service.MemberService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

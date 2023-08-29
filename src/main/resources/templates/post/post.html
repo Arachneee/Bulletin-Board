@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="css/bootstrap.min.css" rel="stylesheet">
+  <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="py-5 text-center">
+    <h2>글</h2>
+  </div>
+
+  <div>
+    <label for="title">제목</label>
+    <input type="text" style="font-size=50px;" id="title" name="title" class="form-control" value="제목" th:value="${post.title}" readonly>
+  </div>
+<!--  <div>-->
+<!--    <label for="name">글쓴이</label>-->
+<!--    <input type="text" id="name" name="name" class="form-control" value="글쓴이" th:value="${post.member.name}" readonly>-->
+<!--  </div>-->
+  <div>
+    <label for="createTime">날짜</label>
+    <input type="text" style="font-size=10px;" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${post.createTime}" readonly>
+  </div>
+  <div>
+    <label for="content">내용</label>
+    <input type="text" style="font-size=30px;" id="content" name="content" class="form-control" value="내용" th:value="${post.content}" readonly>
+  </div>
+
+
+  <hr class="my-4">
+
+  <div class="row">
+    <div class="col">
+      <button class="w-100 btn btn-primary btn-lg"
+              onclick="location.href='editForm.html'"
+              th:onclick="|location.href='@{/post/{id}/edit(id=${post.id})}'|"
+              type="button">수정</button>
+    </div>
+    <div class="col">
+      <button class="w-100 btn btn-secondary btn-lg"
+              onclick="location.href='items.html'"
+              th:onclick="|location.href='@{/post}'|"
+              type="button">목록</button>
+    </div>
+  </div>
+
+</div> <!-- /container -->
+</body>
+</html>

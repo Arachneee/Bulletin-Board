@@ -2,8 +2,8 @@ package com.arachneee.bulletinboard.web;
 
 import org.springframework.stereotype.Component;
 
-import com.arachneee.bulletinboard.domain.member.Member;
-import com.arachneee.bulletinboard.domain.member.MemberRepository;
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.repository.MemberRepository;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

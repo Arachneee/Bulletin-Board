@@ -1,9 +1,12 @@
-package com.arachneee.bulletinboard.domain.member;
+package com.arachneee.bulletinboard.repository.member;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Repository;
+
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

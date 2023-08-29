@@ -4,6 +4,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.repository.MemberRepository;
+import com.arachneee.bulletinboard.repository.member.MemoryMemberRepository;
 
 public class MemberRepositoryTest {
 	MemberRepository userRepository = new MemoryMemberRepository();

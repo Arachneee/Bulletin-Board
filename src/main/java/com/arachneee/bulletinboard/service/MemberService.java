@@ -1,6 +1,9 @@
-package com.arachneee.bulletinboard.domain.member;
+package com.arachneee.bulletinboard.service;
 
 import org.springframework.stereotype.Service;
+
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 

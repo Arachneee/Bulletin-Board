@@ -1,6 +1,6 @@
 package com.arachneee.bulletinboard.web.argumentresolver;
 
-import com.arachneee.bulletinboard.domain.member.Member;
+import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

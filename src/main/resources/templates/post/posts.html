@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+         .container {
+         max-width: 560px;
+         }
+ </style>
+</head>
+<body>
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2>게시글 목록</h2>
+    </div>
+    <table class="table">
+        <tread>
+        <tr>
+            <th>게시글 ID</th>
+            <th>등록 시간</th>
+            <th>제목</th>
+        </tr>
+        </tread>
+        <tbody>
+        <tr th:each="post : ${postList}">
+            <td th:text="${post.id}">0</td>
+            <td th:text="${post.createTime}">등록 시간</td>
+            <td>
+                <a href="item.html" th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                onclick="location.href='items.html'"
+                th:onclick="|location.href='@{/}'|"
+                type="button">홈으로</button>
+    </div>
+</div>
+</body>
+</html>

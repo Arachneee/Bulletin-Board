@@ -1,4 +1,4 @@
-package com.arachneee.bulletinboard.web.login;
+package com.arachneee.bulletinboard.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.arachneee.bulletinboard.domain.member.Member;
-import com.arachneee.bulletinboard.domain.login.LoginService;
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.service.LoginService;
+import com.arachneee.bulletinboard.web.form.LoginForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
 import jakarta.servlet.http.HttpServletRequest;

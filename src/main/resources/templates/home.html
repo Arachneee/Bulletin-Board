@@ -29,18 +29,13 @@
 <hr class="my-4">
 <div class="container" style="max-width: 600px">
   <div class="row">
+    <h4 class="mb-3" th:text="|로그인: ${member.name}|">로그인 사용자 이름</h4>
     <div class="col">
-      <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/members/add}'|">
-        회원 가입
-      </button>
-    </div>
-    <div class="col">
-      <button class="w-100 btn btn-dark btn-lg"
-              onclick="location.href='items.html'"
-              th:onclick="|location.href='@{/login}'|" type="button">
-        로그인
-      </button>
+      <form th:action="@{/logout}" method="post">
+        <button class="w-100 btn btn-dark btn-lg" type="submit">
+          로그아웃
+        </button>
+      </form>
     </div>
   </div>
 </div>
