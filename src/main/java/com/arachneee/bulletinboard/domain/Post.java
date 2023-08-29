@@ -1,7 +1,7 @@
 package com.arachneee.bulletinboard.domain;
 
 import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -15,5 +15,5 @@ public class Post {
 	@NotEmpty
 	private String content;
 	private Member member;
-	private LocalDate createTime;
+	private LocalDateTime createTime;
 }

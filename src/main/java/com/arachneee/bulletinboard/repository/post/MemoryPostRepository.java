@@ -1,6 +1,7 @@
 package com.arachneee.bulletinboard.repository.post;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class MemoryPostRepository implements PostRepository {
 	@Override
 	public Post save(Post post) {
 		post.setId(++sequence);
-		post.setCreateTime(LocalDate.now());
+		post.setCreateTime(LocalDateTime.now());
 		postTable.put(post.getId(), post);
 		log.info("post save={}",post.getId());
 		return post;

@@ -1,4 +1,4 @@
-package com.arachneee.bulletinboard.web;
+package com.arachneee.bulletinboard.web.controller;
 
 import com.arachneee.bulletinboard.web.argumentresolver.Login;
 import org.springframework.stereotype.Controller;
