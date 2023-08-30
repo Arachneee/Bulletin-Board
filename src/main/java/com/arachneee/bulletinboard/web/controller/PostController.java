@@ -1,8 +1,10 @@
 package com.arachneee.bulletinboard.web.controller;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.arachneee.bulletinboard.domain.SearchCode;
+import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,9 +33,26 @@ public class PostController {
 
 	private final PostService postService;
 
+	@ModelAttribute("searchCodes")
+	public List<SearchCode> searchCodes() {
+		List<SearchCode> searchCodes = new ArrayList<>();
+		searchCodes.add(new SearchCode("TITLE", "제목"));
+		searchCodes.add(new SearchCode("CONTENT", "내용"));
+		searchCodes.add(new SearchCode("NAME", "작성자"));
+		return searchCodes;
+	}
+
 	@GetMapping("")
-	public String postMain(Model model) {
+	public String posts(@ModelAttribute SearchForm searchForm, Model model) {
 		List<Post> postList = postService.findAll();
+		model.addAttribute("postList", postList);
+		return "post/posts";
+	}
+
+	@PostMapping("")
+	public String search(@ModelAttribute SearchForm searchForm, Model model) {
+		log.info("searchForm = {}, {}", searchForm.getSearchCode(), searchForm.getSearchString());
+		List<Post> postList = postService.search(searchForm);
 		model.addAttribute("postList", postList);
 		return "post/posts";
 	}

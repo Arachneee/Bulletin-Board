@@ -3,7 +3,9 @@ package com.arachneee.bulletinboard.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Service;
 
 import com.arachneee.bulletinboard.domain.Member;
@@ -53,5 +55,27 @@ public class PostService {
 		Post post = postRepository.findById(id);
 		post.setViewCount(post.getViewCount() + 1);
 		return post;
+	}
+
+	public List<Post> search(SearchForm searchForm) {
+		return findAll().stream()
+				.filter(post -> isSearchCondition(searchForm, post))
+				.collect(Collectors.toList());
+	}
+
+	private static boolean isSearchCondition(SearchForm searchForm, Post post) {
+		String searchString = searchForm.getSearchString();
+		String searchCode = searchForm.getSearchCode();
+
+		if (searchCode.equals("TITLE")) {
+			return post.getTitle().contains(searchString);
+		}
+		if (searchCode.equals("CONTENT")) {
+			return post.getContent().contains(searchString);
+		}
+		if (searchCode.equals("NAME")) {
+			return post.getMember().getName().contains(searchString);
+		}
+		return false;
 	}
 }
