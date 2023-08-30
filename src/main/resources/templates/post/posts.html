@@ -20,14 +20,16 @@
         <tr>
             <th>게시글 ID</th>
             <th>등록 시간</th>
+            <th>조회수</th>
             <th>제목</th>
             <th>작성자</th>
         </tr>
         </tread>
         <tbody>
         <tr th:each="post : ${postList}">
-            <td th:text="${post.id}">0</td>
+            <td th:text="${post.id}">게시글 ID</td>
             <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
+            <td th:text="${post.viewCount}">조회수</td>
             <td>
                 <a href="item.html" th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
             </td>

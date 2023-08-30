@@ -48,4 +48,10 @@ public class PostService {
 	public void delete(Long id) {
 		postRepository.delete(id);
 	}
+
+	public Post view(Long id) {
+		Post post = postRepository.findById(id);
+		post.setViewCount(post.getViewCount() + 1);
+		return post;
+	}
 }

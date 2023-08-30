@@ -23,6 +23,10 @@
     <input type="text" style="font-size=50px;" id="title" name="title" class="form-control" value="제목" th:value="${post.title}" readonly>
   </div>
   <div>
+    <label for="viewCount">조회수</label>
+    <input type="text" style="font-size=10px;" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="${post.viewCount}" readonly>
+  </div>
+  <div>
     <label for="member">글쓴이</label>
     <input type="text" style="font-size=10px;" id="member" name="member" class="form-control" value="글쓴이" th:value="${post.member.name}" readonly>
   </div>

@@ -27,6 +27,7 @@ public class MemoryPostRepository implements PostRepository {
 	public Post save(Post post) {
 		post.setId(++sequence);
 		post.setCreateTime(LocalDateTime.now());
+		post.setViewCount(0);
 		postTable.put(post.getId(), post);
 		log.info("post save={}",post.getId());
 		return post;

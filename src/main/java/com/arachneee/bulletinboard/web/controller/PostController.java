@@ -63,7 +63,7 @@ public class PostController {
 						@PathVariable Long id,
 						Model model) {
 
-		Post findPost = postService.findById(id);
+		Post findPost = postService.view(id);
 		model.addAttribute("post", findPost);
 		log.info("post view={}", id);
 

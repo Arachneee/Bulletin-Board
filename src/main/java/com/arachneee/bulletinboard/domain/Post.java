@@ -16,4 +16,5 @@ public class Post {
 	private String content;
 	private Member member;
 	private LocalDateTime createTime;
+	private Integer viewCount;
 }
