@@ -42,7 +42,7 @@ public class PostService {
 	}
 
 	public boolean isNotRightMember(Member member, Long id) {
-		return !member.getId().equals(postRepository.findById(id).getId());
+		return !member.getId().equals(postRepository.findById(id).getMember().getId());
 	}
 
 	public void delete(Long id) {
