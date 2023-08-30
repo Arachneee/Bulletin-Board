@@ -44,4 +44,8 @@ public class PostService {
 	public boolean isNotRightMember(Member member, Long id) {
 		return !member.getId().equals(postRepository.findById(id).getId());
 	}
+
+	public void delete(Long id) {
+		postRepository.delete(id);
+	}
 }

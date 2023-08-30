@@ -104,4 +104,19 @@ public class PostController {
 
 	}
 
+	@GetMapping("/{id}/delete")
+	public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+						   @PathVariable Long id,
+						   Model model) {
+
+		if (postService.isNotRightMember(member, id)) {
+			return "redirect:/post/{id}";
+		}
+
+		postService.delete(id);
+		return "redirect:/post";
+	}
+
+
+
 }
