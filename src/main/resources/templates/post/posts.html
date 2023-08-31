@@ -27,7 +27,7 @@
             </div>
             <hr class="my-1">
             <div>
-                <input type="text" style="width:560px;" id="searchString" th:field="*{searchString}" class="formcdddontrol">
+                <input type="text" style="width:560px;" id="searchString" th:field="*{searchString}" class="form-control">
             </div>
             <hr class="my-1">
             <div>
@@ -54,14 +54,14 @@
         </tr>
         </tread>
         <tbody>
-        <tr th:each="post : ${postList}">
+        <tr th:each="post : ${postPreDtoList}">
             <td th:text="${post.id}">게시글 ID</td>
             <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
             <td th:text="${post.viewCount}">조회수</td>
             <td>
                 <a href="item.html" th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
             </td>
-            <td th:text="${post.member.name}">작성자</td>
+            <td th:text="${post.name}">작성자</td>
         </tr>
         </tbody>
     </table>

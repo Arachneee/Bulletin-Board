@@ -6,7 +6,7 @@
         href="css/bootstrap.min.css" rel="stylesheet">
   <style>
         .container {
-            max-width: 700px;
+            max-width: 560px;
         }
     </style>
 </head>
@@ -14,29 +14,31 @@
 
 <div class="container">
 
-  <div class="py-5 text-center">
-    <h2>글</h2>
+  <div >
+
   </div>
 
-  <div>
-    <label for="title">제목</label>
-    <input type="text" style="font-size=50px;" id="title" name="title" class="form-control" value="제목" th:value="${post.title}" readonly>
+  <div class="py-5 text-center">
+    <h2>
+      <span th:text="${post.title}">제목</span>
+    </h2>
   </div>
   <div>
     <label for="viewCount">조회수</label>
-    <input type="text" style="font-size=10px;" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="${post.viewCount}" readonly>
+    <input type="text" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="${post.viewCount}" readonly>
   </div>
   <div>
     <label for="member">글쓴이</label>
-    <input type="text" style="font-size=10px;" id="member" name="member" class="form-control" value="글쓴이" th:value="${post.member.name}" readonly>
+    <input type="text" id="member" name="member" class="form-control" value="글쓴이" th:value="${post.member.name}" readonly>
   </div>
   <div>
     <label for="createTime">날짜</label>
-    <input type="text" style="font-size=10px;" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}" readonly>
+    <input type="text" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}" readonly>
   </div>
   <div>
     <label for="content">내용</label>
-    <input type="text" style="height:500px;font-size=30px;" id="content" name="content" class="form-control" value="내용" th:value="${post.content}" readonly>
+    <p><textarea id="content" cols="64" rows="20" class="form-control" th:value="${post.content}" th:text="${post.content}" readonly></textarea></p>
+<!--    <input type="text" style="height:500px;font-size=30px;" id="content" name="content" class="form-control" value="내용" th:value="${post.content}" readonly>-->
   </div>
 
 

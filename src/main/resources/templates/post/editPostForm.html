@@ -26,19 +26,20 @@
     </div>
     <div>
       <label for="id">게시글 ID</label>
-      <input type="text" style="width:500px;" id="id" th:field="*{id}" class="formcontrol" readonly>
+      <input type="text" style="width:500px;" id="id" th:field="*{id}" class="form-control" readonly>
     </div>
     <div>
       <label for="title">제목</label>
-      <input type="text" style="width:500px;" id="title" th:field="*{title}" class="formcontrol"
+      <input type="text" style="width:500px;" id="title" th:field="*{title}" class="form-control"
              th:errorclass="field-error">
       <div class="field-error" th:errors="*{title}" />
     </div>
     <div>
       <label for="content">내용</label>
-      <input type="text" style="width:500px;height:500px;" id="content" th:field="*{content}"
-             class="form-control"
-             th:errorclass="field-error">
+      <p><textarea id="content" cols="64" rows="20" th:field="*{content}" placeholder="내용을 입력하세요."></textarea></p>
+<!--      <input type="text" style="width:500px;height:500px;" id="content" th:field="*{content}"-->
+<!--             class="form-control"-->
+<!--             th:errorclass="field-error">-->
       <div class="field-error" th:errors="*{content}" />
     </div>
     <hr class="my-4">
