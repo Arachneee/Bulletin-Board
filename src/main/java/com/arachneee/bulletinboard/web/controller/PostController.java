@@ -120,7 +120,6 @@ public class PostController {
 
 		postService.update(id, postUpdateDto);
 		return "redirect:/post/{id}";
-
 	}
 
 	@GetMapping("/{id}/delete")

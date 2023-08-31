@@ -58,24 +58,6 @@ public class PostService {
 	}
 
 	public List<Post> search(SearchForm searchForm) {
-		return findAll().stream()
-				.filter(post -> isSearchCondition(searchForm, post))
-				.collect(Collectors.toList());
-	}
-
-	private static boolean isSearchCondition(SearchForm searchForm, Post post) {
-		String searchString = searchForm.getSearchString();
-		String searchCode = searchForm.getSearchCode();
-
-		if (searchCode.equals("TITLE")) {
-			return post.getTitle().contains(searchString);
-		}
-		if (searchCode.equals("CONTENT")) {
-			return post.getContent().contains(searchString);
-		}
-		if (searchCode.equals("NAME")) {
-			return post.getMember().getName().contains(searchString);
-		}
-		return false;
+		return postRepository.search(searchForm);
 	}
 }

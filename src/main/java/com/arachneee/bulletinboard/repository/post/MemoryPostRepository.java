@@ -1,11 +1,9 @@
 package com.arachneee.bulletinboard.repository.post;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.form.SearchForm;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,5 +72,28 @@ public class MemoryPostRepository implements PostRepository {
 
 	public void clear() {
 		postTable.clear();
+	}
+
+	@Override
+	public List<Post> search(SearchForm searchForm) {
+		return findAll().stream()
+			.filter(post -> isSearchCondition(searchForm, post))
+			.collect(Collectors.toList());
+	}
+
+	private static boolean isSearchCondition(SearchForm searchForm, Post post) {
+		String searchString = searchForm.getSearchString();
+		String searchCode = searchForm.getSearchCode();
+
+		if (searchCode.equals("TITLE")) {
+			return post.getTitle().contains(searchString);
+		}
+		if (searchCode.equals("CONTENT")) {
+			return post.getContent().contains(searchString);
+		}
+		if (searchCode.equals("NAME")) {
+			return post.getMember().getName().contains(searchString);
+		}
+		return false;
 	}
 }
