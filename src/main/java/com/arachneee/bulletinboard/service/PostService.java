@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
-import com.arachneee.bulletinboard.web.dto.PostUpdateDto;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,11 +44,11 @@ public class PostService {
 		return postRepository.findById(id);
 	}
 
-	public void update(Long id, PostUpdateDto postUpdateDto) {
+	public void update(Long id, PostAddForm postAddForm) {
 		Post findPost = postRepository.findById(id);
 		findPost.setCreateTime(LocalDateTime.now());
-		findPost.setTitle(postUpdateDto.getTitle());
-		findPost.setContent(postUpdateDto.getContent());
+		findPost.setTitle(postAddForm.getTitle());
+		findPost.setContent(postAddForm.getContent());
 	}
 
 	public boolean isNotRightMember(Member member, Long id) {
@@ -66,7 +65,12 @@ public class PostService {
 		return post;
 	}
 
-	public List<Post> search(SearchForm searchForm) {
+	public List<PostPreDto> search(SearchForm searchForm) {
 		return postRepository.search(searchForm);
+	}
+
+	public List<PostPreDto> findPostPreDtoAll() {
+		log.info("postService findPostPreDtoAll 실행");
+		return postRepository.findPostPreDtoAll();
 	}
 }

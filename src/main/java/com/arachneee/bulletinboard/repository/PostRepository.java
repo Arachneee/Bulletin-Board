@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.arachneee.bulletinboard.domain.Post;
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 
 public interface PostRepository {
@@ -20,5 +21,7 @@ public interface PostRepository {
 	void update(Long id, Post post);
 	void delete(Long id);
 
-	List<Post> search(SearchForm searchForm);
+	List<PostPreDto> search(SearchForm searchForm);
+
+	List<PostPreDto> findPostPreDtoAll();
 }

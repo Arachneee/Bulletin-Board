@@ -2,6 +2,7 @@ package com.arachneee.bulletinboard.repository.post;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +58,25 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
+	public List<PostPreDto> findPostPreDtoAll() {
+		log.info("postRepository findPostPreDtoAll 실행");
+		return findAll().stream()
+			.map(post -> {
+				PostPreDto postPreDto = new PostPreDto();
+
+				postPreDto.setId(post.getId());
+				postPreDto.setCreateTime(post.getCreateTime());
+				postPreDto.setTitle(post.getTitle());
+				postPreDto.setViewCount(post.getViewCount());
+				postPreDto.setName(post.getMember().getName());
+
+				return postPreDto;
+			})
+			.sorted(Comparator.comparing(PostPreDto::getId).reversed())
+			.collect(Collectors.toList());
+	}
+
+	@Override
 	public void update(Long id, Post post) {
 		Post findPost = postTable.get(id);
 
@@ -73,7 +94,7 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<Post> search(SearchForm searchForm) {
+	public List<PostPreDto> search(SearchForm searchForm) {
 		String searchString = searchForm.getSearchString();
 		String searchCode = searchForm.getSearchCode();
 		String sortCode = searchForm.getSortCode();
@@ -81,12 +102,24 @@ public class MemoryPostRepository implements PostRepository {
 		return findAll().stream()
 			.filter(post -> isSearchCondition(searchString, searchCode, post))
 			.sorted((post1, post2) -> comparePost(sortCode, post1, post2))
+			.map(post -> {
+				PostPreDto postPreDto = new PostPreDto();
+
+				postPreDto.setId(post.getId());
+				postPreDto.setCreateTime(post.getCreateTime());
+				postPreDto.setTitle(post.getTitle());
+				postPreDto.setViewCount(post.getViewCount());
+				postPreDto.setName(post.getMember().getName());
+
+				return postPreDto;
+			})
 			.collect(Collectors.toList());
+
 	}
 
 	private int comparePost(String sortCode, Post post1, Post post2) {
 		if (sortCode.equals("OLD")) {
-			return post1.getCreateTime().compareTo(post2.getCreateTime());
+			return post1.getId().compareTo(post2.getId());
 		}
 		if (sortCode.equals("VIEW")) {
 			return post2.getViewCount() - post1.getViewCount();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.arachneee.bulletinboard.domain.SearchCode;
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.service.PostService;
-import com.arachneee.bulletinboard.web.dto.PostUpdateDto;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
 import jakarta.validation.Valid;
@@ -54,16 +54,16 @@ public class PostController {
 
 	@GetMapping("")
 	public String posts(@ModelAttribute SearchForm searchForm, Model model) {
-		List<Post> postList = postService.findAll();
-		model.addAttribute("postList", postList);
+		List<PostPreDto> postPreDtoAll= postService.findPostPreDtoAll();
+		model.addAttribute("postPreDtoList", postPreDtoAll);
 		return "post/posts";
 	}
 
 	@PostMapping("")
 	public String search(@ModelAttribute SearchForm searchForm, Model model) {
 		log.info("searchForm = {}, {}, {}", searchForm.getSearchCode(), searchForm.getSearchString(), searchForm.getSortCode());
-		List<Post> postList = postService.search(searchForm);
-		model.addAttribute("postList", postList);
+		List<PostPreDto> postPreDtoList = postService.search(searchForm);
+		model.addAttribute("postPreDtoList", postPreDtoList);
 		return "post/posts";
 	}
 
@@ -123,13 +123,13 @@ public class PostController {
 
 	@PostMapping("/{id}/edit")
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-		@PathVariable Long id, @ModelAttribute PostUpdateDto postUpdateDto) {
+		@PathVariable Long id, @ModelAttribute PostAddForm postAddForm) {
 
 		if (postService.isNotRightMember(member, id)) {
 			return "redirect:/post/{id}";
 		}
 
-		postService.update(id, postUpdateDto);
+		postService.update(id, postAddForm);
 		return "redirect:/post/{id}";
 	}
 
