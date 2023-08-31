@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.arachneee.bulletinboard.domain.SearchCode;
+import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,15 @@ public class PostController {
 
 	private final PostService postService;
 
+	@ModelAttribute("sortCodes")
+	public List<SearchCode> sortCodes() {
+		List<SearchCode> sortCodes = new ArrayList<>();
+		sortCodes.add(new SearchCode("NEW", "최신순"));
+		sortCodes.add(new SearchCode("OLD", "오래된순"));
+		sortCodes.add(new SearchCode("VIEW", "조회순"));
+		return sortCodes;
+	}
+
 	@ModelAttribute("searchCodes")
 	public List<SearchCode> searchCodes() {
 		List<SearchCode> searchCodes = new ArrayList<>();
@@ -51,27 +61,28 @@ public class PostController {
 
 	@PostMapping("")
 	public String search(@ModelAttribute SearchForm searchForm, Model model) {
-		log.info("searchForm = {}, {}", searchForm.getSearchCode(), searchForm.getSearchString());
+		log.info("searchForm = {}, {}, {}", searchForm.getSearchCode(), searchForm.getSearchString(), searchForm.getSortCode());
 		List<Post> postList = postService.search(searchForm);
 		model.addAttribute("postList", postList);
 		return "post/posts";
 	}
 
 	@GetMapping("/add")
-	public String addPost(@ModelAttribute Post post) {
+	public String addPost(@ModelAttribute PostAddForm postAddForm) {
 		log.info("Get : /post/add 호출");
 		return "post/addPostForm";
 	}
 
 	@PostMapping("/add")
-	public String savePost(@Valid @ModelAttribute Post post, BindingResult bindingResult) {
+	public String savePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+		@Valid @ModelAttribute PostAddForm postAddForm, BindingResult bindingResult) {
 		log.info("Post : /post/add 호출");
 
 		if (bindingResult.hasErrors()) {
 			return "post/addPostForm";
 		}
 
-		postService.save(post);
+		postService.save(postAddForm, member);
 		log.info("post save 완료");
 
 		return "redirect:/post";

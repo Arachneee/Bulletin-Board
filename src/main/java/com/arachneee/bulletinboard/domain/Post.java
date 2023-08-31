@@ -10,9 +10,7 @@ import lombok.Data;
 public class Post {
 
 	private Long id;
-	@NotEmpty
 	private String title;
-	@NotEmpty
 	private String content;
 	private Member member;
 	private LocalDateTime createTime;

@@ -19,11 +19,7 @@
     <div class="py-5 text-center">
         <h2>게시글 작성</h2>
     </div>
-    <form action="" th:action th:object="${post}" method="post">
-        <div th:if="${#fields.hasGlobalErrors()}">
-            <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-               th:text="${err}">전체 오류 메시지</p>
-        </div>
+    <form action="" th:action th:object="${postAddForm}" method="post">
         <div>
             <label for="title">제목</label>
             <input type="text" style="width:500px;" id="title" th:field="*{title}" class="formcontrol"
@@ -44,7 +40,6 @@
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
-                        onclick="location.href='items.html'"
                         th:onclick="|location.href='@{/post}'|"
                         type="button">취소</button>
             </div>

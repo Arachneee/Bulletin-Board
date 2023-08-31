@@ -25,8 +25,6 @@ public class MemoryPostRepository implements PostRepository {
 	@Override
 	public Post save(Post post) {
 		post.setId(++sequence);
-		post.setCreateTime(LocalDateTime.now());
-		post.setViewCount(0);
 		postTable.put(post.getId(), post);
 		log.info("post save={}",post.getId());
 		return post;
@@ -76,15 +74,28 @@ public class MemoryPostRepository implements PostRepository {
 
 	@Override
 	public List<Post> search(SearchForm searchForm) {
+		String searchString = searchForm.getSearchString();
+		String searchCode = searchForm.getSearchCode();
+		String sortCode = searchForm.getSortCode();
+
 		return findAll().stream()
-			.filter(post -> isSearchCondition(searchForm, post))
+			.filter(post -> isSearchCondition(searchString, searchCode, post))
+			.sorted((post1, post2) -> comparePost(sortCode, post1, post2))
 			.collect(Collectors.toList());
 	}
 
-	private static boolean isSearchCondition(SearchForm searchForm, Post post) {
-		String searchString = searchForm.getSearchString();
-		String searchCode = searchForm.getSearchCode();
+	private int comparePost(String sortCode, Post post1, Post post2) {
+		if (sortCode.equals("OLD")) {
+			return post2.getCreateTime().compareTo(post1.getCreateTime());
+		}
+		if (sortCode.equals("VIEW")) {
+			return post2.getViewCount() - post1.getViewCount();
+		}
+		// sortCode.equals("NEW") // 조회순
+		return post1.getCreateTime().compareTo(post2.getCreateTime());
+	}
 
+	private static boolean isSearchCondition(String searchString, String searchCode, Post post) {
 		if (searchCode.equals("TITLE")) {
 			return post.getTitle().contains(searchString);
 		}
@@ -94,6 +105,6 @@ public class MemoryPostRepository implements PostRepository {
 		if (searchCode.equals("NAME")) {
 			return post.getMember().getName().contains(searchString);
 		}
-		return false;
+		return true;
 	}
 }

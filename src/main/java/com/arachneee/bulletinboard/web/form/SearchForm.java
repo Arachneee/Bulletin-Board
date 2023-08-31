@@ -6,4 +6,5 @@ import lombok.Data;
 public class SearchForm {
     private String searchCode;
     private String searchString;
+    private String sortCode;
 }

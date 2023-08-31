@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,15 @@ public class PostService {
 
 	private final PostRepository postRepository;
 
-	public void save(Post post) {
+	public void save(PostAddForm postAddForm, Member member) {
+		Post post = new Post();
+
+		post.setTitle(postAddForm.getTitle());
+		post.setContent(postAddForm.getContent());
+		post.setMember(member);
+		post.setCreateTime(LocalDateTime.now());
+		post.setViewCount(0);
+
 		postRepository.save(post);
 	}
 
