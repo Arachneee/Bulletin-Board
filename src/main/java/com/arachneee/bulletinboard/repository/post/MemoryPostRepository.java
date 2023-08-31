@@ -86,13 +86,13 @@ public class MemoryPostRepository implements PostRepository {
 
 	private int comparePost(String sortCode, Post post1, Post post2) {
 		if (sortCode.equals("OLD")) {
-			return post2.getCreateTime().compareTo(post1.getCreateTime());
+			return post1.getCreateTime().compareTo(post2.getCreateTime());
 		}
 		if (sortCode.equals("VIEW")) {
 			return post2.getViewCount() - post1.getViewCount();
 		}
 		// sortCode.equals("NEW") // 조회순
-		return post1.getCreateTime().compareTo(post2.getCreateTime());
+		return post2.getCreateTime().compareTo(post1.getCreateTime());
 	}
 
 	private static boolean isSearchCondition(String searchString, String searchCode, Post post) {
