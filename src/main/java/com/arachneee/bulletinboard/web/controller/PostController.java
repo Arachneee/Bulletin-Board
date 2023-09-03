@@ -1,7 +1,9 @@
 package com.arachneee.bulletinboard.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.arachneee.bulletinboard.domain.SearchCode;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
@@ -10,6 +12,7 @@ import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +24,12 @@ import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.service.PostService;
 import com.arachneee.bulletinboard.web.session.SessionConst;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +61,52 @@ public class PostController {
 	}
 
 	@GetMapping("")
-	public String posts(@ModelAttribute SearchForm searchForm, Model model) {
+	public String posts(@CookieValue(name = "searchCode", defaultValue = "TITLE") String searchCode,
+						@CookieValue(name = "searchString", defaultValue = "") String searchString,
+						@CookieValue(name = "sortCode", defaultValue = "TITLE") String sortCode,
+						Model model) {
+
+		SearchForm searchForm = new SearchForm();
+		searchForm.setSearchCode(searchCode);
+		searchForm.setSearchString(searchString);
+		searchForm.setSortCode(sortCode);
+
 		List<PostPreDto> postPreDtoList = postService.search(searchForm);
 		model.addAttribute("postPreDtoList", postPreDtoList);
+		model.addAttribute("searchForm", searchForm);
 		return "post/posts";
+	}
+
+
+	@PostMapping("")
+	public String search(@ModelAttribute SearchForm searchForm, Model model, HttpServletResponse response) {
+		List<PostPreDto> postPreDtoList = postService.search(searchForm);
+		model.addAttribute("postPreDtoList", postPreDtoList);
+		model.addAttribute("searchForm", searchForm);
+		addSearchFormCookies(searchForm, response);
+		return "post/posts";
+	}
+
+	private static void addSearchFormCookies(SearchForm searchForm, HttpServletResponse response) {
+		addObjectCookie("searchCode", searchForm.getSearchCode(), response);
+		addObjectCookie("searchString", searchForm.getSearchString(), response);
+		addObjectCookie("sortCode", searchForm.getSortCode(), response);
+	}
+
+	private static void addObjectCookie(String searchCode, String searchForm, HttpServletResponse response) {
+		Cookie searchCodeCookie = new Cookie(searchCode, searchForm);
+		searchCodeCookie.setMaxAge(60 * 60 * 24);
+		searchCodeCookie.setPath("/post");
+		response.addCookie(searchCodeCookie);
+	}
+
+	private static String objectToJson(SearchForm searchForm) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(searchForm);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@GetMapping("/add")
