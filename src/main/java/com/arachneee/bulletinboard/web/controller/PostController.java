@@ -63,27 +63,29 @@ public class PostController {
 	@GetMapping("")
 	public String posts(@CookieValue(name = "searchCode", defaultValue = "TITLE") String searchCode,
 						@CookieValue(name = "searchString", defaultValue = "") String searchString,
-						@CookieValue(name = "sortCode", defaultValue = "TITLE") String sortCode,
+						@CookieValue(name = "sortCode", defaultValue = "NEW") String sortCode,
 						Model model) {
 
 		SearchForm searchForm = new SearchForm();
 		searchForm.setSearchCode(searchCode);
 		searchForm.setSearchString(searchString);
 		searchForm.setSortCode(sortCode);
+		model.addAttribute("searchForm", searchForm);
 
 		List<PostPreDto> postPreDtoList = postService.search(searchForm);
 		model.addAttribute("postPreDtoList", postPreDtoList);
-		model.addAttribute("searchForm", searchForm);
+
 		return "post/posts";
 	}
-
 
 	@PostMapping("")
 	public String search(@ModelAttribute SearchForm searchForm, Model model, HttpServletResponse response) {
 		List<PostPreDto> postPreDtoList = postService.search(searchForm);
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("searchForm", searchForm);
+
 		addSearchFormCookies(searchForm, response);
+
 		return "post/posts";
 	}
 
@@ -95,18 +97,8 @@ public class PostController {
 
 	private static void addObjectCookie(String searchCode, String searchForm, HttpServletResponse response) {
 		Cookie searchCodeCookie = new Cookie(searchCode, searchForm);
-		searchCodeCookie.setMaxAge(60 * 60 * 24);
 		searchCodeCookie.setPath("/post");
 		response.addCookie(searchCodeCookie);
-	}
-
-	private static String objectToJson(SearchForm searchForm) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(searchForm);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@GetMapping("/add")
