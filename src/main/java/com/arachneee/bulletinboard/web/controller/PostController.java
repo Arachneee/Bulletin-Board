@@ -54,14 +54,6 @@ public class PostController {
 
 	@GetMapping("")
 	public String posts(@ModelAttribute SearchForm searchForm, Model model) {
-		List<PostPreDto> postPreDtoAll= postService.findPostPreDtoAll();
-		model.addAttribute("postPreDtoList", postPreDtoAll);
-		return "post/posts";
-	}
-
-	@PostMapping("")
-	public String search(@ModelAttribute SearchForm searchForm, Model model) {
-		log.info("searchForm = {}, {}, {}", searchForm.getSearchCode(), searchForm.getSearchString(), searchForm.getSortCode());
 		List<PostPreDto> postPreDtoList = postService.search(searchForm);
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		return "post/posts";

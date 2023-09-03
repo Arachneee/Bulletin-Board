@@ -16,11 +16,10 @@
         <h2>게시글 목록</h2>
     </div>
 
-    <form action="" th:action th:object="${searchForm}" method="post">
+    <form action="" th:action th:object="${searchForm}" method="get">
         <div class="row">
             <div>
                 <select th:field="*{searchCode}" class="form-select">
-                    <option value="">==검색 조건 선택==</option>
                     <option th:each="searchCode : ${searchCodes}" th:value="${searchCode.code}"
                             th:text="${searchCode.displayName}">FAST</option>
                 </select>

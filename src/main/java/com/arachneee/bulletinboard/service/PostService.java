@@ -66,11 +66,13 @@ public class PostService {
 	}
 
 	public List<PostPreDto> search(SearchForm searchForm) {
+		if (searchForm.getSearchCode() == null && searchForm.getSearchString() == null && searchForm.getSortCode() == null) {
+			return postRepository.findPostPreDtoAll();
+		}
 		return postRepository.search(searchForm);
 	}
-
-	public List<PostPreDto> findPostPreDtoAll() {
-		log.info("postService findPostPreDtoAll 실행");
-		return postRepository.findPostPreDtoAll();
-	}
+	// public List<PostPreDto> findPostPreDtoAll() {
+	// 	log.info("postService findPostPreDtoAll 실행");
+	// 	return postRepository.findPostPreDtoAll();
+	// }
 }

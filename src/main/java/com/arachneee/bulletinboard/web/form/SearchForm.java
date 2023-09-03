@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SearchForm {
-    private String searchCode;
-    private String searchString;
-    private String sortCode;
+    private String searchCode = "TITLE";
+    private String searchString = "";
+    private String sortCode = "NEW";
 }

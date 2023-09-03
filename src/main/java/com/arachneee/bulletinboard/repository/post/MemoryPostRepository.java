@@ -99,6 +99,8 @@ public class MemoryPostRepository implements PostRepository {
 		String searchCode = searchForm.getSearchCode();
 		String sortCode = searchForm.getSortCode();
 
+		log.info("searchString = {} searchCode = {} sortCode = {}", searchString, searchCode, sortCode);
+
 		return findAll().stream()
 			.filter(post -> isSearchCondition(searchString, searchCode, post))
 			.sorted((post1, post2) -> comparePost(sortCode, post1, post2))
@@ -129,15 +131,13 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	private static boolean isSearchCondition(String searchString, String searchCode, Post post) {
-		if (searchCode.equals("TITLE")) {
-			return post.getTitle().contains(searchString);
-		}
 		if (searchCode.equals("CONTENT")) {
 			return post.getContent().contains(searchString);
 		}
 		if (searchCode.equals("NAME")) {
 			return post.getMember().getName().contains(searchString);
 		}
-		return true;
+		// searchCode.equals("TITLE") // 제목
+		return post.getTitle().contains(searchString);
 	}
 }
