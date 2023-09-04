@@ -19,7 +19,7 @@
   <div class="py-5 text-center">
     <h2>로그인</h2>
   </div>
-  <form action="item.html" th:action th:object="${loginForm}" method="post">
+  <form th:action th:object="${loginForm}" method="post">
     <div th:if="${#fields.hasGlobalErrors()}">
       <p class="field-error" th:each="err : ${#fields.globalErrors()}"
          th:text="${err}"> 전체 오류 메시지</p>
@@ -43,7 +43,6 @@
       </div>
       <div class="col">
         <button class="w-100 btn btn-secondary btn-lg"
-                onclick="location.href='items.html'"
                 th:onclick="|location.href='@{/}'|"
                 type="button">취소</button>
       </div>
