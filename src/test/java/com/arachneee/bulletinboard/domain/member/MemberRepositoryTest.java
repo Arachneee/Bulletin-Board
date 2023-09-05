@@ -30,7 +30,7 @@ public class MemberRepositoryTest {
 		userRepository.save(userA);
 
 		//then
-		Assertions.assertThat(userRepository.findById(userA.getId())).isEqualTo(userA);
+		Assertions.assertThat(userRepository.countLoginId(userA.getLoginId())).isEqualTo(1);
 	}
 
 

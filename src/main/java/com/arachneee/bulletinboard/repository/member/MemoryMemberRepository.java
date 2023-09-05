@@ -30,13 +30,6 @@ public class MemoryMemberRepository implements MemberRepository {
 	}
 
 	@Override
-	public Optional<Member> findByName(String name) {
-		return findAll().stream()
-			.filter(member -> member.getName().equals(name))
-			.findAny();
-	}
-
-	@Override
 	public Optional<Member> findByLoginId(String loginId) {
 		return findAll().stream()
 			.filter(member -> member.getLoginId().equals(loginId))
@@ -51,5 +44,19 @@ public class MemoryMemberRepository implements MemberRepository {
 
 	public void clear() {
 		memberTable.clear();
+	}
+
+	@Override
+	public Long countLoginId(String loginId) {
+		return findAll().stream()
+			.filter(member -> member.getLoginId().equals(loginId))
+			.count();
+	}
+
+	@Override
+	public Long countName(String name) {
+		return findAll().stream()
+			.filter(member -> member.getName().equals(name))
+			.count();
 	}
 }

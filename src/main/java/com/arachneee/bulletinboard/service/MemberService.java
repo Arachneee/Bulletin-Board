@@ -14,11 +14,11 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	public boolean isDuplicatedLoginId(Member member) {
-		return memberRepository.findByLoginId(member.getLoginId()).isPresent();
+		return memberRepository.countLoginId(member.getLoginId()) >= 1;
 	}
 
 	public boolean isDuplicatedName(Member member) {
-		return memberRepository.findByName(member.getName()).isPresent();
+		return memberRepository.countName(member.getName()) >= 1;
 	}
 
 	public void save(Member member) {

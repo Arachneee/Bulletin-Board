@@ -1,11 +1,10 @@
 package com.arachneee.bulletinboard.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Service;
@@ -35,44 +34,34 @@ public class PostService {
 		postRepository.save(post);
 	}
 
-	public List<Post> findAll() {
-		log.info("postService findAll 실행");
-		return postRepository.findAll();
+	public List<PostPreDto> search(SearchForm searchForm) {
+		return postRepository.search(searchForm);
 	}
 
-	public Post findById(Long id) {
-		return postRepository.findById(id);
+	public PostViewDto findPostViewDto(Long id) {
+		return postRepository.findViewDtoById(id);
+	}
+
+	public PostViewDto view(Long id) {
+		PostViewDto postViewDto = postRepository.findViewDtoById(id);
+		postViewDto.setViewCount(postViewDto.getViewCount() + 1);
+		postRepository.updateViewCount(id, postViewDto.getViewCount());
+		return postViewDto;
 	}
 
 	public void update(Long id, PostAddForm postAddForm) {
-		Post findPost = postRepository.findById(id);
-		findPost.setCreateTime(LocalDateTime.now());
-		findPost.setTitle(postAddForm.getTitle());
-		findPost.setContent(postAddForm.getContent());
-	}
-
-	public boolean isNotRightMember(Member member, Long id) {
-		return !member.getId().equals(postRepository.findById(id).getMember().getId());
+		postRepository.update(id, postAddForm);
 	}
 
 	public void delete(Long id) {
 		postRepository.delete(id);
 	}
 
-	public Post view(Long id) {
-		Post post = postRepository.findById(id);
-		post.setViewCount(post.getViewCount() + 1);
-		return post;
+	public boolean isNotRightMember(Member member, Long id) {
+		return !member.getId().equals(postRepository.findMemberIdByPostID(id));
 	}
 
-	public List<PostPreDto> search(SearchForm searchForm) {
-		if (searchForm == null) {
-			return postRepository.findPostPreDtoAll();
-		}
-		return postRepository.search(searchForm);
-	}
-	public List<PostPreDto> findPostPreDtoAll() {
-		log.info("postService findPostPreDtoAll 실행");
-		return postRepository.findPostPreDtoAll();
-	}
+
+
+
 }

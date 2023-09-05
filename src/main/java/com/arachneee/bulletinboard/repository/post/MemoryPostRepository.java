@@ -8,11 +8,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.dto.PostViewDto;
+import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,30 +28,37 @@ public class MemoryPostRepository implements PostRepository {
 	private static long sequence = 0L;
 
 	@Override
+	public PostViewDto findViewDtoById(Long id) {
+		Post post = postTable.get(id);
+
+		PostViewDto postViewDto = new PostViewDto();
+		postViewDto.setId(post.getId());
+		postViewDto.setTitle(post.getTitle());
+		postViewDto.setContent(post.getContent());
+		postViewDto.setName(post.getMember().getName());
+		postViewDto.setCreateTime(post.getCreateTime());
+		postViewDto.setViewCount(post.getViewCount());
+
+		return postViewDto;
+	}
+
+	@Override
+	public void updateViewCount(Long id, int viewCount) {
+		Post findPost = postTable.get(id);
+		findPost.setViewCount(findPost.getViewCount() + 1);
+	}
+
+	@Override
+	public Long findMemberIdByPostID(Long id) {
+		return postTable.get(id).getMember().getId();
+	}
+
+	@Override
 	public Post save(Post post) {
 		post.setId(++sequence);
 		postTable.put(post.getId(), post);
 		log.info("post save={}",post.getId());
 		return post;
-	}
-
-	@Override
-	public Post findById(Long id) {
-		return postTable.get(id);
-	}
-
-	@Override
-	public List<Post> findByName(String name) {
-		return findAll().stream()
-			.filter(post -> post.getMember().getName().equals(name))
-			.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<Post> findByLoginId(String loginId) {
-		return findAll().stream()
-			.filter(post -> post.getMember().getLoginId().equals(loginId))
-			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -58,30 +68,10 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<PostPreDto> findPostPreDtoAll() {
-		log.info("postRepository findPostPreDtoAll 실행");
-		return findAll().stream()
-			.map(post -> {
-				PostPreDto postPreDto = new PostPreDto();
-
-				postPreDto.setId(post.getId());
-				postPreDto.setCreateTime(post.getCreateTime());
-				postPreDto.setTitle(post.getTitle());
-				postPreDto.setViewCount(post.getViewCount());
-				postPreDto.setName(post.getMember().getName());
-
-				return postPreDto;
-			})
-			.sorted(Comparator.comparing(PostPreDto::getId).reversed())
-			.collect(Collectors.toList());
-	}
-
-	@Override
-	public void update(Long id, Post post) {
+	public void update(Long id, PostAddForm postAddForm) {
 		Post findPost = postTable.get(id);
-
-		findPost.setContent(post.getContent());
-		findPost.setTitle(post.getTitle());
+		findPost.setContent(postAddForm.getContent());
+		findPost.setTitle(postAddForm.getTitle());
 	}
 
 	@Override

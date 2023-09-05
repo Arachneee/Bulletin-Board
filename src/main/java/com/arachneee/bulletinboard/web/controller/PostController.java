@@ -1,12 +1,10 @@
 package com.arachneee.bulletinboard.web.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.arachneee.bulletinboard.domain.SearchCode;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 import org.springframework.stereotype.Controller;
@@ -21,14 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.arachneee.bulletinboard.domain.Member;
-import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.service.PostService;
 import com.arachneee.bulletinboard.web.session.SessionConst;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -127,7 +121,7 @@ public class PostController {
 						@PathVariable Long id,
 						Model model) {
 
-		Post findPost = postService.view(id);
+		PostViewDto findPost = postService.view(id);
 		model.addAttribute("post", findPost);
 		log.info("post view={}", id);
 
@@ -150,7 +144,7 @@ public class PostController {
 			return "redirect:/post/{id}";
 		}
 
-		Post findPost = postService.findById(id);
+		PostViewDto findPost = postService.findPostViewDto(id);
 		model.addAttribute("post", findPost);
 		return "post/editPostForm";
 	}
@@ -179,7 +173,4 @@ public class PostController {
 		postService.delete(id);
 		return "redirect:/post";
 	}
-
-
-
 }

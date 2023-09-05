@@ -52,18 +52,6 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByName(String name) {
-        String sql = "select id, login_id, password, name from member where name = ?";
-
-        try {
-            Member member = template.queryForObject(sql, memberRowMapper(), name);
-            return Optional.of(member);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    @Override
     public Optional<Member> findByLoginId(String loginId) {
         String sql = "select id, login_id, password, name from member where login_id = ?";
 
@@ -91,5 +79,17 @@ public class JdbcMemberRepository implements MemberRepository {
             member.setName(rs.getString("name"));
             return member;
         };
+    }
+
+    @Override
+    public Long countLoginId(String loginId) {
+        String sql = "select count(id) from member where login_id=?";
+        return template.queryForObject(sql, Long.class, loginId);
+    }
+
+    @Override
+    public Long countName(String name) {
+        String sql = "select count(name) from member where name=?";
+        return template.queryForObject(sql, Long.class, name);
     }
 }
