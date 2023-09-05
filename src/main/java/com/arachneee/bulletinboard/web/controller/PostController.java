@@ -91,7 +91,7 @@ public class PostController {
 
 	private static void addObjectCookie(String searchCode, String searchForm, HttpServletResponse response) {
 		Cookie searchCodeCookie = new Cookie(searchCode, searchForm);
-		searchCodeCookie.setPath("/post");
+		searchCodeCookie.setPath("/");
 		response.addCookie(searchCodeCookie);
 	}
 

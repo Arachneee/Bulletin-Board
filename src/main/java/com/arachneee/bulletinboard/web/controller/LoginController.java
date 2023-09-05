@@ -11,7 +11,9 @@ import com.arachneee.bulletinboard.service.LoginService;
 import com.arachneee.bulletinboard.web.form.LoginForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,14 +58,27 @@ public class LoginController {
 	}
 
 	@PostMapping("/logout")
-	public String logout(HttpServletRequest request) {
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
 
+		expireAllCookies(response);
+
 		return "redirect:/";
 	}
 
+	private void expireAllCookies(HttpServletResponse response) {
+		expireCookie(response, "searchCode");
+		expireCookie(response, "searchString");
+		expireCookie(response, "sortCode");
+	}
+
+	private void expireCookie(HttpServletResponse response, String cookieName) {
+		Cookie cookie = new Cookie(cookieName, null);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+	}
 
 }
