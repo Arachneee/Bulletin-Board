@@ -82,7 +82,7 @@ public class JdbcPostRepository implements PostRepository {
 
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-        String sql = "select post.id, title, content, create_time, view_count, member.id as name from post join member on post.member_id = member.id ";
+        String sql = "select post.id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.id ";
 
         if (searchCode.equals("CONTENT")) {
             sql += "where content like ";

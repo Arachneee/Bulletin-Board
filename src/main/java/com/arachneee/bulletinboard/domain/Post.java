@@ -1,9 +1,7 @@
 package com.arachneee.bulletinboard.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data

@@ -11,7 +11,7 @@
  </style>
 </head>
 <body>
-<div class="container" style="max-width: 600px">
+<div class="container" style="max-width: 560px">
     <div class="py-5 text-center">
         <h2>게시글 목록</h2>
     </div>
@@ -26,7 +26,7 @@
             </div>
             <hr class="my-1">
             <div>
-                <input type="text" style="width:560px;" id="searchString" th:field="*{searchString}" class="form-control">
+                <input type="text" id="searchString" th:field="*{searchString}" class="form-control">
             </div>
             <hr class="my-1">
             <div>
@@ -58,7 +58,7 @@
             <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
             <td th:text="${post.viewCount}">조회수</td>
             <td>
-                <a href="item.html" th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
+                <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
             </td>
             <td th:text="${post.name}">작성자</td>
         </tr>

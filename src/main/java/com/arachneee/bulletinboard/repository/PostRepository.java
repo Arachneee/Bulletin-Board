@@ -1,7 +1,6 @@
 package com.arachneee.bulletinboard.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;

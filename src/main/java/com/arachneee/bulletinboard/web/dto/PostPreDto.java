@@ -2,8 +2,6 @@ package com.arachneee.bulletinboard.web.dto;
 
 import java.time.LocalDateTime;
 
-import com.arachneee.bulletinboard.domain.Member;
-
 import lombok.Data;
 
 @Data
