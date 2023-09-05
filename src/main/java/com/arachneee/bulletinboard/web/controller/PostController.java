@@ -64,6 +64,9 @@ public class PostController {
 		searchForm.setSearchCode(searchCode);
 		searchForm.setSearchString(searchString);
 		searchForm.setSortCode(sortCode);
+
+		log.info("Controller : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
+
 		model.addAttribute("searchForm", searchForm);
 
 		List<PostPreDto> postPreDtoList = postService.search(searchForm);
@@ -91,7 +94,7 @@ public class PostController {
 
 	private static void addObjectCookie(String searchCode, String searchForm, HttpServletResponse response) {
 		Cookie searchCodeCookie = new Cookie(searchCode, searchForm);
-		searchCodeCookie.setPath("/");
+		searchCodeCookie.setPath("/post");
 		response.addCookie(searchCodeCookie);
 	}
 

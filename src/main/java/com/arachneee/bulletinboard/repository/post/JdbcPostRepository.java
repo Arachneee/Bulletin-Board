@@ -19,6 +19,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 @Primary
 public class JdbcPostRepository implements PostRepository {
@@ -76,6 +79,8 @@ public class JdbcPostRepository implements PostRepository {
         String searchCode = searchForm.getSearchCode();
         String searchString = searchForm.getSearchString();
         String sortCode = searchForm.getSortCode();
+
+        log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
         String sql = "select post.id, title, content, create_time, view_count, member.id as name from post join member on post.member_id = member.id ";
 
