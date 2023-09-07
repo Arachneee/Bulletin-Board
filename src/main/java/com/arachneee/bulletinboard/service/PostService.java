@@ -6,7 +6,7 @@ import java.util.List;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.SearchForm;
+import com.arachneee.bulletinboard.web.form.PostSearchForm;
 import org.springframework.stereotype.Service;
 
 import com.arachneee.bulletinboard.domain.Member;
@@ -34,8 +34,8 @@ public class PostService {
 		postRepository.save(post);
 	}
 
-	public List<PostPreDto> search(SearchForm searchForm) {
-		return postRepository.search(searchForm);
+	public List<PostPreDto> search(PostSearchForm postSearchForm) {
+		return postRepository.search(postSearchForm);
 	}
 
 	public PostViewDto findPostViewDto(Long id) {

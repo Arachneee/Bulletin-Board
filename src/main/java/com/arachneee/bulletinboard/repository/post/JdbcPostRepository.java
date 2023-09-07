@@ -5,16 +5,14 @@ import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.SearchForm;
+import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
@@ -76,34 +74,38 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<PostPreDto> search(SearchForm searchForm) {
-        String searchCode = searchForm.getSearchCode();
-        String searchString = searchForm.getSearchString();
-        String sortCode = searchForm.getSortCode();
+    public List<PostPreDto> search(PostSearchForm postSearchForm) {
+        String searchCode = postSearchForm.getSearchCode();
+        String searchString = postSearchForm.getSearchString();
+        String sortCode = postSearchForm.getSortCode();
 
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-        String sql = "select post.id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.id where ";
-
-        if (searchCode.equals("CONTENT")) {
-            sql += "content";
-        } else if (searchCode.equals("NAME")) {
-            sql += "name";
-        } else { // searchCode.equals("TITLE")
-            sql += "title";
-        }
-
-        sql += " like '%" + searchString + "%' order by ";
-
-        if (sortCode.equals("NEW")) {
-            sql += "create_time desc";
-        } else if (sortCode.equals("VIEW")) {
-            sql += "view_count desc";
-        } else { // sortCode.equals("OLD")
-            sql += "create_time asc";
-        }
+        String sql = "select post.id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.id " +
+                     "where " + getSearchSql(searchCode) + " like '%" + searchString + "%' " +
+                     "order by " + getSortSql(sortCode);
 
         return template.query(sql, postPreDtoRowMapper());
+    }
+
+    private static String getSortSql(String sortCode) {
+        if (sortCode.equals("NEW")) {
+            return "create_time desc";
+        } else if (sortCode.equals("VIEW")) {
+            return "view_count desc";
+        } else { // sortCode.equals("OLD")
+            return "create_time asc";
+        }
+    }
+
+    private static String getSearchSql(String searchCode) {
+        if (searchCode.equals("CONTENT")) {
+            return "content";
+        } else if (searchCode.equals("NAME")) {
+            return "name";
+        } else { // searchCode.equals("TITLE")
+            return "title";
+        }
     }
 
     private RowMapper<PostPreDto> postPreDtoRowMapper() {

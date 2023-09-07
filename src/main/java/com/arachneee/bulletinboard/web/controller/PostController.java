@@ -6,7 +6,8 @@ import com.arachneee.bulletinboard.domain.SearchCode;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.SearchForm;
+import com.arachneee.bulletinboard.web.form.PostSearchForm;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,40 +61,40 @@ public class PostController {
 						@CookieValue(name = "sortCode", defaultValue = "NEW") String sortCode,
 						Model model) {
 
-		SearchForm searchForm = new SearchForm();
-		searchForm.setSearchCode(searchCode);
-		searchForm.setSearchString(searchString);
-		searchForm.setSortCode(sortCode);
+		PostSearchForm postSearchForm = new PostSearchForm();
+		postSearchForm.setSearchCode(searchCode);
+		postSearchForm.setSearchString(searchString);
+		postSearchForm.setSortCode(sortCode);
 
-		log.info("Controller : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
+		log.info("Controller : postSearchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-		model.addAttribute("searchForm", searchForm);
+		model.addAttribute("postSearchForm", postSearchForm);
 
-		List<PostPreDto> postPreDtoList = postService.search(searchForm);
+		List<PostPreDto> postPreDtoList = postService.search(postSearchForm);
 		model.addAttribute("postPreDtoList", postPreDtoList);
 
 		return "post/posts";
 	}
 
 	@PostMapping("")
-	public String search(@ModelAttribute SearchForm searchForm, Model model, HttpServletResponse response) {
-		List<PostPreDto> postPreDtoList = postService.search(searchForm);
+	public String search(@ModelAttribute PostSearchForm postSearchForm, Model model, HttpServletResponse response) {
+		List<PostPreDto> postPreDtoList = postService.search(postSearchForm);
 		model.addAttribute("postPreDtoList", postPreDtoList);
-		model.addAttribute("searchForm", searchForm);
+		model.addAttribute("postSearchForm", postSearchForm);
 
-		addSearchFormCookies(searchForm, response);
+		addSearchFormCookies(postSearchForm, response);
 
 		return "post/posts";
 	}
 
-	private static void addSearchFormCookies(SearchForm searchForm, HttpServletResponse response) {
-		addObjectCookie("searchCode", searchForm.getSearchCode(), response);
-		addObjectCookie("searchString", searchForm.getSearchString(), response);
-		addObjectCookie("sortCode", searchForm.getSortCode(), response);
+	private static void addSearchFormCookies(PostSearchForm postSearchForm, HttpServletResponse response) {
+		addObjectCookie("searchCode", postSearchForm.getSearchCode(), response);
+		addObjectCookie("searchString", postSearchForm.getSearchString(), response);
+		addObjectCookie("sortCode", postSearchForm.getSortCode(), response);
 	}
 
-	private static void addObjectCookie(String searchCode, String searchForm, HttpServletResponse response) {
-		Cookie searchCodeCookie = new Cookie(searchCode, searchForm);
+	private static void addObjectCookie(String searchCode, String postSearchCookieName, HttpServletResponse response) {
+		Cookie searchCodeCookie = new Cookie(searchCode, postSearchCookieName);
 		searchCodeCookie.setPath("/post");
 		response.addCookie(searchCodeCookie);
 	}

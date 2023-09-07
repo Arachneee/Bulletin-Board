@@ -13,7 +13,7 @@ import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.SearchForm;
+import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,10 +80,10 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<PostPreDto> search(SearchForm searchForm) {
-		String searchString = searchForm.getSearchString();
-		String searchCode = searchForm.getSearchCode();
-		String sortCode = searchForm.getSortCode();
+	public List<PostPreDto> search(PostSearchForm postSearchForm) {
+		String searchString = postSearchForm.getSearchString();
+		String searchCode = postSearchForm.getSearchCode();
+		String sortCode = postSearchForm.getSortCode();
 
 		log.info("searchString = {} searchCode = {} sortCode = {}", searchString, searchCode, sortCode);
 
