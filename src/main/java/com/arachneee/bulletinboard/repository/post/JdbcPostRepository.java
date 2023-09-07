@@ -8,16 +8,17 @@ import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.SearchForm;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,27 +26,25 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Primary
 public class JdbcPostRepository implements PostRepository {
-    private final JdbcTemplate template;
+    private final NamedParameterJdbcTemplate template;
 
     public JdbcPostRepository(DataSource dataSource) {
-        this.template = new JdbcTemplate(dataSource);
+        this.template = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
     public Post save(Post post) {
-        String sql = "insert into post (title, content, member_id, create_time, view_count) values (?, ?, ?, ?, ?)";
+        String sql = "insert into post (title, content, member_id, create_time, view_count) values (:title, :content, :memberId, :createTime, :viewCount)";
+        SqlParameterSource param = new MapSqlParameterSource()
+            .addValue("title", post.getTitle())
+            .addValue("content", post.getContent())
+            .addValue("memberId", post.getMember().getId())
+            .addValue("createTime", post.getCreateTime())
+            .addValue("viewCount", post.getViewCount());
+
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
-        template.update(con -> {
-            PreparedStatement preparedStatement = con.prepareStatement(sql, new String[]{"id"});
-            preparedStatement.setString(1, post.getTitle());
-            preparedStatement.setString(2, post.getContent());
-            preparedStatement.setLong(3, post.getMember().getId());
-            preparedStatement.setTimestamp(4, Timestamp.valueOf(post.getCreateTime()));
-            preparedStatement.setInt(5, post.getViewCount());
-
-            return preparedStatement;
-        }, keyHolder);
+        template.update(sql, param, keyHolder);
 
         long key = keyHolder.getKey().longValue();
         post.setId(key);
@@ -54,24 +53,24 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findAll() {
-        return null;
-    }
-
-    @Override
     public void update(Long id, PostAddForm postAddForm) {
-        String sql = "update post set title=?, content=? where id=?";
+        String sql = "update post set title = :title, content = :content where id = :id";
 
-        template.update(sql,
-            postAddForm.getTitle(),
-            postAddForm.getTitle(),
-            id);
+        SqlParameterSource param = new MapSqlParameterSource()
+            .addValue("title", postAddForm.getTitle())
+            .addValue("content", postAddForm.getContent())
+            .addValue("id", id);
+
+        template.update(sql, param);
     }
 
     @Override
     public void delete(Long id) {
-        String sql = "delete from post where id=?";
-        template.update(sql, id);
+        String sql = "delete from post where id = :id";
+
+        Map<String, Object> param = Map.of("id", id);
+
+        template.update(sql, param);
     }
 
     @Override
@@ -82,72 +81,61 @@ public class JdbcPostRepository implements PostRepository {
 
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-        String sql = "select post.id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.id ";
+        String sql = "select post.id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.id where ";
 
         if (searchCode.equals("CONTENT")) {
-            sql += "where content like ";
+            sql += "content";
         } else if (searchCode.equals("NAME")) {
-            sql += "where name like ";
+            sql += "name";
         } else { // searchCode.equals("TITLE")
-            sql += "where title like ";
+            sql += "title";
         }
 
-        sql += "'%" + searchString + "%' ";
+        sql += " like '%" + searchString + "%' order by ";
 
         if (sortCode.equals("NEW")) {
-            sql += "order by create_time desc";
+            sql += "create_time desc";
         } else if (sortCode.equals("VIEW")) {
-            sql += "order by view_count desc";
+            sql += "view_count desc";
         } else { // sortCode.equals("OLD")
-            sql += "order by create_time asc";
+            sql += "create_time asc";
         }
 
-        List<Object> param = new ArrayList<>();
-        return template.query(sql, postPreDtoRowMapper(), param.toArray());
+        return template.query(sql, postPreDtoRowMapper());
     }
 
     private RowMapper<PostPreDto> postPreDtoRowMapper() {
-        return (rs, rowNum) -> {
-            PostPreDto postPreDto = new PostPreDto();
-            postPreDto.setId(rs.getLong("post.id"));
-            postPreDto.setTitle(rs.getString("title"));
-            postPreDto.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-            postPreDto.setViewCount(rs.getInt("view_count"));
-            postPreDto.setName(rs.getString("name"));
-
-            return postPreDto;
-        };
+        return BeanPropertyRowMapper.newInstance(PostPreDto.class);
     }
 
     @Override
     public PostViewDto findViewDtoById(Long id) {
-        String sql = "select post.id, title, content, create_time, view_count, member.id as name from post join member on post.member_id = member.id where post.id = ?";
-        return template.queryForObject(sql, postViewDtoRowMapper(), id);
+        String sql = "select post.id, title, content, create_time, view_count, member.id as name from post join member on post.member_id = member.id where post.id = :id";
+        Map<String, Object> param = Map.of("id", id);
+
+        return template.queryForObject(sql, param, postViewDtoRowMapper());
     }
 
     private RowMapper<PostViewDto> postViewDtoRowMapper() {
-        return (rs, rowNum) -> {
-            PostViewDto postViewDto = new PostViewDto();
-            postViewDto.setId(rs.getLong("post.id"));
-            postViewDto.setTitle(rs.getString("title"));
-            postViewDto.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-            postViewDto.setViewCount(rs.getInt("view_count"));
-            postViewDto.setName(rs.getString("name"));
-            postViewDto.setContent(rs.getString("content"));
-
-            return postViewDto;
-        };
+        return BeanPropertyRowMapper.newInstance(PostViewDto.class);
     }
 
     @Override
     public void updateViewCount(Long id, int viewCount) {
-        String sql = "update post set view_count=? where id=?";
-        template.update(sql, viewCount,id);
+        String sql = "update post set view_count = :viewCount where id = :id";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+            .addValue("viewCount", viewCount)
+            .addValue("id", id);
+
+        template.update(sql, param);
     }
 
     @Override
     public Long findMemberIdByPostID(Long id) {
-        String sql = "select member.id from post join member on post.member_id = member.id where post.id = ?";
-        return template.queryForObject(sql, Long.class, id);
+        String sql = "select member.id from post join member on post.member_id = member.id where post.id = :id";
+        Map<String, Object> param = Map.of("id", id);
+
+        return template.queryForObject(sql, param, Long.class);
     }
 }

@@ -11,8 +11,6 @@ import com.arachneee.bulletinboard.web.form.SearchForm;
 public interface PostRepository {
 	Post save(Post post);
 
-	List<Post> findAll();
-
 	void update(Long id, PostAddForm postAddForm);
 	void delete(Long id);
 

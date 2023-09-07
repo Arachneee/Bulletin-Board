@@ -58,7 +58,6 @@ public class MemoryPostRepository implements PostRepository {
 		return post;
 	}
 
-	@Override
 	public List<Post> findAll() {
 		log.info("MemoryPostRepository findAll 현재 총 수량={}",postTable.size());
 		return new ArrayList<>(postTable.values());
