@@ -35,7 +35,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
 						@RequestParam(defaultValue = "/") String redirectURL,
-						HttpServletRequest request) {
+						HttpServletRequest request, HttpServletResponse response) {
 		if (bindingResult.hasErrors()) {
 			return "login/loginForm";
 		}
@@ -51,6 +51,8 @@ public class LoginController {
 
 		HttpSession session = request.getSession();
 		session.setAttribute(SessionConst.LOGIN_MEMBER, member);
+
+		expireAllCookies(response);
 
 		log.info("로그인 성공={}", redirectURL);
 

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
@@ -22,23 +23,20 @@ import java.util.Optional;
 public class JdbcMemberRepository implements MemberRepository {
 
     private final NamedParameterJdbcTemplate template;
+    private final SimpleJdbcInsert jdbcInsert;
 
     public JdbcMemberRepository(DataSource dataSource) {
         this.template = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+            .withTableName("member")
+            .usingGeneratedKeyColumns("id");
     }
 
     @Override
     public Member save(Member member) {
-        String sql = "insert into member (login_id, password, name) values (:loginId, :password, :name)";
-
         SqlParameterSource param = new BeanPropertySqlParameterSource(member);
-        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-
-        template.update(sql, param, keyHolder);
-
-        Long key = keyHolder.getKey().longValue();
-        member.setId(key);
-
+        Number key = jdbcInsert.executeAndReturnKey(param);
+        member.setId(key.longValue());
         return member;
     }
 
