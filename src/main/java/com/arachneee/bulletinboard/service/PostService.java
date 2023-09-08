@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
-import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.PostSearchForm;
 import org.springframework.stereotype.Service;
 
 import com.arachneee.bulletinboard.domain.Member;
@@ -53,7 +51,7 @@ public class PostService {
 	}
 
 	public boolean isNotRightMember(Member member, Long id) {
-		return member.getId().equals(postRepository.findMemberIdByPostID(id));
+		return !member.getId().equals(postRepository.findMemberIdByPostID(id));
 	}
 
 

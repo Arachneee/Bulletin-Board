@@ -48,16 +48,16 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member findById(Long id) {
-        String sql = "select id, login_id, password, name from member where id = :id";
-        Map<String, Object> param = Map.of("id", id);
+    public Member findById(Long memberId) {
+        String sql = "select member_id, login_id, password, name from member where member_id = :memberId";
+        Map<String, Object> param = Map.of("memberId", memberId);
 
         return template.queryForObject(sql, param, memberRowMapper());
     }
 
     @Override
     public Optional<Member> findByLoginId(String loginId) {
-        String sql = "select id, login_id, password, name from member where login_id = :loginId";
+        String sql = "select member_id, login_id, password, name from member where login_id = :loginId";
         Map<String, Object> param = Map.of("loginId", loginId);
 
         try {
@@ -72,14 +72,14 @@ public class JdbcMemberRepository implements MemberRepository {
 
     @Override
     public List<Member> findAll() {
-        String sql = "select id, login_id, password, name from member";
+        String sql = "select member_id, login_id, password, name from member";
         return template.query(sql, memberRowMapper());
     }
 
     private RowMapper<Member> memberRowMapper() {
         return (rs, rowNum) -> {
             Member member = Member.create(rs.getString("login_id"), rs.getString("password"), rs.getString("name"));
-            member.setId(rs.getLong("id"));
+            member.setId(rs.getLong("member_id"));
 
             return member;
         };
@@ -87,7 +87,7 @@ public class JdbcMemberRepository implements MemberRepository {
 
     @Override
     public Long countLoginId(String loginId) {
-        String sql = "select count(id) from member where login_id= :loginId";
+        String sql = "select count(member_id) from member where login_id= :loginId";
         Map<String, Object> param = Map.of("loginId", loginId);
 
         return template.queryForObject(sql, param, Long.class);

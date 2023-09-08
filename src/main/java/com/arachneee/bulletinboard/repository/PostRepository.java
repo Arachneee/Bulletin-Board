@@ -1,14 +1,11 @@
 package com.arachneee.bulletinboard.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
-import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.PostSearchForm;
+
 
 public interface PostRepository {
 	void save(Post post);

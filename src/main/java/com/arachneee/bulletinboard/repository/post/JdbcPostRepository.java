@@ -6,7 +6,6 @@ import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -49,22 +48,22 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public void update(Long id, String title, String content) {
-        String sql = "update post set title = :title, content = :content where id = :id";
+    public void update(Long postId, String title, String content) {
+        String sql = "update post set title = :title, content = :content where post_id = :post_id";
 
         SqlParameterSource param = new MapSqlParameterSource()
             .addValue("title", title)
             .addValue("content", content)
-            .addValue("id", id);
+            .addValue("post_id", postId);
 
         template.update(sql, param);
     }
 
     @Override
-    public void delete(Long id) {
-        String sql = "delete from post where id = :id";
+    public void delete(Long postId) {
+        String sql = "delete from post where post_id = :postId";
 
-        Map<String, Object> param = Map.of("id", id);
+        Map<String, Object> param = Map.of("postId", postId);
 
         template.update(sql, param);
     }
@@ -73,7 +72,7 @@ public class JdbcPostRepository implements PostRepository {
     public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-        String sql = "select post.id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.id " +
+        String sql = "select post_id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.member_id " +
                      "where " + getSearchSql(searchCode) + " like '%" + searchString + "%' " +
                      "order by " + getSortSql(sortCode);
 
@@ -103,7 +102,7 @@ public class JdbcPostRepository implements PostRepository {
     // 바꿔야됨
     private RowMapper<PostPreDto> postPreDtoRowMapper() {
         return (rs, rowNum) -> {
-            return PostPreDto.create(rs.getLong("id"),
+            return PostPreDto.create(rs.getLong("post_id"),
                                     rs.getString("title"),
                                     rs.getString("name"),
                                     rs.getTimestamp("create_time").toLocalDateTime(),
@@ -112,9 +111,9 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public PostViewDto findViewDtoById(Long id) {
-        String sql = "select post.id, title, content, create_time, view_count, member.id as name from post join member on post.member_id = member.id where post.id = :id";
-        Map<String, Object> param = Map.of("id", id);
+    public PostViewDto findViewDtoById(Long postId) {
+        String sql = "select post_id, title, content, create_time, view_count, member.member_id as name from post join member on post.member_id = member.member_id where post.post_id = :postId";
+        Map<String, Object> param = Map.of("postId", postId);
 
         return template.queryForObject(sql, param, postViewDtoRowMapper());
     }
@@ -124,7 +123,7 @@ public class JdbcPostRepository implements PostRepository {
         return (rs, rowNum) -> {
             PostViewDto postViewDto = new PostViewDto();
 
-            postViewDto.setId(rs.getLong("id"));
+            postViewDto.setId(rs.getLong("post_id"));
             postViewDto.setTitle(rs.getString("title"));
             postViewDto.setContent(rs.getString("content"));
             postViewDto.setName(rs.getString("name"));
@@ -136,20 +135,20 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public void updateViewCount(Long id, int viewCount) {
-        String sql = "update post set view_count = :viewCount where id = :id";
+    public void updateViewCount(Long postId, int viewCount) {
+        String sql = "update post set view_count = :viewCount where post_id = :postId";
 
         SqlParameterSource param = new MapSqlParameterSource()
             .addValue("viewCount", viewCount)
-            .addValue("id", id);
+            .addValue("postId", postId);
 
         template.update(sql, param);
     }
 
     @Override
-    public Long findMemberIdByPostID(Long id) {
-        String sql = "select member.id from post join member on post.member_id = member.id where post.id = :id";
-        Map<String, Object> param = Map.of("id", id);
+    public Long findMemberIdByPostID(Long postId) {
+        String sql = "select post.member_id from post join member on post.member_id = member.member_id where post.post_id = :postId";
+        Map<String, Object> param = Map.of("postId", postId);
 
         return template.queryForObject(sql, param, Long.class);
     }
