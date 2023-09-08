@@ -49,8 +49,8 @@ public class LoginController {
 			return "login/loginForm";
 		}
 
-		HttpSession session = request.getSession();
-		session.setAttribute(SessionConst.LOGIN_MEMBER, member);
+		request.getSession()
+				.setAttribute(SessionConst.LOGIN_MEMBER, member);
 
 		expireAllCookies(response);
 

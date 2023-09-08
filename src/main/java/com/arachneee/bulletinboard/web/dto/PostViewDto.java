@@ -2,9 +2,12 @@ package com.arachneee.bulletinboard.web.dto;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter @Setter
 public class PostViewDto {
 
 	private Long id;
@@ -13,4 +16,8 @@ public class PostViewDto {
 	private String name;
 	private LocalDateTime createTime;
 	private Integer viewCount;
+
+	public void view() {
+		viewCount++;
+	}
 }

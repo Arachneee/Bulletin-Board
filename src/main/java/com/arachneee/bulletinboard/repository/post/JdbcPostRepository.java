@@ -4,8 +4,6 @@ import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
-import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -32,7 +30,7 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public Post save(Post post) {
+    public void save(Post post) {
         String sql = "insert into post (title, content, member_id, create_time, view_count) values (:title, :content, :memberId, :createTime, :viewCount)";
 
         SqlParameterSource param = new MapSqlParameterSource()
@@ -47,18 +45,16 @@ public class JdbcPostRepository implements PostRepository {
         template.update(sql, param, keyHolder);
 
         long key = keyHolder.getKey().longValue();
-        post.setId(key);
-
-        return post;
+        return;
     }
 
     @Override
-    public void update(Long id, PostAddForm postAddForm) {
+    public void update(Long id, String title, String content) {
         String sql = "update post set title = :title, content = :content where id = :id";
 
         SqlParameterSource param = new MapSqlParameterSource()
-            .addValue("title", postAddForm.getTitle())
-            .addValue("content", postAddForm.getContent())
+            .addValue("title", title)
+            .addValue("content", content)
             .addValue("id", id);
 
         template.update(sql, param);
@@ -74,14 +70,10 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<PostPreDto> search(PostSearchForm postSearchForm) {
-        String searchCode = postSearchForm.getSearchCode();
-        String searchString = postSearchForm.getSearchString();
-        String sortCode = postSearchForm.getSortCode();
-
+    public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-        String sql = "select post.id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.id " +
+        String sql = "select post.id as id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.id " +
                      "where " + getSearchSql(searchCode) + " like '%" + searchString + "%' " +
                      "order by " + getSortSql(sortCode);
 
@@ -108,8 +100,11 @@ public class JdbcPostRepository implements PostRepository {
         }
     }
 
+    // 바꿔야됨
     private RowMapper<PostPreDto> postPreDtoRowMapper() {
-        return BeanPropertyRowMapper.newInstance(PostPreDto.class);
+        return (rs, rowNum) -> {
+            return PostPreDto.create(rs.getLong("id"), rs.getString("title"), rs.getString("name"), rs.getDate("create_time"), rs.getInt("view_count"));
+        };
     }
 
     @Override
@@ -120,6 +115,7 @@ public class JdbcPostRepository implements PostRepository {
         return template.queryForObject(sql, param, postViewDtoRowMapper());
     }
 
+    //바꿔야됨
     private RowMapper<PostViewDto> postViewDtoRowMapper() {
         return BeanPropertyRowMapper.newInstance(PostViewDto.class);
     }

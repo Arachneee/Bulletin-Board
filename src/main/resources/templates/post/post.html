@@ -49,13 +49,13 @@
       <button class="w-100 btn btn-primary btn-lg"
               onclick="location.href='editForm.html'"
               th:onclick="|location.href='@{/post/{id}/edit(id=${post.id})}'|"
-              type="button" th:disabled="${not show} ? 'disabled'">수정</button>
+              type="button" th:disabled="${show} ? 'disabled'">수정</button>
     </div>
     <div class="col">
       <button class="w-100 btn btn-danger btn-lg"
               onclick="location.href='editForm.html'"
               th:onclick="|location.href='@{/post/{id}/delete(id=${post.id})}'|"
-              type="button" th:disabled="${not show} ? 'disabled'">삭제</button>
+              type="button" th:disabled="${show} ? 'disabled'">삭제</button>
     </div>
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg"

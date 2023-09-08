@@ -22,35 +22,30 @@ public class PostService {
 
 	private final PostRepository postRepository;
 
-	public void save(PostAddForm postAddForm, Member member) {
-		Post post = new Post();
-
-		post.setTitle(postAddForm.getTitle());
-		post.setContent(postAddForm.getContent());
-		post.setMember(member);
-		post.setCreateTime(LocalDateTime.now());
-		post.setViewCount(0);
-
-		postRepository.save(post);
+	public void save(String title, String content, Member member) {
+		postRepository.save(Post.create(title, content, member, LocalDateTime.now(), 0));
 	}
 
-	public List<PostPreDto> search(PostSearchForm postSearchForm) {
-		return postRepository.search(postSearchForm);
+	public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
+		return postRepository.search(searchCode, searchString, sortCode);
 	}
 
 	public PostViewDto findPostViewDto(Long id) {
 		return postRepository.findViewDtoById(id);
 	}
 
-	public PostViewDto view(Long id) {
+	public PostViewDto viewAndFindPostViewDto(Long id) {
 		PostViewDto postViewDto = postRepository.findViewDtoById(id);
-		postViewDto.setViewCount(postViewDto.getViewCount() + 1);
+
+		postViewDto.view();
+
 		postRepository.updateViewCount(id, postViewDto.getViewCount());
+
 		return postViewDto;
 	}
 
-	public void update(Long id, PostAddForm postAddForm) {
-		postRepository.update(id, postAddForm);
+	public void update(Long id, String title, String content) {
+		postRepository.update(id, title, content);
 	}
 
 	public void delete(Long id) {
@@ -58,7 +53,7 @@ public class PostService {
 	}
 
 	public boolean isNotRightMember(Member member, Long id) {
-		return !member.getId().equals(postRepository.findMemberIdByPostID(id));
+		return member.getId().equals(postRepository.findMemberIdByPostID(id));
 	}
 
 

@@ -3,6 +3,7 @@ package com.arachneee.bulletinboard.web.controller;
 import java.util.*;
 
 import com.arachneee.bulletinboard.domain.SearchCode;
+import com.arachneee.bulletinboard.domain.SortCode;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
@@ -38,11 +39,11 @@ public class PostController {
 	private final PostService postService;
 
 	@ModelAttribute("sortCodes")
-	public List<SearchCode> sortCodes() {
-		List<SearchCode> sortCodes = new ArrayList<>();
-		sortCodes.add(new SearchCode("NEW", "최신순"));
-		sortCodes.add(new SearchCode("OLD", "오래된순"));
-		sortCodes.add(new SearchCode("VIEW", "조회순"));
+	public List<SortCode> sortCodes() {
+		List<SortCode> sortCodes = new ArrayList<>();
+		sortCodes.add(new SortCode("NEW", "최신순"));
+		sortCodes.add(new SortCode("OLD", "오래된순"));
+		sortCodes.add(new SortCode("VIEW", "조회순"));
 		return sortCodes;
 	}
 
@@ -61,16 +62,10 @@ public class PostController {
 						@CookieValue(name = "sortCode", defaultValue = "NEW") String sortCode,
 						Model model) {
 
-		PostSearchForm postSearchForm = new PostSearchForm();
-		postSearchForm.setSearchCode(searchCode);
-		postSearchForm.setSearchString(searchString);
-		postSearchForm.setSortCode(sortCode);
-
-		log.info("Controller : postSearchForm = {}, {}, {}", searchCode, searchString, sortCode);
-
+		PostSearchForm postSearchForm = new PostSearchForm(searchCode, searchString, sortCode);
 		model.addAttribute("postSearchForm", postSearchForm);
 
-		List<PostPreDto> postPreDtoList = postService.search(postSearchForm);
+		List<PostPreDto> postPreDtoList = postService.search(searchCode, searchString, sortCode);
 		model.addAttribute("postPreDtoList", postPreDtoList);
 
 		return "post/posts";
@@ -78,7 +73,8 @@ public class PostController {
 
 	@PostMapping("")
 	public String search(@ModelAttribute PostSearchForm postSearchForm, Model model, HttpServletResponse response) {
-		List<PostPreDto> postPreDtoList = postService.search(postSearchForm);
+		List<PostPreDto> postPreDtoList = postService.search(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), postSearchForm.getSortCode());
+
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("postSearchForm", postSearchForm);
 
@@ -100,21 +96,22 @@ public class PostController {
 	}
 
 	@GetMapping("/add")
-	public String addPost(@ModelAttribute PostAddForm postAddForm) {
+	public String addPostForm(@ModelAttribute PostAddForm postAddForm) {
 		log.info("Get : /post/add 호출");
 		return "post/addPostForm";
 	}
 
 	@PostMapping("/add")
 	public String savePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-		@Valid @ModelAttribute PostAddForm postAddForm, BindingResult bindingResult) {
+						   @Valid @ModelAttribute PostAddForm postAddForm, BindingResult bindingResult) {
+
 		log.info("Post : /post/add 호출");
 
 		if (bindingResult.hasErrors()) {
 			return "post/addPostForm";
 		}
 
-		postService.save(postAddForm, member);
+		postService.save(postAddForm.getTitle(), postAddForm.getContent(), member);
 		log.info("post save 완료");
 
 		return "redirect:/post";
@@ -122,52 +119,46 @@ public class PostController {
 
 	@GetMapping("/{id}")
 	public String post(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-						@PathVariable Long id,
+					   @PathVariable Long id,
 						Model model) {
 
-		PostViewDto findPost = postService.view(id);
-		model.addAttribute("post", findPost);
+		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id);
+
+		model.addAttribute("post", postViewDto);
 		log.info("post view={}", id);
 
-		boolean show = true;
-
-		if (postService.isNotRightMember(member, id)) {
-			show = false;
-		}
-
-		model.addAttribute("show", show);
+		model.addAttribute("show", postService.isNotRightMember(member, id));
 		return "post/post";
 	}
 
 	@GetMapping("/{id}/edit")
 	public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-		@PathVariable Long id,
+						   @PathVariable Long id,
 		Model model) {
 
 		if (postService.isNotRightMember(member, id)) {
 			return "redirect:/post/{id}";
 		}
 
-		PostViewDto findPost = postService.findPostViewDto(id);
-		model.addAttribute("post", findPost);
+		model.addAttribute("post", postService.findPostViewDto(id));
 		return "post/editPostForm";
 	}
 
 	@PostMapping("/{id}/edit")
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-		@PathVariable Long id, @ModelAttribute PostAddForm postAddForm) {
+					   @PathVariable Long id, @ModelAttribute PostAddForm postAddForm) {
 
 		if (postService.isNotRightMember(member, id)) {
 			return "redirect:/post/{id}";
 		}
 
-		postService.update(id, postAddForm);
+		postService.update(id, postAddForm.getTitle(), postAddForm.getContent());
 		return "redirect:/post/{id}";
 	}
 
 	@GetMapping("/{id}/delete")
 	public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-						   @PathVariable Long id,
+						 @PathVariable Long id,
 						   Model model) {
 
 		if (postService.isNotRightMember(member, id)) {

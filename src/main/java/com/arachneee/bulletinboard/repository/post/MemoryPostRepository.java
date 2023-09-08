@@ -12,8 +12,7 @@ import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
-import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.PostSearchForm;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +26,7 @@ public class MemoryPostRepository implements PostRepository {
 	@Override
 	public PostViewDto findViewDtoById(Long id) {
 		Post post = postTable.get(id);
+
 
 		PostViewDto postViewDto = new PostViewDto();
 		postViewDto.setId(post.getId());
@@ -42,7 +42,7 @@ public class MemoryPostRepository implements PostRepository {
 	@Override
 	public void updateViewCount(Long id, int viewCount) {
 		Post findPost = postTable.get(id);
-		findPost.setViewCount(findPost.getViewCount() + 1);
+		findPost.view();
 	}
 
 	@Override
@@ -51,11 +51,10 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public Post save(Post post) {
+	public void save(Post post) {
 		post.setId(++sequence);
 		postTable.put(post.getId(), post);
 		log.info("post save={}",post.getId());
-		return post;
 	}
 
 	public List<Post> findAll() {
@@ -64,10 +63,10 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public void update(Long id, PostAddForm postAddForm) {
+	public void update(Long id, String title, String content) {
 		Post findPost = postTable.get(id);
-		findPost.setContent(postAddForm.getContent());
-		findPost.setTitle(postAddForm.getTitle());
+		findPost.update(title, content);
+
 	}
 
 	@Override
@@ -80,27 +79,13 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<PostPreDto> search(PostSearchForm postSearchForm) {
-		String searchString = postSearchForm.getSearchString();
-		String searchCode = postSearchForm.getSearchCode();
-		String sortCode = postSearchForm.getSortCode();
-
+	public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
 		log.info("searchString = {} searchCode = {} sortCode = {}", searchString, searchCode, sortCode);
 
 		return findAll().stream()
 			.filter(post -> isSearchCondition(searchString, searchCode, post))
 			.sorted((post1, post2) -> comparePost(sortCode, post1, post2))
-			.map(post -> {
-				PostPreDto postPreDto = new PostPreDto();
-
-				postPreDto.setId(post.getId());
-				postPreDto.setCreateTime(post.getCreateTime());
-				postPreDto.setTitle(post.getTitle());
-				postPreDto.setViewCount(post.getViewCount());
-				postPreDto.setName(post.getMember().getName());
-
-				return postPreDto;
-			})
+			.map(post -> PostPreDto.from(post))
 			.collect(Collectors.toList());
 
 	}

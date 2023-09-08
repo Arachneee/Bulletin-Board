@@ -1,11 +1,13 @@
 package com.arachneee.bulletinboard.web.form;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
 
-@Data
+
+@Getter @Setter
 public class MemberAddForm {
 
 	@NotEmpty
