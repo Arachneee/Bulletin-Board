@@ -78,7 +78,10 @@ public class JdbcMemberRepository implements MemberRepository {
 
     private RowMapper<Member> memberRowMapper() {
         return (rs, rowNum) -> {
-            return Member.create(rs.getString("login_id"), rs.getString("password"), rs.getString("name"));
+            Member member = Member.create(rs.getString("login_id"), rs.getString("password"), rs.getString("name"));
+            member.setId(rs.getLong("id"));
+
+            return member;
         };
     }
 

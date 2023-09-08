@@ -73,7 +73,7 @@ public class JdbcPostRepository implements PostRepository {
     public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
 
-        String sql = "select post.id as id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.id " +
+        String sql = "select post.id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.id " +
                      "where " + getSearchSql(searchCode) + " like '%" + searchString + "%' " +
                      "order by " + getSortSql(sortCode);
 
@@ -103,7 +103,11 @@ public class JdbcPostRepository implements PostRepository {
     // 바꿔야됨
     private RowMapper<PostPreDto> postPreDtoRowMapper() {
         return (rs, rowNum) -> {
-            return PostPreDto.create(rs.getLong("id"), rs.getString("title"), rs.getString("name"), rs.getDate("create_time"), rs.getInt("view_count"));
+            return PostPreDto.create(rs.getLong("id"),
+                                    rs.getString("title"),
+                                    rs.getString("name"),
+                                    rs.getTimestamp("create_time").toLocalDateTime(),
+                                    rs.getInt("view_count"));
         };
     }
 
@@ -117,7 +121,18 @@ public class JdbcPostRepository implements PostRepository {
 
     //바꿔야됨
     private RowMapper<PostViewDto> postViewDtoRowMapper() {
-        return BeanPropertyRowMapper.newInstance(PostViewDto.class);
+        return (rs, rowNum) -> {
+            PostViewDto postViewDto = new PostViewDto();
+
+            postViewDto.setId(rs.getLong("id"));
+            postViewDto.setTitle(rs.getString("title"));
+            postViewDto.setContent(rs.getString("content"));
+            postViewDto.setName(rs.getString("name"));
+            postViewDto.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+            postViewDto.setViewCount(rs.getInt("view_count"));
+
+            return postViewDto;
+        };
     }
 
     @Override

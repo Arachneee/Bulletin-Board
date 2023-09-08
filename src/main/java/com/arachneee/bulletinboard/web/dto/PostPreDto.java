@@ -2,7 +2,6 @@ package com.arachneee.bulletinboard.web.dto;
 
 import java.time.LocalDateTime;
 
-import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import lombok.Getter;
 
@@ -30,6 +29,7 @@ public class PostPreDto {
 	public static PostPreDto create(Long id, String title, String name, LocalDateTime createTime, Integer viewCount) {
 		PostPreDto postPreDto = new PostPreDto();
 
+		postPreDto.setId(id);
 		postPreDto.setTitle(title);
 		postPreDto.setName(name);
 		postPreDto.setCreateTime(createTime);
