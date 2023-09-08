@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.arachneee.bulletinboard.domain.Member;
 
 public interface MemberRepository {
-	Member save(Member member);
+	void save(Member member);
 	Member findById(Long id);
 
 	Optional<Member> findByLoginId(String loginId);

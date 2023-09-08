@@ -14,20 +14,15 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-	public boolean isDuplicatedLoginId(MemberAddForm memberAddForm) {
-		return memberRepository.countLoginId(memberAddForm.getLoginId()) >= 1;
+	public boolean isDuplicatedLoginId(String loginId) {
+		return memberRepository.countLoginId(loginId) >= 1;
 	}
 
-	public boolean isDuplicatedName(MemberAddForm memberAddForm) {
-		return memberRepository.countName(memberAddForm.getName()) >= 1;
+	public boolean isDuplicatedName(String name) {
+		return memberRepository.countName(name) >= 1;
 	}
 
-	public void save(MemberAddForm memberAddForm) {
-		Member member = new Member();
-		member.setLoginId(memberAddForm.getLoginId());
-		member.setPassword(memberAddForm.getPassword());
-		member.setName(memberAddForm.getName());
-
-		memberRepository.save(member);
+	public void save(String loginId, String password, String name) {
+		memberRepository.save(Member.create(loginId, password, name));
 	}
 }

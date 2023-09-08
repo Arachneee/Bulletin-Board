@@ -2,22 +2,23 @@ package com.arachneee.bulletinboard.repository.member;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+@Slf4j
 @Repository
 @Primary
 public class JdbcMemberRepository implements MemberRepository {
@@ -33,11 +34,17 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member save(Member member) {
-        SqlParameterSource param = new BeanPropertySqlParameterSource(member);
-        Number key = jdbcInsert.executeAndReturnKey(param);
-        member.setId(key.longValue());
-        return member;
+    public void save(Member member) {
+        String sql = "insert into member (login_id, password, name) values (:loginId, :password, :name)";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("loginId", member.getLoginId())
+                .addValue("password", member.getPassword())
+                .addValue("name", member.getName());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        template.update(sql, param, keyHolder);
     }
 
     @Override
@@ -55,6 +62,8 @@ public class JdbcMemberRepository implements MemberRepository {
 
         try {
             Member member = template.queryForObject(sql, param, memberRowMapper());
+
+            log.info("findMember data loginId = {}, password = {} by input = {}", member.getLoginId(), member.getPassword(), loginId);
             return Optional.of(member);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -68,7 +77,9 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     private RowMapper<Member> memberRowMapper() {
-        return BeanPropertyRowMapper.newInstance(Member.class);
+        return (rs, rowNum) -> {
+            return Member.create(rs.getString("login_id"), rs.getString("password"), rs.getString("name"));
+        };
     }
 
     @Override

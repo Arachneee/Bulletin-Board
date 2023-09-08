@@ -17,11 +17,12 @@ public class MemoryMemberRepository implements MemberRepository {
 	private static final Map<Long, Member> memberTable = new ConcurrentHashMap<>();
 	private static long sequence = 0L;
 
-	public Member save(Member member) {
+	public void save(Member member) {
 		member.setId(++sequence);
 		memberTable.put(member.getId(), member);
 		log.info("save member id={}", member.getId());
-		return member;
+
+		return;
 	}
 
 	public Member findById(Long id) {
