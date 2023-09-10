@@ -1,6 +1,6 @@
 package com.arachneee.bulletinboard.web.form;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter @Setter
 public class PostAddForm {
 
-	@NotEmpty
+	@NotBlank
 	private String title;
 
-	@NotEmpty
+	@NotBlank
 	private String content;
 }

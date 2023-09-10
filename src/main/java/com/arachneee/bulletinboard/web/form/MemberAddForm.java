@@ -1,5 +1,6 @@
 package com.arachneee.bulletinboard.web.form;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -10,16 +11,16 @@ import jakarta.validation.constraints.NotEmpty;
 @Getter @Setter
 public class MemberAddForm {
 
-	@NotEmpty
+	@NotBlank
 	@Length(max=30)
 	private String loginId;
-	@NotEmpty
+	@NotBlank
 	@Length(max=30)
 	private String password;
-	@NotEmpty
+	@NotBlank
 	@Length(max=30)
 	private String passwordRe;
-	@NotEmpty
+	@NotBlank
 	@Length(max=30)
 	private String name;
 }

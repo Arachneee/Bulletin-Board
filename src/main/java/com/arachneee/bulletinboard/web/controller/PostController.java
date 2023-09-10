@@ -62,7 +62,8 @@ public class PostController {
 
 	@PostMapping("/add")
 	public String savePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-						   @Valid @ModelAttribute PostAddForm postAddForm, BindingResult bindingResult) {
+						   @Valid @ModelAttribute PostAddForm postAddForm,
+						   BindingResult bindingResult) {
 
 		log.info("Post : /post/add 호출");
 
@@ -83,7 +84,7 @@ public class PostController {
 						Model model) {
 		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id);
 
-		model.addAttribute("post", postViewDto);
+		model.addAttribute("postViewDto", postViewDto);
 		log.info("post view={}", id);
 
 		model.addAttribute("show", postService.isNotRightMember(member, id));
@@ -99,19 +100,25 @@ public class PostController {
 			return "redirect:/post/{id}";
 		}
 
-		model.addAttribute("post", postService.findPostViewDto(id));
+		model.addAttribute("postViewDto", postService.findPostViewDto(id));
 		return "post/editPostForm";
 	}
 
 	@PostMapping("/{id}/edit")
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-					   @PathVariable Long id, @ModelAttribute PostAddForm postAddForm) {
+					   @PathVariable Long id,
+					   @Valid @ModelAttribute PostViewDto postViewDto,
+					   BindingResult bindingResult) {
 
 		if (postService.isNotRightMember(member, id)) {
 			return "redirect:/post/{id}";
 		}
 
-		postService.update(id, postAddForm.getTitle(), postAddForm.getContent());
+		if (bindingResult.hasErrors()) {
+			return "post/editPostForm";
+		}
+
+		postService.update(id, postViewDto.getTitle(), postViewDto.getContent());
 		return "redirect:/post/{id}";
 	}
 

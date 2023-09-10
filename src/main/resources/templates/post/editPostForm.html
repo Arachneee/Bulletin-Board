@@ -19,7 +19,7 @@
   <div class="py-5 text-center">
     <h2>게시글 수정</h2>
   </div>
-  <form action="" th:action th:object="${post}" method="post">
+  <form action="" th:action th:object="${postViewDto}" method="post">
     <div th:if="${#fields.hasGlobalErrors()}">
       <p class="field-error" th:each="err : ${#fields.globalErrors()}"
          th:text="${err}">전체 오류 메시지</p>
@@ -37,9 +37,6 @@
     <div>
       <label for="content">내용</label>
       <p><textarea id="content" cols="64" rows="20" th:field="*{content}" placeholder="내용을 입력하세요."></textarea></p>
-<!--      <input type="text" style="width:500px;height:500px;" id="content" th:field="*{content}"-->
-<!--             class="form-control"-->
-<!--             th:errorclass="field-error">-->
       <div class="field-error" th:errors="*{content}" />
     </div>
     <hr class="my-4">
@@ -49,8 +46,7 @@
       </div>
       <div class="col">
         <button class="w-100 btn btn-secondary btn-lg"
-                onclick="location.href='items.html'"
-                th:onclick="|location.href='@{/post/{id}(id=${post.id})}'|"
+                th:onclick="|location.href='@{/post/{id}(id=*{id})}'|"
                 type="button">취소</button>
       </div>
     </div>

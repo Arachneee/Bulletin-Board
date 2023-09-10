@@ -12,59 +12,58 @@
 </head>
 <body>
 
-<div class="container">
-
-  <div >
-
-  </div>
-
-  <div class="py-5 text-center">
-    <h2>
-      <span th:text="${post.title}">제목</span>
-    </h2>
-  </div>
-  <div>
-    <label for="viewCount">조회수</label>
-    <input type="text" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="${post.viewCount}" readonly>
-  </div>
-  <div>
-    <label for="member">글쓴이</label>
-    <input type="text" id="member" name="member" class="form-control" value="글쓴이" th:value="${post.name}" readonly>
-  </div>
-  <div>
-    <label for="createTime">날짜</label>
-    <input type="text" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}" readonly>
-  </div>
-  <div>
-    <label for="content">내용</label>
-    <p><textarea id="content" cols="64" rows="20" class="form-control" th:value="${post.content}" th:text="${post.content}" readonly></textarea></p>
-<!--    <input type="text" style="height:500px;font-size=30px;" id="content" name="content" class="form-control" value="내용" th:value="${post.content}" readonly>-->
-  </div>
-
-
-  <hr class="my-4">
-
-  <div class="row">
-    <div class="col">
-      <button class="w-100 btn btn-primary btn-lg"
-              onclick="location.href='editForm.html'"
-              th:onclick="|location.href='@{/post/{id}/edit(id=${post.id})}'|"
-              type="button" th:disabled="${show} ? 'disabled'">수정</button>
+<div class="container" >
+  <div th:object="${postViewDto}">
+    <div class="py-5 text-center">
+      <h2>
+        <span th:text="${postViewDto.title}">제목</span>
+      </h2>
     </div>
-    <div class="col">
-      <button class="w-100 btn btn-danger btn-lg"
-              onclick="location.href='editForm.html'"
-              th:onclick="|location.href='@{/post/{id}/delete(id=${post.id})}'|"
-              type="button" th:disabled="${show} ? 'disabled'">삭제</button>
+    <div>
+      <label for="id">게시글 ID</label>
+      <input type="text" id="id" name="id" class="form-control" th:value="*{id}" readonly>
     </div>
-    <div class="col">
+    <div>
+      <label for="viewCount">조회수</label>
+      <input type="text" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="*{viewCount}" readonly>
+    </div>
+    <div>
+      <label for="member">글쓴이</label>
+      <input type="text" id="member" name="member" class="form-control" value="글쓴이" th:value="*{name}" readonly>
+    </div>
+    <div>
+      <label for="createTime">날짜</label>
+      <input type="text" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${#temporals.format(postViewDto.createTime, 'yyyy-MM-dd HH:mm')}" readonly>
+    </div>
+    <div>
+      <label for="content">내용</label>
+      <p><textarea id="content" cols="64" rows="20" class="form-control" th:value="*{content}" th:text="*{content}" readonly></textarea></p>
+  <!--    <input type="text" style="height:500px;font-size=30px;" id="content" name="content" class="form-control" value="내용" th:value="${post.content}" readonly>-->
+    </div>
+    <hr class="my-2">
+
+    <div class="row">
+      <div class="col">
+        <button class="w-100 btn btn-primary btn-lg"
+                onclick="location.href='editForm.html'"
+                th:onclick="|location.href='@{/post/{id}/edit(id=*{id})}'|"
+                type="button" th:disabled="${show} ? 'disabled'">수정</button>
+      </div>
+      <div class="col">
+        <button class="w-100 btn btn-danger btn-lg"
+                onclick="location.href='editForm.html'"
+                th:onclick="|location.href='@{/post/{id}/delete(id=*{id})}'|"
+                type="button" th:disabled="${show} ? 'disabled'">삭제</button>
+      </div>
+    </div>
+    <hr class="my-2">
+  </div>
+    <div class="col" th:object="${postSearchForm}">
       <button class="w-100 btn btn-secondary btn-lg"
               onclick="location.href=history.back()"
-              th:onclick="|location.href='@{/post(searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode}, page=${postSearchForm.page})}'|"
+              th:onclick="|location.href='@{/post(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
               type="button">목록</button>
     </div>
-  </div>
-
 </div> <!-- /container -->
 </body>
 </html>
