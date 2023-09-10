@@ -9,7 +9,6 @@ import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,24 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 public class PostController {
 
 	private final PostService postService;
-
-	@ModelAttribute("sortCodes")
-	public List<SortCode> sortCodes() {
-		List<SortCode> sortCodes = new ArrayList<>();
-		sortCodes.add(new SortCode("NEW", "최신순"));
-		sortCodes.add(new SortCode("OLD", "오래된순"));
-		sortCodes.add(new SortCode("VIEW", "조회순"));
-		return sortCodes;
-	}
-
-	@ModelAttribute("searchCodes")
-	public List<SearchCode> searchCodes() {
-		List<SearchCode> searchCodes = new ArrayList<>();
-		searchCodes.add(new SearchCode("TITLE", "제목"));
-		searchCodes.add(new SearchCode("CONTENT", "내용"));
-		searchCodes.add(new SearchCode("NAME", "작성자"));
-		return searchCodes;
-	}
 
 	@GetMapping("")
 	public String posts(@ModelAttribute PostSearchForm postSearchForm,
@@ -132,5 +113,23 @@ public class PostController {
 
 		postService.delete(id);
 		return "redirect:/post";
+	}
+
+	@ModelAttribute("sortCodes")
+	public List<SortCode> sortCodes() {
+		List<SortCode> sortCodes = new ArrayList<>();
+		sortCodes.add(new SortCode("NEW", "최신순"));
+		sortCodes.add(new SortCode("OLD", "오래된순"));
+		sortCodes.add(new SortCode("VIEW", "조회순"));
+		return sortCodes;
+	}
+
+	@ModelAttribute("searchCodes")
+	public List<SearchCode> searchCodes() {
+		List<SearchCode> searchCodes = new ArrayList<>();
+		searchCodes.add(new SearchCode("TITLE", "제목"));
+		searchCodes.add(new SearchCode("CONTENT", "내용"));
+		searchCodes.add(new SearchCode("NAME", "작성자"));
+		return searchCodes;
 	}
 }

@@ -51,8 +51,6 @@ public class LoginController {
 		request.getSession()
 				.setAttribute(SessionConst.LOGIN_MEMBER, member);
 
-		//expireAllCookies(response);
-
 		log.info("로그인 성공={}", redirectURL);
 
 		return "redirect:" + redirectURL;

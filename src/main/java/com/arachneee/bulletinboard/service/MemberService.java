@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.repository.MemberRepository;
-import com.arachneee.bulletinboard.web.form.MemberAddForm;
 
 import lombok.RequiredArgsConstructor;
 
