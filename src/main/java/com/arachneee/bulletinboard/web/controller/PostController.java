@@ -33,7 +33,7 @@ public class PostController {
 	private final PostService postService;
 
 	@GetMapping("")
-	public String posts(@ModelAttribute PostSearchForm postSearchForm,
+	public String posts(PostSearchForm postSearchForm,
 						HttpServletResponse response,
 						Model model) throws IOException {
 
@@ -55,14 +55,14 @@ public class PostController {
 	}
 
 	@GetMapping("/add")
-	public String addPostForm(@ModelAttribute PostAddForm postAddForm) {
+	public String addPostForm(PostAddForm postAddForm) {
 		log.info("Get : /post/add 호출");
 		return "post/addPostForm";
 	}
 
 	@PostMapping("/add")
 	public String savePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-						   @Valid @ModelAttribute PostAddForm postAddForm,
+						   @Valid PostAddForm postAddForm,
 						   BindingResult bindingResult) {
 
 		log.info("Post : /post/add 호출");
@@ -80,8 +80,8 @@ public class PostController {
 	@GetMapping("/{id}")
 	public String post(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
-						@ModelAttribute PostSearchForm postSearchForm,
-						Model model) {
+					   PostSearchForm postSearchForm,
+					   Model model) {
 		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id);
 
 		model.addAttribute("postViewDto", postViewDto);
@@ -107,7 +107,7 @@ public class PostController {
 	@PostMapping("/{id}/edit")
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
-					   @Valid @ModelAttribute PostViewDto postViewDto,
+					   @Valid PostViewDto postViewDto,
 					   BindingResult bindingResult) {
 
 		if (postService.isNotRightMember(member, id)) {
@@ -125,7 +125,7 @@ public class PostController {
 	@GetMapping("/{id}/delete")
 	public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						 @PathVariable Long id,
-						   Model model) {
+						 Model model) {
 
 		if (postService.isNotRightMember(member, id)) {
 			return "redirect:/post/{id}";

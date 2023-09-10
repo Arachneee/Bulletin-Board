@@ -6,7 +6,7 @@
         href="../css/bootstrap.min.css" rel="stylesheet">
   <style>
          .container {
-         max-width: 560px;
+         max-width: 800px;
          }
          .field-error {
          border-color: #dc3545;
@@ -26,17 +26,17 @@
     </div>
     <div>
       <label for="id">게시글 ID</label>
-      <input type="text" style="width:500px;" id="id" th:field="*{id}" class="form-control" readonly>
+      <input type="text" style="width:800px;" id="id" th:field="*{id}" class="form-control" readonly>
     </div>
     <div>
       <label for="title">제목</label>
-      <input type="text" style="width:500px;" id="title" th:field="*{title}" class="form-control"
+      <input type="text" style="width:800px;" id="title" th:field="*{title}" class="form-control"
              th:errorclass="field-error">
       <div class="field-error" th:errors="*{title}" />
     </div>
     <div>
       <label for="content">내용</label>
-      <p><textarea id="content" cols="64" rows="20" th:field="*{content}" placeholder="내용을 입력하세요."></textarea></p>
+      <p><textarea id="content" cols="104" rows="20" th:field="*{content}" placeholder="내용을 입력하세요."></textarea></p>
       <div class="field-error" th:errors="*{content}" />
     </div>
     <hr class="my-4">
