@@ -69,12 +69,14 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
+    public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize) {
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
+        Long skipPageSize = (page - 1L) * pageSize;
 
         String sql = "select post_id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.member_id " +
                      "where " + getSearchSql(searchCode) + " like '%" + searchString + "%' " +
-                     "order by " + getSortSql(sortCode);
+                     "order by " + getSortSql(sortCode) + " " +
+                     "limit " + skipPageSize + "," + pageSize;
 
         return template.query(sql, postPreDtoRowMapper());
     }
@@ -112,7 +114,7 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public PostViewDto findViewDtoById(Long postId) {
-        String sql = "select post_id, title, content, create_time, view_count, member.member_id as name from post join member on post.member_id = member.member_id where post.post_id = :postId";
+        String sql = "select post_id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.member_id where post.post_id = :postId";
         Map<String, Object> param = Map.of("postId", postId);
 
         return template.queryForObject(sql, param, postViewDtoRowMapper());
@@ -149,6 +151,16 @@ public class JdbcPostRepository implements PostRepository {
     public Long findMemberIdByPostID(Long postId) {
         String sql = "select post.member_id from post join member on post.member_id = member.member_id where post.post_id = :postId";
         Map<String, Object> param = Map.of("postId", postId);
+
+        return template.queryForObject(sql, param, Long.class);
+    }
+
+    @Override
+    public Long countAll(String searchCode, String searchString) {
+        String sql = "select count(*) from post " +
+                     "where " + getSearchSql(searchCode) + " like '%" + searchString + "%'";
+
+        Map<String, Object> param = new HashMap<>();
 
         return template.queryForObject(sql, param, Long.class);
     }

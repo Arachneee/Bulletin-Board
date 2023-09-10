@@ -13,8 +13,7 @@ public interface PostRepository {
 	void update(Long id, String title, String content);
 	void delete(Long id);
 
-	List<PostPreDto> search(String searchCode, String searchString, String sortCode);
-
+	List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize);
 
 	PostViewDto findViewDtoById(Long id);
 
@@ -23,4 +22,5 @@ public interface PostRepository {
 	Long findMemberIdByPostID(Long id);
 
 
+	Long countAll(String searchCode, String searchString);
 }

@@ -1,5 +1,6 @@
 package com.arachneee.bulletinboard.web.controller;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.arachneee.bulletinboard.domain.SearchCode;
@@ -9,6 +10,7 @@ import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,11 +34,22 @@ public class PostController {
 
 	@GetMapping("")
 	public String posts(@ModelAttribute PostSearchForm postSearchForm,
-						Model model) {
-		model.addAttribute("postSearchForm", postSearchForm);
+						HttpServletResponse response,
+						Model model) throws IOException {
 
-		List<PostPreDto> postPreDtoList = postService.search(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), postSearchForm.getSortCode());
+		Long presentPage = postSearchForm.getPage();
+
+		if (presentPage < 1L) {
+			response.sendError(400, "page 는 1이상입니다.");
+			return null;
+		}
+
+		List<PostPreDto> postPreDtoList = postService.search(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), postSearchForm.getSortCode(), presentPage);
+
 		model.addAttribute("postPreDtoList", postPreDtoList);
+		model.addAttribute("postSearchForm", postSearchForm);
+		model.addAttribute("previous", presentPage == 1L);
+		model.addAttribute("next", postService.isLastPage(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), presentPage));
 
 		return "post/posts";
 	}

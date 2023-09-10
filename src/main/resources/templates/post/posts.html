@@ -58,13 +58,30 @@
             <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
             <td th:text="${post.viewCount}">조회수</td>
             <td>
-                <a th:href="@{/post/{id}(id=${post.id}, searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode})}"
+                <a th:href="@{/post/{id}(id=${post.id}, searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode}, page=${postSearchForm.page})}"
                    th:text="${post.title}">제목</a>
             </td>
             <td th:text="${post.name}">작성자</td>
         </tr>
         </tbody>
     </table>
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    th:onclick="|location.href='@{/post(searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode}, page=${postSearchForm.page - 1})}'|"
+                    type="button" th:disabled="${previous} ? 'disabled'">
+                이전
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    th:onclick="|location.href='@{/post(searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode}, page=${postSearchForm.page + 1})}'|"
+                    type="button" th:disabled="${next} ? 'disabled'">
+                다음
+            </button>
+        </div>
+    </div>
+    <hr class="my-2">
     <div class="col">
         <button class="w-100 btn btn-secondary btn-lg"
                 onclick="location.href='items.html'"

@@ -19,13 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final Long PAGE_SIZE = 10L;
 
 	public void save(String title, String content, Member member) {
 		postRepository.save(Post.create(title, content, member, LocalDateTime.now(), 0));
 	}
 
-	public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
-		return postRepository.search(searchCode, searchString, sortCode);
+	public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page) {
+		return postRepository.search(searchCode, searchString, sortCode, page, PAGE_SIZE);
 	}
 
 	public PostViewDto findPostViewDto(Long id) {
@@ -55,6 +56,7 @@ public class PostService {
 	}
 
 
-
-
+	public boolean isLastPage(String searchCode, String searchString, Long presentPage) {
+		return postRepository.countAll(searchCode, searchString) <= presentPage * PAGE_SIZE;
+	}
 }

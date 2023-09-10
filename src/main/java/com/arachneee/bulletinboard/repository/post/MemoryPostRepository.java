@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemoryPostRepository implements PostRepository {
 
 	private static final Map<Long, Post> postTable = new ConcurrentHashMap<>();
-	private static long sequence = 0L;
+	private long sequence = 0L;
 
 	@Override
 	public PostViewDto findViewDtoById(Long id) {
@@ -79,13 +79,17 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<PostPreDto> search(String searchCode, String searchString, String sortCode) {
+	public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize) {
 		log.info("searchString = {} searchCode = {} sortCode = {}", searchString, searchCode, sortCode);
+
+		Long skipPageSize = (page - 1L) * pageSize;
 
 		return findAll().stream()
 			.filter(post -> isSearchCondition(searchString, searchCode, post))
 			.sorted((post1, post2) -> comparePost(sortCode, post1, post2))
 			.map(post -> PostPreDto.from(post))
+				.skip(skipPageSize)
+				.limit(pageSize)
 			.collect(Collectors.toList());
 
 	}
@@ -110,5 +114,12 @@ public class MemoryPostRepository implements PostRepository {
 		}
 		// searchCode.equals("TITLE") // 제목
 		return post.getTitle().contains(searchString);
+	}
+
+	@Override
+	public Long countAll(String searchCode, String searchString) {
+		return Long.valueOf(findAll().stream()
+									 .filter(post -> isSearchCondition(searchString, searchCode, post))
+				 					 .count());
 	}
 }
