@@ -11,7 +11,6 @@ import com.arachneee.bulletinboard.service.LoginService;
 import com.arachneee.bulletinboard.web.form.LoginForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -52,7 +51,7 @@ public class LoginController {
 		request.getSession()
 				.setAttribute(SessionConst.LOGIN_MEMBER, member);
 
-		expireAllCookies(response);
+		//expireAllCookies(response);
 
 		log.info("로그인 성공={}", redirectURL);
 
@@ -66,22 +65,6 @@ public class LoginController {
 			session.invalidate();
 		}
 
-		expireAllCookies(response);
-
 		return "redirect:/";
 	}
-
-	private void expireAllCookies(HttpServletResponse response) {
-		expireCookie(response, "searchCode");
-		expireCookie(response, "searchString");
-		expireCookie(response, "sortCode");
-	}
-
-	private void expireCookie(HttpServletResponse response, String cookieName) {
-		Cookie cookie = new Cookie(cookieName, null);
-		cookie.setPath("/post");
-		cookie.setMaxAge(0);
-		response.addCookie(cookie);
-	}
-
 }

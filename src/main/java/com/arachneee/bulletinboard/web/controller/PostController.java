@@ -9,23 +9,16 @@ import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.service.PostService;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,42 +50,14 @@ public class PostController {
 	}
 
 	@GetMapping("")
-	public String posts(@CookieValue(name = "searchCode", defaultValue = "TITLE") String searchCode,
-						@CookieValue(name = "searchString", defaultValue = "") String searchString,
-						@CookieValue(name = "sortCode", defaultValue = "NEW") String sortCode,
+	public String posts(@ModelAttribute PostSearchForm postSearchForm,
 						Model model) {
-
-		PostSearchForm postSearchForm = new PostSearchForm(searchCode, searchString, sortCode);
 		model.addAttribute("postSearchForm", postSearchForm);
 
-		List<PostPreDto> postPreDtoList = postService.search(searchCode, searchString, sortCode);
-		model.addAttribute("postPreDtoList", postPreDtoList);
-
-		return "post/posts";
-	}
-
-	@PostMapping("")
-	public String search(@ModelAttribute PostSearchForm postSearchForm, Model model, HttpServletResponse response) {
 		List<PostPreDto> postPreDtoList = postService.search(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), postSearchForm.getSortCode());
-
 		model.addAttribute("postPreDtoList", postPreDtoList);
-		model.addAttribute("postSearchForm", postSearchForm);
-
-		addSearchFormCookies(postSearchForm, response);
 
 		return "post/posts";
-	}
-
-	private static void addSearchFormCookies(PostSearchForm postSearchForm, HttpServletResponse response) {
-		addObjectCookie("searchCode", postSearchForm.getSearchCode(), response);
-		addObjectCookie("searchString", postSearchForm.getSearchString(), response);
-		addObjectCookie("sortCode", postSearchForm.getSortCode(), response);
-	}
-
-	private static void addObjectCookie(String searchCode, String postSearchCookieName, HttpServletResponse response) {
-		Cookie searchCodeCookie = new Cookie(searchCode, postSearchCookieName);
-		searchCodeCookie.setPath("/post");
-		response.addCookie(searchCodeCookie);
 	}
 
 	@GetMapping("/add")
@@ -120,8 +85,8 @@ public class PostController {
 	@GetMapping("/{id}")
 	public String post(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
+						@ModelAttribute PostSearchForm postSearchForm,
 						Model model) {
-
 		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id);
 
 		model.addAttribute("post", postViewDto);

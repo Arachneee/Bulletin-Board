@@ -60,7 +60,7 @@
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg"
               onclick="location.href=history.back()"
-              th:onclick="|location.href='@{/post}'|"
+              th:onclick="|location.href='@{/post(searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode})}'|"
               type="button">목록</button>
     </div>
   </div>

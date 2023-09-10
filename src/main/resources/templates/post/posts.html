@@ -16,7 +16,7 @@
         <h2>게시글 목록</h2>
     </div>
 
-    <form action="" th:action th:object="${postSearchForm}" method="post">
+    <form action="" th:action th:object="${postSearchForm}" method="get">
         <div class="row">
             <div>
                 <select th:field="*{searchCode}" class="form-select">
@@ -58,7 +58,8 @@
             <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
             <td th:text="${post.viewCount}">조회수</td>
             <td>
-                <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
+                <a th:href="@{/post/{id}(id=${post.id}, searchCode=${postSearchForm.searchCode}, searchString=${postSearchForm.searchString}, sortCode=${postSearchForm.sortCode})}"
+                   th:text="${post.title}">제목</a>
             </td>
             <td th:text="${post.name}">작성자</td>
         </tr>
