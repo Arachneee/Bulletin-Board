@@ -15,6 +15,7 @@ public interface PostRepository {
 
 	List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize);
 
+
 	PostViewDto findViewDtoById(Long id);
 
 	void updateViewCount(Long id, int viewCount);

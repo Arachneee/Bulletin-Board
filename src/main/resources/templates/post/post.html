@@ -5,10 +5,14 @@
   <link th:href="@{/css/bootstrap.min.css}"
         href="css/bootstrap.min.css" rel="stylesheet">
   <style>
-        .container {
-            max-width: 800px;
-        }
-    </style>
+         .container {
+         max-width: 800px;
+         }
+         .field-error {
+         border-color: #dc3545;
+         color: #dc3545;
+         }
+ </style>
 </head>
 <body>
 
@@ -38,10 +42,43 @@
     <div>
       <label for="content">내용</label>
       <p><textarea id="content" cols="64" rows="20" class="form-control" th:value="*{content}" th:text="*{content}" readonly></textarea></p>
-  <!--    <input type="text" style="height:500px;font-size=30px;" id="content" name="content" class="form-control" value="내용" th:value="${post.content}" readonly>-->
     </div>
     <hr class="my-2">
+    <div class="text-start">
+      <h4>
+        <span>댓글</span>
+      </h4>
+    </div>
 
+    <table class="table">
+      <tread>
+        <tr>
+          <th>등록 시간</th>
+          <th>작성자</th>
+          <th>내용</th>
+        </tr>
+      </tread>
+      <tbody>
+      <tr th:each="comment : ${comments}">
+        <td style="width: 110px;" th:text="${#temporals.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
+        <td style="width: 90px;" th:text="${comment.name}">작성자</td>
+        <td style="width: 600px;word-break: break-all;">
+          <p th:text="${comment.content}">내용</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <form action="" method="post">
+      <div class="row">
+        <div class="col">
+          <p><textarea cols="80" rows="5" name="commentContent" placeholder="내용을 입력하세요."></textarea></p>
+        </div>
+        <div class="col">
+          <button class="w-100 btn btn-primary btn-lg" type="submit">댓글 쓰기</button>
+        </div>
+      </div>
+    </form>
+    <hr class="my-2">
     <div class="row">
       <div class="col">
         <button class="w-100 btn btn-primary btn-lg"

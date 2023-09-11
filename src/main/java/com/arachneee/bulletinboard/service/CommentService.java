@@ -1,11 +1,12 @@
 package com.arachneee.bulletinboard.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.CommentRepository;
+import com.arachneee.bulletinboard.web.dto.CommentAddDto;
 import com.arachneee.bulletinboard.web.dto.CommentViewDto;
 
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ public class CommentService {
 
 	private final CommentRepository commentRepository;
 
-	public void save(Comment comment) {
-		commentRepository.save(comment);
+
+	public void save(String content, Long postId, Long memberId) {
+		commentRepository.save(CommentAddDto.create(content, postId, memberId));
 	}
 
 	public List<CommentViewDto> findByPostId(Long postId) {

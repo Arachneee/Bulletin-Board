@@ -16,14 +16,14 @@ public class Post {
 	private Integer viewCount;
 	protected Post() {
 	}
-	public static Post create(String title, String content, Member member, LocalDateTime createTime, Integer viewCount) {
+	public static Post create(String title, String content, Member member) {
 		Post post = new Post();
 
 		post.setTitle(title);
 		post.setContent(content);
 		post.setMember(member);
-		post.setCreateTime(createTime);
-		post.setViewCount(viewCount);
+		post.setCreateTime(LocalDateTime.now());
+		post.setViewCount(0);
 
 		return post;
 	}

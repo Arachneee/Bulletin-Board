@@ -1,5 +1,6 @@
 package com.arachneee.bulletinboard.repository.post;
 
+import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
@@ -43,6 +44,7 @@ public class JdbcPostRepository implements PostRepository {
 
         template.update(sql, param, keyHolder);
     }
+
 
     @Override
     public void update(Long postId, String title, String content) {

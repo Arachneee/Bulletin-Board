@@ -1,6 +1,5 @@
 package com.arachneee.bulletinboard.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
@@ -22,7 +21,7 @@ public class PostService {
 	private final Long PAGE_SIZE = 10L;
 
 	public void save(String title, String content, Member member) {
-		postRepository.save(Post.create(title, content, member, LocalDateTime.now(), 0));
+		postRepository.save(Post.create(title, content, member));
 	}
 
 	public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page) {
@@ -51,8 +50,8 @@ public class PostService {
 		postRepository.delete(id);
 	}
 
-	public boolean isNotRightMember(Member member, Long id) {
-		return !member.getId().equals(postRepository.findMemberIdByPostID(id));
+	public boolean isNotRightMember(Long memberId, Long id) {
+		return !memberId.equals(postRepository.findMemberIdByPostID(id));
 	}
 
 
