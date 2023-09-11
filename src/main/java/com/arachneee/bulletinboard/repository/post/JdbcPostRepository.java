@@ -42,9 +42,6 @@ public class JdbcPostRepository implements PostRepository {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         template.update(sql, param, keyHolder);
-
-        long key = keyHolder.getKey().longValue();
-        return;
     }
 
     @Override
@@ -103,13 +100,11 @@ public class JdbcPostRepository implements PostRepository {
 
     // 바꿔야됨
     private RowMapper<PostPreDto> postPreDtoRowMapper() {
-        return (rs, rowNum) -> {
-            return PostPreDto.create(rs.getLong("post_id"),
-                                    rs.getString("title"),
-                                    rs.getString("name"),
-                                    rs.getTimestamp("create_time").toLocalDateTime(),
-                                    rs.getInt("view_count"));
-        };
+        return (rs, rowNum) -> PostPreDto.create(rs.getLong("post_id"),
+                                                    rs.getString("title"),
+                                                    rs.getString("name"),
+                                                    rs.getTimestamp("create_time").toLocalDateTime(),
+                                                    rs.getInt("view_count"));
     }
 
     @Override
