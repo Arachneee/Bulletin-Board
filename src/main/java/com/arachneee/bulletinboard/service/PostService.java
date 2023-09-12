@@ -40,7 +40,7 @@ public class PostService {
 	}
 
 	public PostViewDto viewAndFindPostViewDto(Long id) {
-		Post post = postRepository.findById(id);
+		Post post = postRepository.findWithCommentsById(id);
 
 		post.view();
 
@@ -66,13 +66,5 @@ public class PostService {
 
 	public boolean isLastPage(String searchCode, String searchString, Long presentPage) {
 		return postRepository.countAll(searchCode, searchString) <= presentPage * PAGE_SIZE;
-	}
-
-	public List<CommentViewDto> findCommentsById(Long id) {
-		List<Comment> commentSByPostId = postRepository.findCommentsByPostId(id);
-
-		return commentSByPostId.stream()
-			.map(CommentViewDto::from)
-			.collect(Collectors.toList());
 	}
 }

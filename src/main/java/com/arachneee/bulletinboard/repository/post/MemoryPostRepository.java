@@ -120,7 +120,7 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<Comment> findCommentsByPostId(Long id) {
-		return postTable.get(id).getComments();
+	public Post findWithCommentsById(Long postId) {
+		return findById(postId);
 	}
 }

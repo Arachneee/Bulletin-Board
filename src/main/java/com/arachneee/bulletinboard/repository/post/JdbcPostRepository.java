@@ -46,22 +46,7 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public Post findById(Long id) {
-        String sql = "select * from post join member on post.member_id = member.member_id where post.post_id = :id";
-        Map<String, Object> param = Map.of("id", id);
-
-        return template.queryForObject(sql, param, postMapper());
-    }
-
-    private RowMapper<Post> postMapper() {
-        return (rs, rowNum) -> {
-            Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"));
-
-            return Post.createRowMap(rs.getString("title"),
-                rs.getString("p.content"),
-                member,
-                rs.getTimestamp("create_time").toLocalDateTime(),
-                rs.getInt("view_count"));
-        };
+        return findWithCommentsById(id);
     }
 
     @Override
@@ -174,18 +159,18 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Comment> findCommentsByPostId(Long postId) {
+    public Post findWithCommentsById(Long postId) {
         String sql = "select * from post as p" +
             " join member as m on p.member_id = m.member_id" +
             " join comment as c on p.post_id = c.post_id" +
             " where p.post_id = :postId";
-
         Map<String, Object> param = Map.of("postId", postId);
 
-        return template.query(sql, param, commentMapper());
+        return template.queryForObject(sql, param, postMapper());
     }
 
-    private RowMapper<Comment> commentMapper() {
+
+    private RowMapper<Post> postMapper() {
         return (rs, rowNum) -> {
             Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"));
 
@@ -195,11 +180,15 @@ public class JdbcPostRepository implements PostRepository {
                 rs.getTimestamp("create_time").toLocalDateTime(),
                 rs.getInt("view_count"));
 
-            return new Comment(rs.getLong("post_id"),
-                rs.getString("c.content"),
-                post,
-                member,
-                rs.getTimestamp("c.create_time").toLocalDateTime());
+            while (rs.next()) {
+                Comment comment = new Comment(rs.getLong("post_id"),
+                    rs.getString("c.content"),
+                    post,
+                    member,
+                    rs.getTimestamp("c.create_time").toLocalDateTime());
+            }
+
+            return post;
         };
     }
 }

@@ -52,7 +52,7 @@ public class Comment {
 	public Comment(Long id, String content, Post post, Member member, LocalDateTime createTime) {
 		this.id = id;
 		this.content = content;
-		this.post = post;
+		setPost(post);
 		this.member = member;
 		this.createTime = createTime;
 	}

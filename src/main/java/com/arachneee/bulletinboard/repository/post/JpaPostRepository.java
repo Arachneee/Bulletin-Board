@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
@@ -32,11 +31,7 @@ public class JpaPostRepository implements PostRepository {
 
 	@Override
 	public Post findById(Long id) {
-		String jpql = "select p from Post p join fetch p.comments where p.id = :id";
-
-		return em.createQuery(jpql, Post.class)
-					.setParameter("id", id)
-					.getSingleResult();
+		return em.find(Post.class, id);
 	}
 
 	@Override
@@ -58,12 +53,10 @@ public class JpaPostRepository implements PostRepository {
 		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostPreDto(p.id, p.title, m.name, p.createTime, p.viewCount)" +
 						" from Post p" +
 						" join p.member m" +
-						" where :searchCode like :searchString" +
+						" where " + getSearchSql(searchCode) + " like '%" + searchString + "%'" +
 						" order by " + getSortSql(sortCode);
 
 		return em.createQuery(jpql, PostPreDto.class)
-			.setParameter("searchCode", getSearchSql(searchCode))
-			.setParameter("searchString", "%" + searchString + "%")
 			.setFirstResult(skipPageSize)
 			.setMaxResults(pageSize.intValue())
 			.getResultList();
@@ -131,12 +124,11 @@ public class JpaPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<Comment> findCommentsByPostId(Long id) {
-		// String jpql = "select c from Comment c join fetch c.post where c.post.id = :id";
-		String jpql = "select c from Comment c where c.post.id = :id";
+	public Post findWithCommentsById(Long postId) {
+		String jpql = "select p from Post p left join fetch p.comments c left join fetch c.member m where p.id = :postId";
 
-		return em.createQuery(jpql, Comment.class)
-			.setParameter("id", id)
-			.getResultList();
+		return em.createQuery(jpql, Post.class)
+			.setParameter("postId", postId)
+			.getSingleResult();
 	}
 }
