@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.arachneee.bulletinboard.repository.CommentRepository;
 import com.arachneee.bulletinboard.web.dto.CommentAddDto;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentService {
 
 	private final CommentRepository commentRepository;

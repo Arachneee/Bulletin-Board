@@ -1,6 +1,7 @@
 package com.arachneee.bulletinboard.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.repository.MemberRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LoginService {
 
 	private final MemberRepository memberRepository;
