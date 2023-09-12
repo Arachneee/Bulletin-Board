@@ -14,28 +14,16 @@ public class PostPreDto {
 	private LocalDateTime createTime;
 	private Integer viewCount;
 
-	public static PostPreDto from(Post post) {
-		PostPreDto postPreDto = new PostPreDto();
-
-		postPreDto.setId(post.getId());
-		postPreDto.setCreateTime(post.getCreateTime());
-		postPreDto.setTitle(post.getTitle());
-		postPreDto.setViewCount(post.getViewCount());
-		postPreDto.setName(post.getMember().getName());
-
-		return postPreDto;
+	public PostPreDto(Long id, String title, String name, LocalDateTime createTime, Integer viewCount) {
+		this.id = id;
+		this.title = title;
+		this.name = name;
+		this.createTime = createTime;
+		this.viewCount = viewCount;
 	}
 
-	public static PostPreDto create(Long id, String title, String name, LocalDateTime createTime, Integer viewCount) {
-		PostPreDto postPreDto = new PostPreDto();
-
-		postPreDto.setId(id);
-		postPreDto.setTitle(title);
-		postPreDto.setName(name);
-		postPreDto.setCreateTime(createTime);
-		postPreDto.setViewCount(viewCount);
-
-		return postPreDto;
+	public static PostPreDto from(Post post) {
+		return new PostPreDto(post.getId(), post.getTitle(), post.getMember().getName(), post.getCreateTime(), post.getViewCount());
 	}
 
 	private void setId(Long id) {

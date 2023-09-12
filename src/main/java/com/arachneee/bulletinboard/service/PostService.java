@@ -2,6 +2,7 @@ package com.arachneee.bulletinboard.service;
 
 import java.util.List;
 
+import com.arachneee.bulletinboard.repository.post.JdbcPostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import org.springframework.stereotype.Service;
@@ -35,13 +36,15 @@ public class PostService {
 	}
 
 	public PostViewDto viewAndFindPostViewDto(Long id) {
-		PostViewDto postViewDto = postRepository.findViewDtoById(id);
+		Post post = postRepository.findById(id);
 
-		postViewDto.view();
+		post.view();
 
-		postRepository.updateViewCount(id, postViewDto.getViewCount());
+		if (postRepository instanceof JdbcPostRepository) {
+			postRepository.updateViewCount(id, post.getViewCount());
+		}
 
-		return postViewDto;
+		return PostViewDto.from(post);
 	}
 
 	public void update(Long id, String title, String content) {

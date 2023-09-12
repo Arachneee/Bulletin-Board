@@ -32,8 +32,9 @@ public class MemberController {
 		if (bindingResult.hasErrors() || validateMemberAddForm(memberAddForm, bindingResult)) {
 			return "members/addMemberForm";
 		}
-
+		log.info("MemberController save 실행 시작");
 		memberService.save(memberAddForm.getLoginId(), memberAddForm.getPassword(), memberAddForm.getName());
+		log.info("MemberController save 실행 종료");
 		return "redirect:/";
 	}
 

@@ -18,10 +18,13 @@ public interface PostRepository {
 
 	PostViewDto findViewDtoById(Long id);
 
+
 	void updateViewCount(Long id, int viewCount);
 
 	Long findMemberIdByPostID(Long id);
 
 
 	Long countAll(String searchCode, String searchString);
+
+	Post findById(Long id);
 }

@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Optional;
 @Slf4j
 @Repository
-@Primary
 public class JdbcMemberRepository implements MemberRepository {
 
     private final NamedParameterJdbcTemplate template;

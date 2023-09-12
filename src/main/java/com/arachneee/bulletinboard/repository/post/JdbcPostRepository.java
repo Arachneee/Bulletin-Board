@@ -6,7 +6,6 @@ import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
-@Primary
 public class JdbcPostRepository implements PostRepository {
     private final NamedParameterJdbcTemplate template;
 
@@ -45,6 +43,26 @@ public class JdbcPostRepository implements PostRepository {
         template.update(sql, param, keyHolder);
     }
 
+    @Override
+    public Post findById(Long id) {
+        String sql = "select * from post join member on post.member_id = member.member_id where post.post_id = :id";
+        Map<String, Object> param = Map.of("id", id);
+
+        return template.queryForObject(sql, param, postMapper());
+    }
+
+    private RowMapper<Post> postMapper() {
+        return (rs, rowNum) ->  {
+            Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"));
+
+            return Post.createRowMap(rs.getString("title"),
+                                rs.getString("content"),
+                                member,
+                                rs.getTimestamp("create_time").toLocalDateTime(),
+                                rs.getInt("view_count"));
+        };
+
+    }
 
     @Override
     public void update(Long postId, String title, String content) {
@@ -100,9 +118,8 @@ public class JdbcPostRepository implements PostRepository {
         }
     }
 
-    // 바꿔야됨
     private RowMapper<PostPreDto> postPreDtoRowMapper() {
-        return (rs, rowNum) -> PostPreDto.create(rs.getLong("post_id"),
+        return (rs, rowNum) -> new PostPreDto(rs.getLong("post_id"),
                                                     rs.getString("title"),
                                                     rs.getString("name"),
                                                     rs.getTimestamp("create_time").toLocalDateTime(),
@@ -120,16 +137,12 @@ public class JdbcPostRepository implements PostRepository {
     //바꿔야됨
     private RowMapper<PostViewDto> postViewDtoRowMapper() {
         return (rs, rowNum) -> {
-            PostViewDto postViewDto = new PostViewDto();
-
-            postViewDto.setId(rs.getLong("post_id"));
-            postViewDto.setTitle(rs.getString("title"));
-            postViewDto.setContent(rs.getString("content"));
-            postViewDto.setName(rs.getString("name"));
-            postViewDto.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-            postViewDto.setViewCount(rs.getInt("view_count"));
-
-            return postViewDto;
+            return new PostViewDto(rs.getLong("post_id"),
+                rs.getString("title"),
+                rs.getString("content"),
+                rs.getString("name"),
+                rs.getTimestamp("create_time").toLocalDateTime(),
+                rs.getInt("view_count"));
         };
     }
 

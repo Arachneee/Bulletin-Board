@@ -26,23 +26,18 @@ public class MemoryPostRepository implements PostRepository {
 	@Override
 	public PostViewDto findViewDtoById(Long id) {
 		Post post = postTable.get(id);
-
-
-		PostViewDto postViewDto = new PostViewDto();
-		postViewDto.setId(post.getId());
-		postViewDto.setTitle(post.getTitle());
-		postViewDto.setContent(post.getContent());
-		postViewDto.setName(post.getMember().getName());
-		postViewDto.setCreateTime(post.getCreateTime());
-		postViewDto.setViewCount(post.getViewCount());
-
-		return postViewDto;
+		return PostViewDto.from(post);
 	}
 
 	@Override
 	public void updateViewCount(Long id, int viewCount) {
 		Post findPost = postTable.get(id);
 		findPost.view();
+	}
+
+	@Override
+	public Post findById(Long id) {
+		return postTable.get(id);
 	}
 
 	@Override
