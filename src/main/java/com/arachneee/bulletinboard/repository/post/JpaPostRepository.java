@@ -5,18 +5,21 @@ import java.util.List;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostViewDto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-@Primary
-@RequiredArgsConstructor
+@Slf4j
 @Repository
+@RequiredArgsConstructor
+@Primary
 public class JpaPostRepository implements PostRepository {
 
 	@PersistenceContext
@@ -29,7 +32,11 @@ public class JpaPostRepository implements PostRepository {
 
 	@Override
 	public Post findById(Long id) {
-		return em.find(Post.class, id);
+		String jpql = "select p from Post p join fetch p.comments where p.id = :id";
+
+		return em.createQuery(jpql, Post.class)
+					.setParameter("id", id)
+					.getSingleResult();
 	}
 
 	@Override
@@ -83,13 +90,13 @@ public class JpaPostRepository implements PostRepository {
 	}
 
 	@Override
-	public PostViewDto findViewDtoById(Long id) {
+	public PostEditDto findPostEditDtoById(Long id) {
 		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostViewDto(p.id, p.title, p.content, m.name, p.createTime, p.viewCount)" +
 						" from Post p" +
 						" join p.member m" +
 						" where p.id = :id";
 
-		return em.createQuery(jpql, PostViewDto.class)
+		return em.createQuery(jpql, PostEditDto.class)
 			.setParameter("id", id)
 			.getSingleResult();
 	}
@@ -121,5 +128,15 @@ public class JpaPostRepository implements PostRepository {
 
 		return em.createQuery(jpql, Long.class)
 			.getSingleResult();
+	}
+
+	@Override
+	public List<Comment> findCommentsByPostId(Long id) {
+		// String jpql = "select c from Comment c join fetch c.post where c.post.id = :id";
+		String jpql = "select c from Comment c where c.post.id = :id";
+
+		return em.createQuery(jpql, Comment.class)
+			.setParameter("id", id)
+			.getResultList();
 	}
 }

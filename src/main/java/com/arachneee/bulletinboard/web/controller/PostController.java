@@ -3,13 +3,10 @@ package com.arachneee.bulletinboard.web.controller;
 import java.io.IOException;
 import java.util.*;
 
-import com.arachneee.bulletinboard.domain.SearchCode;
-import com.arachneee.bulletinboard.domain.SortCode;
 import com.arachneee.bulletinboard.service.CommentService;
-import com.arachneee.bulletinboard.web.dto.CommentViewDto;
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
-import com.arachneee.bulletinboard.web.form.CommentAddForm;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
@@ -26,6 +23,8 @@ import com.arachneee.bulletinboard.service.PostService;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -90,10 +89,8 @@ public class PostController {
 					   Model model) {
 
 		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id);
-		List<CommentViewDto> comments = commentService.findByPostId(id);
 
 		model.addAttribute("postViewDto", postViewDto);
-		model.addAttribute("comments", comments);
 		model.addAttribute("show", postService.isNotRightMember(member.getId(), id));
 		model.addAttribute("commentContent", "");
 
@@ -109,7 +106,7 @@ public class PostController {
 			return "redirect:/post/" + id;
 		}
 
-		commentService.save(commentContent, id, member.getId());
+		commentService.save(commentContent, id, member);
 		log.info("댓글 저장 완료 ={}", commentContent);
 		return "redirect:/post/" + id;
 	}
@@ -123,14 +120,14 @@ public class PostController {
 			return "redirect:/post/{id}";
 		}
 
-		model.addAttribute("postViewDto", postService.findPostViewDto(id));
+		model.addAttribute("postEditDto", postService.findPostEditDto(id));
 		return "post/editPostForm";
 	}
 
 	@PostMapping("/{id}/edit")
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
-					   @Valid PostViewDto postViewDto,
+					   @Valid PostEditDto postEditDto,
 					   BindingResult bindingResult) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
@@ -141,7 +138,7 @@ public class PostController {
 			return "post/editPostForm";
 		}
 
-		postService.update(id, postViewDto.getTitle(), postViewDto.getContent());
+		postService.update(id, postEditDto.getTitle(), postEditDto.getContent());
 		return "redirect:/post/{id}";
 	}
 
@@ -175,4 +172,20 @@ public class PostController {
 		searchCodes.add(new SearchCode("NAME", "작성자"));
 		return searchCodes;
 	}
+
+	@Getter
+	@AllArgsConstructor
+	static class SortCode {
+		private String code;
+		private String displayName;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class SearchCode {
+
+		private String code;
+		private String displayName;
+	}
+
 }

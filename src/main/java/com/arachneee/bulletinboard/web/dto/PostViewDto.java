@@ -1,10 +1,11 @@
 package com.arachneee.bulletinboard.web.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.arachneee.bulletinboard.domain.Post;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,27 +14,27 @@ import lombok.Setter;
 public class PostViewDto {
 
 	private Long id;
-
-	@NotBlank
 	private String title;
-
-	@NotBlank
 	private String content;
 	private String name;
 	private LocalDateTime createTime;
 	private Integer viewCount;
+	private List<CommentViewDto> comments;
 
-	public PostViewDto(Long id, String title, String content, String name, LocalDateTime createTime,
-		Integer viewCount) {
-		this.id = id;
-		this.title = title;
-		this.content = content;
-		this.name = name;
-		this.createTime = createTime;
-		this.viewCount = viewCount;
-	}
 
 	public static PostViewDto from(Post post) {
-		return new PostViewDto(post.getId(), post.getTitle(), post.getContent(), post.getMember().getName(), post.getCreateTime(), post.getViewCount());
+		PostViewDto postViewDto = new PostViewDto();
+
+		postViewDto.setId(post.getId());
+		postViewDto.setTitle(post.getTitle());
+		postViewDto.setContent(post.getContent());
+		postViewDto.setName(post.getMember().getName());
+		postViewDto.setCreateTime(post.getCreateTime());
+		postViewDto.setViewCount(post.getViewCount());
+		postViewDto.setComments(post.getComments().stream()
+					.map(CommentViewDto::from)
+					.collect(Collectors.toList()));
+
+		return postViewDto;
 	}
 }

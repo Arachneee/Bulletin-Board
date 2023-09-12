@@ -2,9 +2,10 @@ package com.arachneee.bulletinboard.repository;
 
 import java.util.List;
 
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Post;
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostViewDto;
 
 
 public interface PostRepository {
@@ -16,7 +17,7 @@ public interface PostRepository {
 	List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize);
 
 
-	PostViewDto findViewDtoById(Long id);
+	PostEditDto findPostEditDtoById(Long id);
 
 
 	void updateViewCount(Long id, int viewCount);
@@ -27,4 +28,6 @@ public interface PostRepository {
 	Long countAll(String searchCode, String searchString);
 
 	Post findById(Long id);
+
+	List<Comment> findCommentsByPostId(Long id);
 }

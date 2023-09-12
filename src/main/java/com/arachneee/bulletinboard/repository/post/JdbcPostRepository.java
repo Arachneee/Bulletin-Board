@@ -1,10 +1,11 @@
 package com.arachneee.bulletinboard.repository.post;
 
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostViewDto;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -52,16 +53,15 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     private RowMapper<Post> postMapper() {
-        return (rs, rowNum) ->  {
+        return (rs, rowNum) -> {
             Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"));
 
             return Post.createRowMap(rs.getString("title"),
-                                rs.getString("content"),
-                                member,
-                                rs.getTimestamp("create_time").toLocalDateTime(),
-                                rs.getInt("view_count"));
+                rs.getString("p.content"),
+                member,
+                rs.getTimestamp("create_time").toLocalDateTime(),
+                rs.getInt("view_count"));
         };
-
     }
 
     @Override
@@ -127,22 +127,18 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public PostViewDto findViewDtoById(Long postId) {
+    public PostEditDto findPostEditDtoById(Long postId) {
         String sql = "select post_id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.member_id where post.post_id = :postId";
         Map<String, Object> param = Map.of("postId", postId);
 
-        return template.queryForObject(sql, param, postViewDtoRowMapper());
+        return template.queryForObject(sql, param, postEditDtoRowMapper());
     }
 
-    //바꿔야됨
-    private RowMapper<PostViewDto> postViewDtoRowMapper() {
+    private RowMapper<PostEditDto> postEditDtoRowMapper() {
         return (rs, rowNum) -> {
-            return new PostViewDto(rs.getLong("post_id"),
+            return new PostEditDto(rs.getLong("post_id"),
                 rs.getString("title"),
-                rs.getString("content"),
-                rs.getString("name"),
-                rs.getTimestamp("create_time").toLocalDateTime(),
-                rs.getInt("view_count"));
+                rs.getString("content"));
         };
     }
 
@@ -175,5 +171,35 @@ public class JdbcPostRepository implements PostRepository {
             .addValue("searchString", searchString);
 
         return template.queryForObject(sql, param, Long.class);
+    }
+
+    @Override
+    public List<Comment> findCommentsByPostId(Long postId) {
+        String sql = "select * from post as p" +
+            " join member as m on p.member_id = m.member_id" +
+            " join comment as c on p.post_id = c.post_id" +
+            " where p.post_id = :postId";
+
+        Map<String, Object> param = Map.of("postId", postId);
+
+        return template.query(sql, param, commentMapper());
+    }
+
+    private RowMapper<Comment> commentMapper() {
+        return (rs, rowNum) -> {
+            Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"));
+
+            Post post = Post.createRowMap(rs.getString("title"),
+                rs.getString("p.content"),
+                member,
+                rs.getTimestamp("create_time").toLocalDateTime(),
+                rs.getInt("view_count"));
+
+            return new Comment(rs.getLong("post_id"),
+                rs.getString("c.content"),
+                post,
+                member,
+                rs.getTimestamp("c.create_time").toLocalDateTime());
+        };
     }
 }

@@ -20,7 +20,7 @@
   <div th:object="${postViewDto}">
     <div class="py-5 text-center">
       <h2>
-        <span th:text="${postViewDto.title}">제목</span>
+        <span th:text="*{title}">제목</span>
       </h2>
     </div>
     <div>
@@ -59,11 +59,11 @@
         </tr>
       </tread>
       <tbody>
-      <tr th:each="comment : ${comments}">
-        <td style="width: 110px;" th:text="${#temporals.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
-        <td style="width: 90px;" th:text="${comment.name}">작성자</td>
+      <tr th:each="commentViewDto : *{comments}">
+        <td style="width: 110px;" th:text="${#temporals.format(commentViewDto.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
+        <td style="width: 90px;" th:text="${commentViewDto.name}">작성자</td>
         <td style="width: 600px;word-break: break-all;">
-          <p th:text="${comment.content}">내용</p>
+          <p th:text="${commentViewDto.content}">내용</p>
         </td>
       </tr>
       </tbody>
@@ -82,13 +82,11 @@
     <div class="row">
       <div class="col">
         <button class="w-100 btn btn-primary btn-lg"
-                onclick="location.href='editForm.html'"
                 th:onclick="|location.href='@{/post/{id}/edit(id=*{id})}'|"
                 type="button" th:disabled="${show} ? 'disabled'">수정</button>
       </div>
       <div class="col">
         <button class="w-100 btn btn-danger btn-lg"
-                onclick="location.href='editForm.html'"
                 th:onclick="|location.href='@{/post/{id}/delete(id=*{id})}'|"
                 type="button" th:disabled="${show} ? 'disabled'">삭제</button>
       </div>

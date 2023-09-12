@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import jakarta.validation.constraints.NotEmpty;
-
 
 @Getter @Setter
 public class MemberAddForm {

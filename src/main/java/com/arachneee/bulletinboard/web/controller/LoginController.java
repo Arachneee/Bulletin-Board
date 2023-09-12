@@ -3,7 +3,6 @@ package com.arachneee.bulletinboard.web.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.arachneee.bulletinboard.domain.Member;

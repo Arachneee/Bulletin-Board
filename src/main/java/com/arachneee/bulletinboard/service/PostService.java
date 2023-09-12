@@ -1,8 +1,12 @@
 package com.arachneee.bulletinboard.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.post.JdbcPostRepository;
+import com.arachneee.bulletinboard.web.dto.CommentViewDto;
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import org.springframework.stereotype.Service;
@@ -31,8 +35,8 @@ public class PostService {
 		return postRepository.search(searchCode, searchString, sortCode, page, PAGE_SIZE);
 	}
 
-	public PostViewDto findPostViewDto(Long id) {
-		return postRepository.findViewDtoById(id);
+	public PostEditDto findPostEditDto(Long id) {
+		return postRepository.findPostEditDtoById(id);
 	}
 
 	public PostViewDto viewAndFindPostViewDto(Long id) {
@@ -62,5 +66,13 @@ public class PostService {
 
 	public boolean isLastPage(String searchCode, String searchString, Long presentPage) {
 		return postRepository.countAll(searchCode, searchString) <= presentPage * PAGE_SIZE;
+	}
+
+	public List<CommentViewDto> findCommentsById(Long id) {
+		List<Comment> commentSByPostId = postRepository.findCommentsByPostId(id);
+
+		return commentSByPostId.stream()
+			.map(CommentViewDto::from)
+			.collect(Collectors.toList());
 	}
 }

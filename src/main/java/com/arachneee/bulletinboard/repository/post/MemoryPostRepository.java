@@ -8,10 +8,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostViewDto;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,9 @@ public class MemoryPostRepository implements PostRepository {
 	private long sequence = 0L;
 
 	@Override
-	public PostViewDto findViewDtoById(Long id) {
+	public PostEditDto findPostEditDtoById(Long id) {
 		Post post = postTable.get(id);
-		return PostViewDto.from(post);
+		return PostEditDto.from(post);
 	}
 
 	@Override
@@ -116,5 +117,10 @@ public class MemoryPostRepository implements PostRepository {
 		return Long.valueOf(findAll().stream()
 									 .filter(post -> isSearchCondition(searchString, searchCode, post))
 				 					 .count());
+	}
+
+	@Override
+	public List<Comment> findCommentsByPostId(Long id) {
+		return postTable.get(id).getComments();
 	}
 }

@@ -2,35 +2,23 @@ package com.arachneee.bulletinboard.web.dto;
 
 import java.time.LocalDateTime;
 
-import lombok.Getter;
+import com.arachneee.bulletinboard.domain.Comment;
 
-@Getter
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class CommentViewDto {
 	private String content;
 	private String name;
 	private LocalDateTime createTime;
 
-	protected CommentViewDto() {
-	}
-
-	public static CommentViewDto create(String content, String name, LocalDateTime createTime) {
+	public static CommentViewDto from(Comment comment) {
 		CommentViewDto commentViewDto = new CommentViewDto();
-		commentViewDto.setContent(content);
-		commentViewDto.setName(name);
-		commentViewDto.setCreateTime(createTime);
+		commentViewDto.setContent(comment.getContent());
+		commentViewDto.setName(comment.getMember().getName());
+		commentViewDto.setCreateTime(comment.getCreateTime());
 
 		return commentViewDto;
-	}
-
-	private void setContent(String content) {
-		this.content = content;
-	}
-
-	private void setName(String name) {
-		this.name = name;
-	}
-
-	private void setCreateTime(LocalDateTime createTime) {
-		this.createTime = createTime;
 	}
 }

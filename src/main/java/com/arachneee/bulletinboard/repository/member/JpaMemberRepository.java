@@ -15,10 +15,10 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Primary
 @Slf4j
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
+@Primary
 public class JpaMemberRepository implements MemberRepository {
 
 	@PersistenceContext
