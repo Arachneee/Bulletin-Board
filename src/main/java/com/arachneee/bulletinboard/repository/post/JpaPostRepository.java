@@ -51,11 +51,12 @@ public class JpaPostRepository implements PostRepository {
 		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostPreDto(p.id, p.title, m.name, p.createTime, p.viewCount)" +
 						" from Post p" +
 						" join p.member m" +
-						" where " + getSearchSql(searchCode) + " like '%" + searchString + "%'" +
+						" where :searchCode like :searchString" +
 						" order by " + getSortSql(sortCode);
 
-
 		return em.createQuery(jpql, PostPreDto.class)
+			.setParameter("searchCode", getSearchSql(searchCode))
+			.setParameter("searchString", "%" + searchString + "%")
 			.setFirstResult(skipPageSize)
 			.setMaxResults(pageSize.intValue())
 			.getResultList();

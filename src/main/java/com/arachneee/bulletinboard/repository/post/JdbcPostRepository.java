@@ -168,9 +168,11 @@ public class JdbcPostRepository implements PostRepository {
     @Override
     public Long countAll(String searchCode, String searchString) {
         String sql = "select count(*) from post " +
-                     "where " + getSearchSql(searchCode) + " like '%" + searchString + "%'";
+                     "where :searchCode like '%:searchString%'";
 
-        Map<String, Object> param = new HashMap<>();
+        SqlParameterSource param = new MapSqlParameterSource()
+            .addValue("searchCode", getSearchSql(searchCode))
+            .addValue("searchString", searchString);
 
         return template.queryForObject(sql, param, Long.class);
     }
