@@ -11,7 +11,6 @@ import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @Primary
 public class JpaPostRepository implements PostRepository {
 
-	@PersistenceContext
 	private final EntityManager em;
 
 	@Override

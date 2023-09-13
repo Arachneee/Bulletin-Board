@@ -11,7 +11,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 10
+    open-in-view: false
 server:
   servlet:
     session:
       tracking-modes: cookie
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace

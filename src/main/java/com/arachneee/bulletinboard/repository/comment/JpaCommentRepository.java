@@ -8,7 +8,6 @@ import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.CommentRepository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @Primary
 public class JpaCommentRepository implements CommentRepository {
 
-	@PersistenceContext
 	private final EntityManager em;
 
 	@Override

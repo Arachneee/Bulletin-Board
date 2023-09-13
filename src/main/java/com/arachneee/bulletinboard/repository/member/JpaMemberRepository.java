@@ -11,7 +11,6 @@ import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.repository.MemberRepository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @Primary
 public class JpaMemberRepository implements MemberRepository {
 
-	@PersistenceContext
 	private final EntityManager em;
 
 	@Override
