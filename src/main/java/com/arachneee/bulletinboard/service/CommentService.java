@@ -24,4 +24,20 @@ public class CommentService {
 		Post post = postRepository.findById(postId);
 		commentRepository.save(Comment.create(content, post, member));
 	}
+
+	public void update(Long commentId, String content) {
+		commentRepository.update(commentId, content);
+	}
+
+	public boolean isNotRightMember(Long memberId, Long commentId) {
+		return !memberId.equals(commentRepository.findMemberIdByCommentId(commentId));
+	}
+
+	public String findContentById(Long commentId) {
+		return commentRepository.findContentById(commentId);
+	}
+
+	public void delete(Long commentId) {
+		commentRepository.delete(commentId);
+	}
 }

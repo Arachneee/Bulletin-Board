@@ -73,4 +73,8 @@ public class Comment {
 	private void setCreateTime(LocalDateTime createTime) {
 		this.createTime = createTime;
 	}
+
+	public void update(String content) {
+		setContent(content);
+	}
 }

@@ -3,7 +3,6 @@ package com.arachneee.bulletinboard.web.controller;
 import java.io.IOException;
 import java.util.*;
 
-import com.arachneee.bulletinboard.service.CommentService;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.service.PostService;
@@ -31,11 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
 
 	private final PostService postService;
-	private final CommentService commentService;
 
 	@GetMapping("")
 	public String posts(PostSearchForm postSearchForm,
@@ -79,7 +76,7 @@ public class PostController {
 		postService.save(postAddForm.getTitle(), postAddForm.getContent(), member);
 		log.info("post save 완료");
 
-		return "redirect:/post";
+		return "redirect:/posts";
 	}
 
 	@GetMapping("/{id}")
@@ -88,7 +85,7 @@ public class PostController {
 					   PostSearchForm postSearchForm,
 					   Model model) {
 
-		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id);
+		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id, member.getId());
 
 		model.addAttribute("postViewDto", postViewDto);
 		model.addAttribute("show", postService.isNotRightMember(member.getId(), id));
@@ -97,27 +94,13 @@ public class PostController {
 		return "post/post";
 	}
 
-	@PostMapping("/{id}")
-	public String saveComment(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-							  @PathVariable Long id,
-							  @RequestParam("commentContent") String commentContent) {
-
-		if (StringUtils.isEmptyOrWhitespace(commentContent)) {
-			return "redirect:/post/" + id;
-		}
-
-		commentService.save(commentContent, id, member);
-		log.info("댓글 저장 완료 ={}", commentContent);
-		return "redirect:/post/" + id;
-	}
-
 	@GetMapping("/{id}/edit")
 	public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						   @PathVariable Long id,
 		Model model) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
-			return "redirect:/post/{id}";
+			return "redirect:/posts/{id}";
 		}
 
 		model.addAttribute("postEditDto", postService.findPostEditDto(id));
@@ -131,7 +114,7 @@ public class PostController {
 					   BindingResult bindingResult) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
-			return "redirect:/post/{id}";
+			return "redirect:/posts/{id}";
 		}
 
 		if (bindingResult.hasErrors()) {
@@ -139,7 +122,7 @@ public class PostController {
 		}
 
 		postService.update(id, postEditDto.getTitle(), postEditDto.getContent());
-		return "redirect:/post/{id}";
+		return "redirect:/posts/{id}";
 	}
 
 	@GetMapping("/{id}/delete")
@@ -148,11 +131,11 @@ public class PostController {
 						 Model model) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
-			return "redirect:/post/{id}";
+			return "redirect:/posts/{id}";
 		}
 
 		postService.delete(id);
-		return "redirect:/post";
+		return "redirect:/posts";
 	}
 
 	@ModelAttribute("sortCodes")

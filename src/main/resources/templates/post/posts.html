@@ -58,7 +58,7 @@
             <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
             <td th:text="${post.viewCount}">조회수</td>
             <td>
-                <a th:href="@{/post/{id}(id=${post.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}"
+                <a th:href="@{/posts/{id}(id=${post.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}"
                    th:text="${post.title}">제목</a>
             </td>
             <td th:text="${post.name}">작성자</td>
@@ -68,14 +68,14 @@
     <div class="row">
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
-                    th:onclick="|location.href='@{/post(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=${postSearchForm.page - 1})}'|"
+                    th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=${postSearchForm.page - 1})}'|"
                     type="button" th:disabled="${previous} ? 'disabled'">
                 이전
             </button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
-                    th:onclick="|location.href='@{/post(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=${postSearchForm.page + 1})}'|"
+                    th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=${postSearchForm.page + 1})}'|"
                     type="button" th:disabled="${next} ? 'disabled'">
                 다음
             </button>

@@ -9,4 +9,8 @@ public class CommentAddForm {
 
 	@NotBlank
 	private String commentContent;
+
+	public CommentAddForm(String commentContent) {
+		this.commentContent = commentContent;
+	}
 }

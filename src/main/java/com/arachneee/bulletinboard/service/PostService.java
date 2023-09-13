@@ -1,11 +1,8 @@
 package com.arachneee.bulletinboard.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.post.JdbcPostRepository;
-import com.arachneee.bulletinboard.web.dto.CommentViewDto;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
@@ -26,6 +23,7 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final Long PAGE_SIZE = 10L;
+	private final int COMMENT_PAGE_SIZE = 10;
 
 	public void save(String title, String content, Member member) {
 		postRepository.save(Post.create(title, content, member));
@@ -39,16 +37,16 @@ public class PostService {
 		return postRepository.findPostEditDtoById(id);
 	}
 
-	public PostViewDto viewAndFindPostViewDto(Long id) {
-		Post post = postRepository.findWithCommentsById(id);
+	public PostViewDto viewAndFindPostViewDto(Long postId, Long memberId) {
+		Post post = postRepository.findWithCommentsById(postId);
 
 		post.view();
 
 		if (postRepository instanceof JdbcPostRepository) {
-			postRepository.updateViewCount(id, post.getViewCount());
+			postRepository.updateViewCount(postId, post.getViewCount());
 		}
 
-		return PostViewDto.from(post);
+		return PostViewDto.from(post, memberId);
 	}
 
 	public void update(Long id, String title, String content) {
@@ -62,7 +60,6 @@ public class PostService {
 	public boolean isNotRightMember(Long memberId, Long id) {
 		return !memberId.equals(postRepository.findMemberIdByPostID(id));
 	}
-
 
 	public boolean isLastPage(String searchCode, String searchString, Long presentPage) {
 		return postRepository.countAll(searchCode, searchString) <= presentPage * PAGE_SIZE;

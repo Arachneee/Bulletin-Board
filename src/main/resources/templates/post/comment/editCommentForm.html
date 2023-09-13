@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="css/bootstrap.min.css" rel="stylesheet">
+  <style>
+         .container {
+         max-width: 800px;
+         }
+         .field-error {
+         border-color: #dc3545;
+         color: #dc3545;
+         }
+ </style>
+</head>
+<body>
+
+<div class="container" >
+  <div class="py-5 text-center">
+    <h2>댓글 수정</h2>
+  </div>
+    <form action="" th:object="${commentAddForm}" method="post">
+        <p><textarea cols="104" rows="5" th:field="*{commentContent}" placeholder="내용을 입력하세요."></textarea></p>
+        <div class="field-error" th:errors="*{commentContent}" />
+      <div class="row">
+        <div class="col">
+          <button class="w-100 btn btn-primary" type="submit">수정</button>
+        </div>
+        <div class="col" th:object="${postSearchForm}">
+          <button class="w-100 btn btn-secondary"
+                  onclick="location.href=history.back()"
+                  th:onclick="|location.href='@{/posts/{id}(id=${postId}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                  type="button">취소
+          </button>
+        </div>
+      </div>
+    </form>
+</div>
+</body>
+</html>

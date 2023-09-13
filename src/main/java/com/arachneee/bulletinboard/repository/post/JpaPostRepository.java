@@ -82,9 +82,8 @@ public class JpaPostRepository implements PostRepository {
 
 	@Override
 	public PostEditDto findPostEditDtoById(Long id) {
-		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostViewDto(p.id, p.title, p.content, m.name, p.createTime, p.viewCount)" +
+		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostEditDto(p.id, p.title, p.content)" +
 						" from Post p" +
-						" join p.member m" +
 						" where p.id = :id";
 
 		return em.createQuery(jpql, PostEditDto.class)
@@ -123,7 +122,10 @@ public class JpaPostRepository implements PostRepository {
 
 	@Override
 	public Post findWithCommentsById(Long postId) {
-		String jpql = "select p from Post p left join fetch p.comments c left join fetch c.member m where p.id = :postId";
+		String jpql = "select p from Post p" +
+						" left join fetch p.comments c" +
+						" left join fetch c.member m" +
+						" where p.id = :postId";
 
 		return em.createQuery(jpql, Post.class)
 			.setParameter("postId", postId)
