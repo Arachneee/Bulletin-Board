@@ -24,6 +24,6 @@ public class HomeController {
 
 		model.addAttribute("member", loginMember);
 		log.info("session login state true");
-		return "home";
+		return "redirect:/posts";
 	}
 }

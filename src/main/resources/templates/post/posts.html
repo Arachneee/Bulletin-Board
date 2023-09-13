@@ -1,47 +1,45 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
-    <style>
-         .container {
-         max-width: 800px;
-         }
- </style>
-</head>
+<head th:replace="fragments/header :: header" />
 <body>
-<div class="container" th:object="${postSearchForm}" >
+    <div class="container" th:object="${postSearchForm}" >
+    <hr class="my-1">
     <div class="py-5 text-center">
-        <h2>게시글 목록</h2>
+        <h3>게시글 목록</h3>
     </div>
 
     <form action="" th:action method="get">
         <div class="row">
-            <div>
+            <div class="col-2">
                 <select th:field="*{searchCode}" class="form-select">
                     <option th:each="searchCode : ${searchCodes}" th:value="${searchCode.code}"
                             th:text="${searchCode.displayName}">FAST</option>
                 </select>
             </div>
-            <hr class="my-1">
-            <div>
+            <div class="col-8">
                 <input type="text" th:field="*{searchString}" class="form-control">
             </div>
-            <hr class="my-1">
-            <div>
-                <button class="w-100 btn btn-primary btn-lg" type="submit">검색</button>
+            <div class="col-2">
+                <button class="w-100 btn btn-primary" type="submit">검색</button>
             </div>
-            <hr class="my-1">
-            <div>
+        </div>
+        <hr class="my-2">
+        <div class="row justify-content-between">
+            <div class="col-2">
                 <select th:field="*{sortCode}" class="form-select">
                     <option th:each="sortCode : ${sortCodes}" th:value="${sortCode.code}"
                             th:text="${sortCode.displayName}">최신순</option>
                 </select>
             </div>
+            <div class="col-2">
+                <button class="w-100 btn btn-dark"
+                        th:onclick="|location.href='@{/posts/add}'|" type="button">
+                    글쓰기
+                </button>
+            </div>
         </div>
     </form>
-    <hr class="my-3">
+    <hr class="my-2">
     <table class="table">
         <tread>
         <tr>
@@ -54,40 +52,34 @@
         </tread>
         <tbody>
         <tr th:each="post : ${postPreDtoList}">
-            <td th:text="${post.id}">게시글 ID</td>
-            <td th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
-            <td th:text="${post.viewCount}">조회수</td>
-            <td>
+            <td style="width: 100px;" th:text="${post.id}">게시글 ID</td>
+            <td style="width: 170px;" th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
+            <td style="width: 100px;"th:text="${post.viewCount}">조회수</td>
+            <td style="width: 330px;">
                 <a th:href="@{/posts/{id}(id=${post.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}"
                    th:text="${post.title}">제목</a>
             </td>
-            <td th:text="${post.name}">작성자</td>
+            <td style="width: 100px;" th:text="${post.name}">작성자</td>
         </tr>
         </tbody>
     </table>
     <div class="row">
         <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
+            <button class="w-100 btn btn-primary"
                     th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=${postSearchForm.page - 1})}'|"
                     type="button" th:disabled="${previous} ? 'disabled'">
                 이전
             </button>
         </div>
         <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
+            <button class="w-100 btn btn-primary"
                     th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=${postSearchForm.page + 1})}'|"
                     type="button" th:disabled="${next} ? 'disabled'">
                 다음
             </button>
         </div>
     </div>
-    <hr class="my-2">
-    <div class="col">
-        <button class="w-100 btn btn-secondary btn-lg"
-                th:onclick="|location.href='@{/}'|"
-                type="button">홈으로</button>
-    </div>
-    <hr class="my-2">
+    <hr class="my-3">
 </div>
 </body>
 </html>

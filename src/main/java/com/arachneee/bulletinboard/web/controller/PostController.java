@@ -35,7 +35,8 @@ public class PostController {
 	private final PostService postService;
 
 	@GetMapping("")
-	public String posts(PostSearchForm postSearchForm,
+	public String posts(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+						PostSearchForm postSearchForm,
 						HttpServletResponse response,
 						Model model) throws IOException {
 
@@ -48,6 +49,7 @@ public class PostController {
 
 		List<PostPreDto> postPreDtoList = postService.search(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), postSearchForm.getSortCode(), presentPage);
 
+		model.addAttribute("member", member);
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("postSearchForm", postSearchForm);
 		model.addAttribute("previous", presentPage == 1L);
@@ -90,6 +92,7 @@ public class PostController {
 		model.addAttribute("postViewDto", postViewDto);
 		model.addAttribute("show", postService.isNotRightMember(member.getId(), id));
 		model.addAttribute("commentContent", "");
+		model.addAttribute("member", member);
 
 		return "post/post";
 	}

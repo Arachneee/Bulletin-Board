@@ -1,20 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <link th:href="@{/css/bootstrap.min.css}"
-        href="css/bootstrap.min.css" rel="stylesheet">
-  <style>
-         .container {
-         max-width: 800px;
-         }
-         .field-error {
-         border-color: #dc3545;
-         color: #dc3545;
-         }
-         .
- </style>
-</head>
+<head th:replace="fragments/header :: header" />
 <body>
 
 <div class="container" >
@@ -66,21 +52,27 @@
         <td style="width: 560px;word-break: break-all;">
           <p th:text="${commentViewDto.content}">내용</p>
         </td>
-        <span th:if="${commentViewDto.commentShow}", th:object="${postSearchForm}">
-          <td style="width: 20px;">
-            <button class="w-100 btn btn-primary btn-sm"
-                    th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/edit(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-                    type="button">수정</button>
-          </td>
-          <td style="width: 20px;">
-            <button class="w-100 btn btn-danger btn-sm"
-                    th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/delete(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-                    type="button">삭제</button>
-          </td>
-        </span>
-        <span th:unless="${commentViewDto.commentShow}">
-          <td style="width: 40px;"></td>
-        </span>
+        <div th:object="${postSearchForm}">
+          <span th:if="${commentViewDto.commentShow}">
+            <td style="width: 40px;">
+              <button class="w-100 btn btn-secondary btn-sm"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/edit(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      type="button">수정</button>
+            </td>
+            <td style="width: 40px;">
+              <button class="w-100 btn btn-danger btn-sm"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/delete(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      type="button">삭제</button>
+            </td>
+          </span>
+          <span th:unless="${commentViewDto.commentShow}">
+            <td style="width: 20px;">
+              <button class="w-100 btn btn-primary btn-sm"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/sympathy(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      type="button">공감</button>
+            </td>
+          </span>
+        </div>
       </tr>
       </tbody>
     </table>

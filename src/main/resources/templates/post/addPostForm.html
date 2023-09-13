@@ -22,7 +22,7 @@
     <form action="" th:action th:object="${postAddForm}" method="post">
         <div>
             <label for="title">제목</label>
-            <input type="text" style="width:500px;" id="title" th:field="*{title}" class="form-control"
+            <input type="text" style="width:800px;" id="title" th:field="*{title}" class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{title}" />
         </div>
@@ -38,7 +38,7 @@
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
-                        th:onclick="|location.href='@{/post}'|"
+                        th:onclick="|location.href='@{/posts}'|"
                         type="button">취소</button>
             </div>
         </div>
