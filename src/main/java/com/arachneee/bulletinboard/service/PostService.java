@@ -6,6 +6,7 @@ import com.arachneee.bulletinboard.repository.post.JdbcPostRepository;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,8 @@ public class PostService {
 		postRepository.save(Post.create(title, content, member));
 	}
 
-	public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page) {
-		return postRepository.search(searchCode, searchString, sortCode, page, PAGE_SIZE);
+	public List<PostPreDto> search(PostSearchCondition postSearchCondition) {
+		return postRepository.search(postSearchCondition, PAGE_SIZE);
 	}
 
 	public PostEditDto findPostEditDto(Long id) {

@@ -52,7 +52,7 @@
         <td style="width: 560px;word-break: break-all;">
           <p th:text="${commentViewDto.content}">내용</p>
         </td>
-        <div th:object="${postSearchForm}">
+        <div th:object="${postSearchCondition}">
           <span th:if="${commentViewDto.commentShow}">
             <td style="width: 40px;">
               <button class="w-100 btn btn-secondary btn-sm"
@@ -80,7 +80,7 @@
       <div class="row">
         <div class="col">
           <p><textarea cols="80" rows="5" name="commentContent" placeholder="내용을 입력하세요."></textarea></p>
-          <span th:object="${postSearchForm}">
+          <span th:object="${postSearchCondition}">
             <input type="hidden" th:field="*{searchCode}">
             <input type="hidden" th:field="*{searchString}">
             <input type="hidden" th:field="*{sortCode}">
@@ -95,7 +95,7 @@
     </form>
     <hr class="my-2">
     <span th:unless="${show}">
-      <div class="row" th:object="${postSearchForm}">
+      <div class="row" th:object="${postSearchCondition}">
         <div class="col">
           <button class="w-100 btn btn-primary btn-lg"
                   th:onclick="|location.href='@{/posts/{id}/edit(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
@@ -110,7 +110,7 @@
       <hr class="my-2">
     </span>
   </div>
-    <div class="col" th:object="${postSearchForm}">
+    <div class="col" th:object="${postSearchCondition}">
       <button class="w-100 btn btn-secondary btn-lg"
               onclick="location.href=history.back()"
               th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"

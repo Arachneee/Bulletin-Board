@@ -2,8 +2,8 @@ package com.arachneee.bulletinboard.web.controller;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.service.CommentService;
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import com.arachneee.bulletinboard.web.form.CommentAddForm;
-import com.arachneee.bulletinboard.web.form.PostSearchForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class CommentController {
     public String saveComment(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                               @PathVariable Long postId,
                               @RequestParam("commentContent") String commentContent,
-                              PostSearchForm postSearchForm,
+                              PostSearchCondition postSearchCondition,
                               Model model) {
 
         if (StringUtils.isEmptyOrWhitespace(commentContent)) {
@@ -35,22 +35,22 @@ public class CommentController {
 
         commentService.save(commentContent, postId, member);
         log.info("댓글 저장 완료 ={}", commentContent);
-        log.info("postSearchForm = {}", postSearchForm);
-        return "redirect:/posts/{postId}" + postSearchForm.toQueryString();
+        log.info("postSearchCondition = {}", postSearchCondition);
+        return "redirect:/posts/{postId}" + postSearchCondition.toQueryString();
     }
 
     @GetMapping("/{commentId}/edit")
     public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                            @PathVariable Long postId,
                            @PathVariable Long commentId,
-                           PostSearchForm postSearchForm,
+                           PostSearchCondition postSearchCondition,
                            Model model) {
 
         if (commentService.isNotRightMember(member.getId(), commentId)) {
-            return "redirect:/posts/{postId}" + postSearchForm.toQueryString();
+            return "redirect:/posts/{postId}" + postSearchCondition.toQueryString();
         }
 
-        log.info("get edit postSearchForm={}", postSearchForm.toQueryString());
+        log.info("get edit postSearchCondition={}", postSearchCondition.toQueryString());
         CommentAddForm commentAddForm = new CommentAddForm(commentService.findContentById(commentId));
         model.addAttribute("commentAddForm", commentAddForm);
         log.info("@GetMapping(\"/{commentId}/edit\") 완료 = {}", commentAddForm.getCommentContent());
@@ -62,13 +62,13 @@ public class CommentController {
                            @PathVariable Long postId,
                            @PathVariable Long commentId,
                            @Valid CommentAddForm commentAddForm,
-                           PostSearchForm postSearchForm,
+                           PostSearchCondition postSearchCondition,
                            BindingResult bindingResult) {
 
-        log.info("post edit postSearchForm={}", postSearchForm.toQueryString());
+        log.info("post edit postSearchCondition={}", postSearchCondition.toQueryString());
 
         if (commentService.isNotRightMember(member.getId(), commentId)) {
-            return "redirect:/posts/{postId}" + postSearchForm.toQueryString();
+            return "redirect:/posts/{postId}" + postSearchCondition.toQueryString();
         }
 
         if (bindingResult.hasErrors()) {
@@ -78,23 +78,23 @@ public class CommentController {
         log.info("contents update start");
         commentService.update(commentId, commentAddForm.getCommentContent());
         log.info("contents update finish");
-        return "redirect:/posts/{postId}" + postSearchForm.toQueryString();
+        return "redirect:/posts/{postId}" + postSearchCondition.toQueryString();
     }
 
     @GetMapping("/{commentId}/delete")
     public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
                          @PathVariable Long postId,
-                         PostSearchForm postSearchForm,
+                         PostSearchCondition postSearchCondition,
                          @PathVariable Long commentId) {
 
         if (commentService.isNotRightMember(member.getId(), commentId)) {
-            return "redirect:/posts/{postId}" + postSearchForm.toQueryString();
+            return "redirect:/posts/{postId}" + postSearchCondition.toQueryString();
         }
 
         log.info("contents delete start");
         commentService.delete(commentId);
         log.info("contents delete finish");
-        return "redirect:/posts/{postId}" + postSearchForm.toQueryString();
+        return "redirect:/posts/{postId}" + postSearchCondition.toQueryString();
     }
 
 }

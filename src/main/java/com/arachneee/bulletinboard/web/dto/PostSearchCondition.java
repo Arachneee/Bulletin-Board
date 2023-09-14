@@ -1,16 +1,16 @@
-package com.arachneee.bulletinboard.web.form;
+package com.arachneee.bulletinboard.web.dto;
 
 import lombok.Data;
 
 @Data
-public class PostSearchForm {
+public class PostSearchCondition {
 
     private String searchCode;
     private String searchString;
     private String sortCode;
     private Long page;
 
-    public PostSearchForm() {
+    public PostSearchCondition() {
         searchCode = "TITLE";
         searchString = "";
         sortCode = "NEW";

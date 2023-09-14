@@ -2,6 +2,7 @@ package com.arachneee.bulletinboard.repository.post;
 
 import java.util.List;
 
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -45,7 +46,13 @@ public class JpaPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize) {
+	public List<PostPreDto> search(PostSearchCondition postSearchCondition, Long pageSize) {
+
+		String searchString = postSearchCondition.getSearchString();
+		String searchCode = postSearchCondition.getSearchCode();
+		String sortCode = postSearchCondition.getSortCode();
+		Long page = postSearchCondition.getPage();
+
 		Integer skipPageSize = (page.intValue() - 1) * pageSize.intValue();
 
 		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostPreDto(p.id, p.title, m.name, p.createTime, p.viewCount)" +

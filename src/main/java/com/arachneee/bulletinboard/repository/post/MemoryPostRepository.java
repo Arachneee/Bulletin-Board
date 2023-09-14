@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.stereotype.Repository;
 
-import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
@@ -75,7 +75,13 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
-	public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize) {
+	public List<PostPreDto> search(PostSearchCondition postSearchCondition, Long pageSize) {
+		String searchString = postSearchCondition.getSearchString();
+		String searchCode = postSearchCondition.getSearchCode();
+		String sortCode = postSearchCondition.getSortCode();
+		Long page = postSearchCondition.getPage();
+
+
 		log.info("searchString = {} searchCode = {} sortCode = {}", searchString, searchCode, sortCode);
 
 		Long skipPageSize = (page - 1L) * pageSize;

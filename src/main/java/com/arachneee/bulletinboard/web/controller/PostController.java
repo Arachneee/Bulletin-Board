@@ -5,9 +5,9 @@ import java.util.*;
 
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
-import com.arachneee.bulletinboard.web.form.PostSearchForm;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,24 +36,24 @@ public class PostController {
 
 	@GetMapping("")
 	public String posts(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-						PostSearchForm postSearchForm,
+						PostSearchCondition postSearchCondition,
 						HttpServletResponse response,
 						Model model) throws IOException {
 
-		Long presentPage = postSearchForm.getPage();
+		Long presentPage = postSearchCondition.getPage();
 
 		if (presentPage < 1L) {
 			response.sendError(400, "page 는 1이상입니다.");
 			return null;
 		}
 
-		List<PostPreDto> postPreDtoList = postService.search(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), postSearchForm.getSortCode(), presentPage);
+		List<PostPreDto> postPreDtoList = postService.search(postSearchCondition);
 
 		model.addAttribute("member", member);
 		model.addAttribute("postPreDtoList", postPreDtoList);
-		model.addAttribute("postSearchForm", postSearchForm);
+		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("previous", presentPage == 1L);
-		model.addAttribute("next", postService.isLastPage(postSearchForm.getSearchCode(), postSearchForm.getSearchString(), presentPage));
+		model.addAttribute("next", postService.isLastPage(postSearchCondition.getSearchCode(), postSearchCondition.getSearchString(), presentPage));
 
 		return "post/posts";
 	}
@@ -84,7 +84,7 @@ public class PostController {
 	@GetMapping("/{id}")
 	public String post(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
-					   PostSearchForm postSearchForm,
+					   PostSearchCondition postSearchCondition,
 					   Model model) {
 
 		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id, member.getId());

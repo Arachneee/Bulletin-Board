@@ -7,6 +7,7 @@ import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -71,7 +72,12 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<PostPreDto> search(String searchCode, String searchString, String sortCode, Long page, Long pageSize) {
+    public List<PostPreDto> search(PostSearchCondition postSearchCondition, Long pageSize) {
+        String searchString = postSearchCondition.getSearchString();
+        String searchCode = postSearchCondition.getSearchCode();
+        String sortCode = postSearchCondition.getSortCode();
+        Long page = postSearchCondition.getPage();
+
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
         Long skipPageSize = (page - 1L) * pageSize;
 
