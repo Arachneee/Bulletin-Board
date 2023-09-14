@@ -3,7 +3,6 @@ package com.arachneee.bulletinboard.repository;
 import java.util.List;
 
 import com.arachneee.bulletinboard.domain.Post;
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 
@@ -26,4 +25,6 @@ public interface PostRepository {
 	Post findById(Long id);
 
 	Post findWithCommentsById(Long postId);
+
+	Post findWithMemberById(Long postId);
 }

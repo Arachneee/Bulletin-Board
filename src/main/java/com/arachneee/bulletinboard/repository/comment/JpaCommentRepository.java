@@ -1,6 +1,7 @@
 package com.arachneee.bulletinboard.repository.comment;
 
 
+import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,8 @@ import com.arachneee.bulletinboard.repository.CommentRepository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -50,5 +53,26 @@ public class JpaCommentRepository implements CommentRepository {
 		return comment.getMember().getId();
 	}
 
+	@Override
+	public List<Comment> findCommentsByPostId(Long postId, CommentSearchCondition commentSearchCondition, Integer commentPageSize) {
 
+		String jpql = "select c from Comment c" +
+				" join fetch c.member" +
+				" where c.post.id = :postId" +
+				" order by c.createTime " + getSortCode(commentSearchCondition);
+
+		Integer commentPage = commentSearchCondition.getCommentPage();
+		Integer skipPageSize = (commentPage - 1) * commentPageSize;
+
+		return em.createQuery(jpql, Comment.class)
+				.setParameter("postId", postId)
+				.setFirstResult(skipPageSize)
+				.setMaxResults(commentPageSize)
+				.getResultList();
+
+	}
+
+	private static String getSortCode(CommentSearchCondition commentSearchCondition) {
+		return commentSearchCondition.getCommentSortCode().equals("NEW") ? "desc" : "asc";
+	}
 }

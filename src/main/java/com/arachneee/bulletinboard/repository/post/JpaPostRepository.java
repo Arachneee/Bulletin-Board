@@ -126,4 +126,15 @@ public class JpaPostRepository implements PostRepository {
 			.setParameter("postId", postId)
 			.getSingleResult();
 	}
+
+	@Override
+	public Post findWithMemberById(Long postId) {
+		String jpql = "select p from Post p" +
+						" left join fetch p.member m" +
+						" where p.id = :postId";
+
+		return em.createQuery(jpql, Post.class)
+				.setParameter("postId", postId)
+				.getSingleResult();
+	}
 }

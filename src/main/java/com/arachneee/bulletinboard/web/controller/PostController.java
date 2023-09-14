@@ -3,10 +3,7 @@ package com.arachneee.bulletinboard.web.controller;
 import java.io.IOException;
 import java.util.*;
 
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
-import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
-import com.arachneee.bulletinboard.web.dto.PostViewDto;
+import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,6 +34,7 @@ public class PostController {
 	@GetMapping("")
 	public String posts(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						PostSearchCondition postSearchCondition,
+						CommentSearchCondition commentSearchCondition,
 						HttpServletResponse response,
 						Model model) throws IOException {
 
@@ -52,6 +50,7 @@ public class PostController {
 		model.addAttribute("member", member);
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("postSearchCondition", postSearchCondition);
+		model.addAttribute("commentSearchCondition", commentSearchCondition);
 		model.addAttribute("previous", presentPage == 1L);
 		model.addAttribute("next", postService.isLastPage(postSearchCondition.getSearchCode(), postSearchCondition.getSearchString(), presentPage));
 
@@ -85,14 +84,29 @@ public class PostController {
 	public String post(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
 					   PostSearchCondition postSearchCondition,
-					   Model model) {
+					   CommentSearchCondition commentSearchCondition,
+					   HttpServletResponse response,
+					   Model model) throws IOException {
 
-		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id, member.getId());
+		log.info("commentSearchCondition = {}, {}", commentSearchCondition.getCommentSortCode(), commentSearchCondition.getCommentPage());
 
+		Integer commentPage = commentSearchCondition.getCommentPage();
+
+		if (commentPage < 1) {
+			response.sendError(400, "page 는 1이상입니다.");
+			return null;
+		}
+
+		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id, member.getId(), commentSearchCondition);
+
+		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("postViewDto", postViewDto);
 		model.addAttribute("show", postService.isNotRightMember(member.getId(), id));
 		model.addAttribute("commentContent", "");
 		model.addAttribute("member", member);
+		model.addAttribute("commentSearchCondition", commentSearchCondition);
+		model.addAttribute("previous", commentPage == 1);
+		model.addAttribute("next", postService.isLastCommentPage(id, commentPage));
 
 		return "post/post";
 	}
@@ -100,13 +114,15 @@ public class PostController {
 	@GetMapping("/{id}/edit")
 	public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						   @PathVariable Long id,
-		Model model) {
+						   Model model) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
 			return "redirect:/posts/{id}";
 		}
 
 		model.addAttribute("postEditDto", postService.findPostEditDto(id));
+		log.info("Get : post edit 호출");
+
 		return "post/editPostForm";
 	}
 
@@ -114,6 +130,7 @@ public class PostController {
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
 					   @Valid PostEditDto postEditDto,
+					   PostSearchCondition postSearchCondition,
 					   BindingResult bindingResult) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
@@ -121,16 +138,17 @@ public class PostController {
 		}
 
 		if (bindingResult.hasErrors()) {
-			return "post/editPostForm";
+			return "post/editPostForm" + postSearchCondition.toQueryString();
 		}
 
 		postService.update(id, postEditDto.getTitle(), postEditDto.getContent());
-		return "redirect:/posts/{id}";
+		return "redirect:/posts/{id}" + postSearchCondition.toQueryString();
 	}
 
 	@GetMapping("/{id}/delete")
 	public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						 @PathVariable Long id,
+						 PostSearchCondition postSearchCondition,
 						 Model model) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
@@ -138,7 +156,7 @@ public class PostController {
 		}
 
 		postService.delete(id);
-		return "redirect:/posts";
+		return "redirect:/posts" + postSearchCondition.toQueryString();
 	}
 
 	@ModelAttribute("sortCodes")
@@ -157,6 +175,21 @@ public class PostController {
 		searchCodes.add(new SearchCode("CONTENT", "내용"));
 		searchCodes.add(new SearchCode("NAME", "작성자"));
 		return searchCodes;
+	}
+
+	@ModelAttribute("commentSortCodes")
+	public List<CommentSortCode> commentSortCodes() {
+		List<CommentSortCode> commentSortCodes = new ArrayList<>();
+		commentSortCodes.add(new CommentSortCode("NEW", "최신순"));
+		commentSortCodes.add(new CommentSortCode("OLD", "등록순"));
+		return commentSortCodes;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	static class CommentSortCode {
+		private String code;
+		private String displayName;
 	}
 
 	@Getter

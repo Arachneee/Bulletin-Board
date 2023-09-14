@@ -2,6 +2,10 @@ package com.arachneee.bulletinboard.repository.comment;
 
 import javax.sql.DataSource;
 
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.domain.Post;
+import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.CommentRepository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -71,5 +76,40 @@ public class JdbcCommentRepository implements CommentRepository {
 		Map<String, Object> param = Map.of("commentId", commentId);
 
 		return template.queryForObject(sql, param, String.class);
+	}
+
+	@Override
+	public List<Comment> findCommentsByPostId(Long postId, CommentSearchCondition commentSearchCondition, Integer commentPageSize) {
+		String sql = "select * from comment c" +
+				" join member m on c.member_id = m.member_id" +
+				" join post p on c.post_id = p.post_id" +
+				" where p.post_id = :postId" +
+				" order by c.create_time " + getSortCode(commentSearchCondition);
+
+		Map<String, Object> param = Map.of("postId", postId);
+
+		return template.query(sql, param, commentRowMapper());
+	}
+
+	private static String getSortCode(CommentSearchCondition commentSearchCondition) {
+		return commentSearchCondition.getCommentSortCode().equals("NEW") ? "desc" : "asc";
+	}
+
+	private RowMapper<Comment> commentRowMapper() {
+		return (rs, rowNum) -> {
+			Member member = Member.create(rs.getString("m.loginId"), rs.getString("m.password"), rs.getString("m.name"));
+
+			Post post = Post.createRowMap(rs.getString("p.title"),
+					rs.getString("p.content"),
+					member,
+					rs.getTimestamp("p.create_time").toLocalDateTime(),
+					rs.getInt("p.view_count"));
+
+			return new Comment(rs.getLong("post_id"),
+						rs.getString("c.content"),
+						post,
+						member,
+						rs.getTimestamp("c.create_time").toLocalDateTime());
+		};
 	}
 }

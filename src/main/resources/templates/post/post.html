@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
+<head th:replace="~{fragments/header :: header}" />
 <body>
 
 <div class="container" >
@@ -28,7 +28,7 @@
     </div>
     <div>
       <label for="content">내용</label>
-      <p><textarea id="content" cols="64" rows="20" class="form-control" th:value="*{content}" th:text="*{content}" readonly></textarea></p>
+      <p><textarea id="content" th:cols="40" rows="20" class="form-control" th:value="*{content}" th:text="*{content}" readonly></textarea></p>
     </div>
     <hr class="my-2">
     <div class="text-start">
@@ -36,7 +36,17 @@
         <span>댓글</span>
       </h4>
     </div>
+  </div>
 
+  <div>
+    <select style="width: 200px;" onchange="if(this.value) location.href=(this.value);" class="form-select" th:object="${postSearchCondition}">
+      <option th:each="commentSortCode : ${commentSortCodes}"
+              th:value="@{/posts/{id}(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page}, commentSortCode=${commentSortCode.code})}"
+              th:text="${commentSortCode.displayName}"
+              th:selected="${commentSortCode.code} == ${commentSearchCondition.commentSortCode}">FAST</option>
+    </select>
+  </div>
+  <div th:object="${postViewDto}">
     <table class="table">
       <tread>
         <tr>
@@ -76,6 +86,27 @@
       </tr>
       </tbody>
     </table>
+  </div>
+
+    <div class="row" th:object="${postSearchCondition}">
+      <div class="col">
+        <button class="w-100 btn btn-primary btn-sm"
+                th:onclick="|location.href='@{/posts/{id}(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage - 1}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                type="button" th:disabled="${previous} ? 'disabled'">
+          이전
+        </button>
+      </div>
+      <div class="col">
+        <button class="w-100 btn btn-primary btn-sm"
+                th:onclick="|location.href='@{/posts/{id}(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage + 1}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                type="button" th:disabled="${next} ? 'disabled'">
+          다음
+        </button>
+      </div>
+    </div>
+
+  <div th:object="${postViewDto}">
+    <hr class="my-3">
     <form action="" th:action="@{/posts/{postId}/comments(postId=*{id})}" method="post">
       <div class="row">
         <div class="col">

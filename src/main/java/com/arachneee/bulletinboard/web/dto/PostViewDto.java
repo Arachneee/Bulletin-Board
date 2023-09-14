@@ -22,7 +22,7 @@ public class PostViewDto {
 	private List<CommentViewDto> comments;
 
 
-	public static PostViewDto from(Post post, Long memberId) {
+	public static PostViewDto from(Post post) {
 		PostViewDto postViewDto = new PostViewDto();
 
 		postViewDto.setId(post.getId());
@@ -31,9 +31,6 @@ public class PostViewDto {
 		postViewDto.setName(post.getMember().getName());
 		postViewDto.setCreateTime(post.getCreateTime());
 		postViewDto.setViewCount(post.getViewCount());
-		postViewDto.setComments(post.getComments().stream()
-													.map(comment -> CommentViewDto.from(comment, memberId))
-													.collect(Collectors.toList()));
 
 		return postViewDto;
 	}

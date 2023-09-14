@@ -1,12 +1,12 @@
 package com.arachneee.bulletinboard.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.arachneee.bulletinboard.domain.Comment;
+import com.arachneee.bulletinboard.repository.CommentRepository;
 import com.arachneee.bulletinboard.repository.post.JdbcPostRepository;
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
-import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostViewDto;
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
+import com.arachneee.bulletinboard.web.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final CommentRepository commentRepository;
 	private final Long PAGE_SIZE = 10L;
-	private final int COMMENT_PAGE_SIZE = 10;
+	private final Integer COMMENT_PAGE_SIZE = 10;
 
 	public void save(String title, String content, Member member) {
 		postRepository.save(Post.create(title, content, member));
@@ -39,8 +40,8 @@ public class PostService {
 		return PostEditDto.from(post);
 	}
 
-	public PostViewDto viewAndFindPostViewDto(Long postId, Long memberId) {
-		Post post = postRepository.findWithCommentsById(postId);
+	public PostViewDto viewAndFindPostViewDto(Long postId, Long memberId, CommentSearchCondition commentSearchCondition) {
+		Post post = postRepository.findWithMemberById(postId);
 
 		post.view();
 
@@ -48,7 +49,15 @@ public class PostService {
 			postRepository.updateViewCount(postId, post.getViewCount());
 		}
 
-		return PostViewDto.from(post, memberId);
+		PostViewDto postViewDto = PostViewDto.from(post);
+
+		List<Comment> comments = commentRepository.findCommentsByPostId(postId, commentSearchCondition, COMMENT_PAGE_SIZE);
+
+		postViewDto.setComments(comments.stream()
+										.map(comment -> CommentViewDto.from(comment, memberId))
+										.collect(Collectors.toList()));
+
+		return postViewDto;
 	}
 
 	public void update(Long id, String title, String content) {
@@ -65,5 +74,11 @@ public class PostService {
 
 	public boolean isLastPage(String searchCode, String searchString, Long presentPage) {
 		return postRepository.countAll(searchCode, searchString) <= presentPage * PAGE_SIZE;
+	}
+
+	public boolean isLastCommentPage(Long postId, Integer commentPage) {
+		Post post = postRepository.findWithCommentsById(postId);
+
+		return post.getComments().size() <= commentPage * COMMENT_PAGE_SIZE;
 	}
 }

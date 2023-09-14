@@ -30,6 +30,11 @@ public class MemoryPostRepository implements PostRepository {
 	}
 
 	@Override
+	public Post findWithMemberById(Long postId) {
+		return findById(postId);
+	}
+
+	@Override
 	public Post findById(Long id) {
 		return postTable.get(id);
 	}
