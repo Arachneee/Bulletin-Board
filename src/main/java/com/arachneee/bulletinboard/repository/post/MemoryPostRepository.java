@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 
 
@@ -23,12 +22,6 @@ public class MemoryPostRepository implements PostRepository {
 
 	private static final Map<Long, Post> postTable = new ConcurrentHashMap<>();
 	private long sequence = 0L;
-
-	@Override
-	public PostEditDto findPostEditDtoById(Long id) {
-		Post post = postTable.get(id);
-		return PostEditDto.from(post);
-	}
 
 	@Override
 	public void updateViewCount(Long id, int viewCount) {

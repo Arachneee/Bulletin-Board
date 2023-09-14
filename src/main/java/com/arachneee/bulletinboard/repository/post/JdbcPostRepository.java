@@ -4,7 +4,6 @@ import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 
 import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
@@ -117,21 +116,6 @@ public class JdbcPostRepository implements PostRepository {
                                                     rs.getInt("view_count"));
     }
 
-    @Override
-    public PostEditDto findPostEditDtoById(Long postId) {
-        String sql = "select post_id, title, content, create_time, view_count, member.name as name from post join member on post.member_id = member.member_id where post.post_id = :postId";
-        Map<String, Object> param = Map.of("postId", postId);
-
-        return template.queryForObject(sql, param, postEditDtoRowMapper());
-    }
-
-    private RowMapper<PostEditDto> postEditDtoRowMapper() {
-        return (rs, rowNum) -> {
-            return new PostEditDto(rs.getLong("post_id"),
-                rs.getString("title"),
-                rs.getString("content"));
-        };
-    }
 
     @Override
     public void updateViewCount(Long postId, int viewCount) {

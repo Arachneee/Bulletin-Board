@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 
 import jakarta.persistence.EntityManager;
@@ -85,17 +84,6 @@ public class JpaPostRepository implements PostRepository {
 		} else { // sortCode.equals("OLD")
 			return "p.createTime asc";
 		}
-	}
-
-	@Override
-	public PostEditDto findPostEditDtoById(Long id) {
-		String jpql = "select new com.arachneee.bulletinboard.web.dto.PostEditDto(p.id, p.title, p.content)" +
-						" from Post p" +
-						" where p.id = :id";
-
-		return em.createQuery(jpql, PostEditDto.class)
-			.setParameter("id", id)
-			.getSingleResult();
 	}
 
 	@Override

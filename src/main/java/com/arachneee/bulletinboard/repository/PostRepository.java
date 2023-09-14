@@ -16,10 +16,6 @@ public interface PostRepository {
 
 	List<PostPreDto> search(PostSearchCondition postSearchCondition, Long pageSize);
 
-
-	PostEditDto findPostEditDtoById(Long id);
-
-
 	void updateViewCount(Long id, int viewCount);
 
 	Long findMemberIdByPostID(Long id);

@@ -35,7 +35,8 @@ public class PostService {
 	}
 
 	public PostEditDto findPostEditDto(Long id) {
-		return postRepository.findPostEditDtoById(id);
+		Post post = postRepository.findById(id);
+		return PostEditDto.from(post);
 	}
 
 	public PostViewDto viewAndFindPostViewDto(Long postId, Long memberId) {
