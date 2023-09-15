@@ -56,7 +56,7 @@
             <td style="width: 170px;" th:text="${#temporals.format(post.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
             <td style="width: 100px;"th:text="${post.viewCount}">조회수</td>
             <td style="width: 330px;">
-                <a th:href="@{/posts/{id}(id=${post.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage})}"
+                <a th:href="@{/posts/{id}(id=${post.id})} + '?' + ${queryString}"
                    th:text="${post.title}">제목</a>
             </td>
             <td style="width: 100px;" th:text="${post.name}">작성자</td>

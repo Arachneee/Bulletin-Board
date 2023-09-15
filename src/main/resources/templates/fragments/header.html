@@ -24,7 +24,7 @@
                 type="button">홈으로</button>
       </div>
       <div class="col-md-2 offset-md-6">
-        <p class="mb-3" th:text="|로그인: ${member.name}|">로그인 사용자 이름</p>
+        <p class="mb-3" th:text="|로그인: ${memberName}|">로그인 사용자 이름</p>
       </div>
       <div class="col-md-2">
         <form th:action="@{/logout}" method="post">

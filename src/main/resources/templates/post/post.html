@@ -10,21 +10,23 @@
         <span th:text="*{title}">제목</span>
       </h2>
     </div>
-    <div>
-      <label for="id">게시글 ID</label>
-      <input type="text" id="id" name="id" class="form-control" th:value="*{id}" readonly>
-    </div>
-    <div>
-      <label for="viewCount">조회수</label>
-      <input type="text" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="*{viewCount}" readonly>
-    </div>
-    <div>
-      <label for="member">글쓴이</label>
-      <input type="text" id="member" name="member" class="form-control" value="글쓴이" th:value="*{name}" readonly>
-    </div>
-    <div>
-      <label for="createTime">날짜</label>
-      <input type="text" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${#temporals.format(postViewDto.createTime, 'yyyy-MM-dd HH:mm')}" readonly>
+    <div class="row">
+      <div class="col">
+        <label for="id">게시글 ID</label>
+        <input type="text" id="id" name="id" class="form-control" th:value="*{id}" readonly>
+      </div>
+      <div class="col">
+        <label for="viewCount">조회수</label>
+        <input type="text" id="viewCount" name="viewCount" class="form-control" value="조회수" th:value="*{viewCount}" readonly>
+      </div>
+      <div class="col">
+        <label for="member">글쓴이</label>
+        <input type="text" id="member" name="member" class="form-control" value="글쓴이" th:value="*{name}" readonly>
+      </div>
+      <div class="col">
+        <label for="createTime">날짜</label>
+        <input type="text" id="createTime" name="createTime" class="form-control" value="등록 날짜" th:value="${#temporals.format(postViewDto.createTime, 'yyyy-MM-dd HH:mm')}" readonly>
+      </div>
     </div>
     <div>
       <label for="content">내용</label>
@@ -43,7 +45,7 @@
       <option th:each="commentSortCode : ${commentSortCodes}"
               th:value="@{/posts/{id}(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page}, commentSortCode=${commentSortCode.code})}"
               th:text="${commentSortCode.displayName}"
-              th:selected="${commentSortCode.code} == ${commentSearchCondition.commentSortCode}">FAST</option>
+              th:selected="${commentSortCode.code} == ${commentSearchCondition.commentSortCode}">댓글 정렬</option>
     </select>
   </div>
   <div th:object="${postViewDto}">
@@ -53,33 +55,34 @@
           <th>등록 시간</th>
           <th>작성자</th>
           <th>내용</th>
+          <th>공감수</th>
+          <th>공감</th>
         </tr>
       </tread>
       <tbody>
       <tr th:each="commentViewDto : *{comments}">
         <td style="width: 110px;" th:text="${#temporals.format(commentViewDto.createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
         <td style="width: 90px;" th:text="${commentViewDto.name}">작성자</td>
-        <td style="width: 560px;word-break: break-all;">
+        <td style="width: 500px;word-break: break-all;">
           <p th:text="${commentViewDto.content}">내용</p>
         </td>
+        <td style="width: 80px;" th:text="${commentViewDto.empathyCount}">공감수</td>
         <div th:object="${postSearchCondition}">
+          <td style="width: 10px;">
+            <button class="w-100 btn btn-primary btn-sm"
+                    th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/empathy(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                    type="button">공감</button>
+          </td>
           <span th:if="${commentViewDto.commentShow}">
             <td style="width: 40px;">
               <button class="w-100 btn btn-secondary btn-sm"
-                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/edit(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/edit(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
                       type="button">수정</button>
             </td>
             <td style="width: 40px;">
               <button class="w-100 btn btn-danger btn-sm"
-                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/delete(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/delete(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
                       type="button">삭제</button>
-            </td>
-          </span>
-          <span th:unless="${commentViewDto.commentShow}">
-            <td style="width: 20px;">
-              <button class="w-100 btn btn-primary btn-sm"
-                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/sympathy(id=${postViewDto.id}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-                      type="button">공감</button>
             </td>
           </span>
         </div>
