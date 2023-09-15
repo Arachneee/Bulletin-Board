@@ -16,16 +16,20 @@ public class CommentViewDto {
 	private LocalDateTime createTime;
 	private Integer empathyCount;
 	private boolean commentShow;
+	private boolean isEmpathy;
 
 	public static CommentViewDto from(Comment comment, Long memberId) {
 		CommentViewDto commentViewDto = new CommentViewDto();
+		
 		commentViewDto.setId(comment.getId());
 		commentViewDto.setContent(comment.getContent());
 		commentViewDto.setName(comment.getMember().getName());
 		commentViewDto.setCreateTime(comment.getCreateTime());
-		commentViewDto.setCommentShow(comment.getMember().getId().equals(memberId));
+		commentViewDto.setCommentShow(comment.isWriter(memberId));
 		commentViewDto.setEmpathyCount(comment.getEmpathyCount());
+		commentViewDto.setEmpathy(comment.isAlreadyEmpathized(memberId) || comment.isWriter(memberId));
 
 		return commentViewDto;
 	}
+
 }

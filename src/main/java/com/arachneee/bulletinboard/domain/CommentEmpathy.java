@@ -41,4 +41,8 @@ public class CommentEmpathy {
     private void setMember(Member member) {
         this.member = member;
     }
+
+    public Long getMemberId() {
+        return member.getId();
+    }
 }

@@ -14,6 +14,9 @@ import com.arachneee.bulletinboard.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -46,6 +49,11 @@ public class CommentService {
 
 	public void empathy(Long commentId, Member member) {
 		Comment comment = commentRepository.findById(commentId);
+
+		if (comment.isAlreadyEmpathized(member.getId()) || comment.isWriter(member.getId())) {
+			return;
+		}
+
 		CommentEmpathy commentEmpathy = CommentEmpathy.create(comment, member);
 		commentEmpathyRepository.save(commentEmpathy);
 	}

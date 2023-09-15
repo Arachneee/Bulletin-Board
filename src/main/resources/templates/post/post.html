@@ -68,11 +68,13 @@
         </td>
         <td style="width: 80px;" th:text="${commentViewDto.empathyCount}">공감수</td>
         <div th:object="${postSearchCondition}">
-          <td style="width: 10px;">
-            <button class="w-100 btn btn-primary btn-sm"
-                    th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/empathy(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-                    type="button">공감</button>
-          </td>
+          <span th:if="${!commentViewDto.isEmpathy}">
+            <td style="width: 10px;">
+              <button class="w-100 btn btn-primary btn-sm"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/empathy(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage}, commentId=${commentViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      type="button">공감</button>
+            </td>
+          </span>
           <span th:if="${commentViewDto.commentShow}">
             <td style="width: 40px;">
               <button class="w-100 btn btn-secondary btn-sm"
@@ -128,7 +130,7 @@
       </div>
     </form>
     <hr class="my-2">
-    <span th:unless="${show}">
+    <span th:unless="${!show}">
       <div class="row" th:object="${postSearchCondition}">
         <div class="col">
           <button class="w-100 btn btn-primary btn-lg"

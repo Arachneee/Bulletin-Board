@@ -5,9 +5,9 @@ import static jakarta.persistence.FetchType.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 
 @Entity
@@ -84,5 +84,19 @@ public class Comment {
 
 	public void addEmpathy(CommentEmpathy commentEmpathy) {
 		commentEmpathies.add(commentEmpathy);
+	}
+
+	public boolean isAlreadyEmpathized(Long memberId) {
+		return getMemberIds().contains(memberId);
+	}
+
+	private List<Long> getMemberIds() {
+		return commentEmpathies.stream()
+				.map(CommentEmpathy::getMemberId)
+				.collect(Collectors.toList());
+	}
+
+	public boolean isWriter(Long memberId) {
+		return member.getId().equals(memberId);
 	}
 }
