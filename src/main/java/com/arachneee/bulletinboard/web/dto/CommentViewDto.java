@@ -14,6 +14,7 @@ public class CommentViewDto {
 	private String content;
 	private String name;
 	private LocalDateTime createTime;
+	private Integer empathyCount;
 	private boolean commentShow;
 
 	public static CommentViewDto from(Comment comment, Long memberId) {
@@ -23,6 +24,7 @@ public class CommentViewDto {
 		commentViewDto.setName(comment.getMember().getName());
 		commentViewDto.setCreateTime(comment.getCreateTime());
 		commentViewDto.setCommentShow(comment.getMember().getId().equals(memberId));
+		commentViewDto.setEmpathyCount(comment.getEmpathyCount());
 
 		return commentViewDto;
 	}

@@ -43,6 +43,18 @@ public class JdbcCommentRepository implements CommentRepository {
 	}
 
 	@Override
+	public Comment findById(Long id) {
+		String sql = "select * from comment c" +
+				" join member m on c.member_id = m.member_id" +
+				" join post p on c.post_id = p.post_id" +
+				" where c.comment_id = :id";
+
+		Map<String, Object> param = Map.of("id", id);
+
+		return template.queryForObject(sql, param, commentRowMapper());
+	}
+
+	@Override
 	public void update(Long id, String content) {
 		String sql = "update comment set content = :content where comment_id = :id";
 
@@ -111,5 +123,14 @@ public class JdbcCommentRepository implements CommentRepository {
 						member,
 						rs.getTimestamp("c.create_time").toLocalDateTime());
 		};
+	}
+
+	@Override
+	public Long countByPostId(Long postId) {
+		String sql = "select count(*) from comment where post_id = :postId";
+
+		Map<String, Object> param = Map.of("postId", postId);
+
+		return template.queryForObject(sql, param, Long.class);
 	}
 }

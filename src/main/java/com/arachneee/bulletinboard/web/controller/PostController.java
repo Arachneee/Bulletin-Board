@@ -6,6 +6,7 @@ import java.util.*;
 import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
@@ -34,8 +35,8 @@ public class PostController {
 	@GetMapping("")
 	public String posts(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						PostSearchCondition postSearchCondition,
-						CommentSearchCondition commentSearchCondition,
 						HttpServletResponse response,
+						HttpServletRequest request,
 						Model model) throws IOException {
 
 		Long presentPage = postSearchCondition.getPage();
@@ -47,10 +48,10 @@ public class PostController {
 
 		List<PostPreDto> postPreDtoList = postService.search(postSearchCondition);
 
-		model.addAttribute("member", member);
+		model.addAttribute("queryString", request.getQueryString());
+		model.addAttribute("memberName", member.getName());
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("postSearchCondition", postSearchCondition);
-		model.addAttribute("commentSearchCondition", commentSearchCondition);
 		model.addAttribute("previous", presentPage == 1L);
 		model.addAttribute("next", postService.isLastPage(postSearchCondition.getSearchCode(), postSearchCondition.getSearchString(), presentPage));
 
@@ -99,11 +100,13 @@ public class PostController {
 
 		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id, member.getId(), commentSearchCondition);
 
+		log.info("PostViewDto = {} ", postViewDto);
+
 		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("postViewDto", postViewDto);
-		model.addAttribute("show", postService.isNotRightMember(member.getId(), id));
+		model.addAttribute("show", member.getName().equals(postViewDto.getName()));
 		model.addAttribute("commentContent", "");
-		model.addAttribute("member", member);
+		model.addAttribute("memberName", member.getName());
 		model.addAttribute("commentSearchCondition", commentSearchCondition);
 		model.addAttribute("previous", commentPage == 1);
 		model.addAttribute("next", postService.isLastCommentPage(id, commentPage));
@@ -138,11 +141,11 @@ public class PostController {
 		}
 
 		if (bindingResult.hasErrors()) {
-			return "post/editPostForm" + postSearchCondition.toQueryString();
+			return "post/editPostForm";
 		}
 
 		postService.update(id, postEditDto.getTitle(), postEditDto.getContent());
-		return "redirect:/posts/{id}" + postSearchCondition.toQueryString();
+		return "redirect:/posts/{id}?" + postSearchCondition.toQueryString();
 	}
 
 	@GetMapping("/{id}/delete")
@@ -156,7 +159,7 @@ public class PostController {
 		}
 
 		postService.delete(id);
-		return "redirect:/posts" + postSearchCondition.toQueryString();
+		return "redirect:/posts?" + postSearchCondition.toQueryString();
 	}
 
 	@ModelAttribute("sortCodes")

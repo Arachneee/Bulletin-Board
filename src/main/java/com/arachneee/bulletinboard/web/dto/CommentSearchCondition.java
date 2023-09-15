@@ -12,4 +12,9 @@ public class CommentSearchCondition {
         commentSortCode = "NEW";
         commentPage = 1;
     }
+
+    public String toQueryString() {
+        return "commentSortCode=" + commentSortCode +
+                "&commentPage=" + commentPage;
+    }
 }

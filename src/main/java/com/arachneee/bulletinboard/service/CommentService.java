@@ -1,6 +1,8 @@
 package com.arachneee.bulletinboard.service;
 
 
+import com.arachneee.bulletinboard.domain.CommentEmpathy;
+import com.arachneee.bulletinboard.repository.CommentEmpathyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ public class CommentService {
 
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
+	private final CommentEmpathyRepository commentEmpathyRepository;
 
 	public void save(String content, Long postId, Member member) {
 		Post post = postRepository.findById(postId);
@@ -39,5 +42,11 @@ public class CommentService {
 
 	public void delete(Long commentId) {
 		commentRepository.delete(commentId);
+	}
+
+	public void empathy(Long commentId, Member member) {
+		Comment comment = commentRepository.findById(commentId);
+		CommentEmpathy commentEmpathy = CommentEmpathy.create(comment, member);
+		commentEmpathyRepository.save(commentEmpathy);
 	}
 }

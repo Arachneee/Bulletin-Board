@@ -77,8 +77,6 @@ public class PostService {
 	}
 
 	public boolean isLastCommentPage(Long postId, Integer commentPage) {
-		Post post = postRepository.findWithCommentsById(postId);
-
-		return post.getComments().size() <= commentPage * COMMENT_PAGE_SIZE;
+		return commentRepository.countByPostId(postId) <= commentPage * COMMENT_PAGE_SIZE;
 	}
 }

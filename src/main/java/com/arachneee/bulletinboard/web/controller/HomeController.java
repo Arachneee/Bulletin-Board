@@ -1,6 +1,8 @@
 package com.arachneee.bulletinboard.web.controller;
 
 import com.arachneee.bulletinboard.web.argumentresolver.Login;
+import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
+import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class HomeController {
 	@GetMapping("/")
-	public String home(@Login Member loginMember, Model model) {
+	public String home(@Login Member loginMember,
+					   Model model) {
 
 		if (loginMember == null) {
 			log.info("session login state false");

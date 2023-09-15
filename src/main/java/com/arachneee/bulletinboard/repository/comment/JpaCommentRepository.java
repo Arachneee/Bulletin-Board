@@ -37,6 +37,7 @@ public class JpaCommentRepository implements CommentRepository {
 		em.remove(comment);
 	}
 
+	@Override
 	public Comment findById(Long commentId) {
 		return em.find(Comment.class, commentId);
 	}
@@ -74,5 +75,13 @@ public class JpaCommentRepository implements CommentRepository {
 
 	private static String getSortCode(CommentSearchCondition commentSearchCondition) {
 		return commentSearchCondition.getCommentSortCode().equals("NEW") ? "desc" : "asc";
+	}
+
+	@Override
+	public Long countByPostId(Long postId) {
+		String jpql = "select count(c) from Comment c where c.post.id = :postId";
+		return em.createQuery(jpql, Long.class)
+				.setParameter("postId", postId)
+				.getSingleResult();
 	}
 }

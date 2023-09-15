@@ -3,15 +3,11 @@ package com.arachneee.bulletinboard.domain;
 import static jakarta.persistence.FetchType.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 
 @Entity
@@ -35,6 +31,9 @@ public class Comment {
 	private Member member;
 
 	private LocalDateTime createTime;
+
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+	private List<CommentEmpathy> commentEmpathies = new ArrayList<>();
 
 	protected Comment() {
 	}
@@ -74,7 +73,16 @@ public class Comment {
 		this.createTime = createTime;
 	}
 
+
 	public void update(String content) {
 		setContent(content);
+	}
+
+	public Integer getEmpathyCount() {
+		return commentEmpathies.size();
+	}
+
+	public void addEmpathy(CommentEmpathy commentEmpathy) {
+		commentEmpathies.add(commentEmpathy);
 	}
 }

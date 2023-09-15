@@ -6,11 +6,12 @@ import java.util.stream.Collectors;
 
 import com.arachneee.bulletinboard.domain.Post;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 
-@Getter @Setter
+@Data
 public class PostViewDto {
 
 	private Long id;

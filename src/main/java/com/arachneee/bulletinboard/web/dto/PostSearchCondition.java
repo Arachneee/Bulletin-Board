@@ -18,7 +18,7 @@ public class PostSearchCondition {
     }
 
     public String toQueryString() {
-        return "?searchCode=" + searchCode +
+        return "searchCode=" + searchCode +
                 "&searchString=" + searchString +
                 "&sortCode=" + sortCode +
                 "&page=" + page;

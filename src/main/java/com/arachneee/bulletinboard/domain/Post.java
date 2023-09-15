@@ -91,7 +91,7 @@ public class Post {
 	}
 
 	public void view() {
-		viewCount++;
+		++viewCount;
 	}
 
 	public void setId(Long id) {
