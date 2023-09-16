@@ -26,12 +26,6 @@ public class JpaCommentRepository implements CommentRepository {
 	}
 
 	@Override
-	public void update(Long id, String content) {
-		Comment comment = em.find(Comment.class, id);
-		comment.update(content);
-	}
-
-	@Override
 	public void delete(Long id) {
 		Comment comment = em.find(Comment.class, id);
 		em.remove(comment);

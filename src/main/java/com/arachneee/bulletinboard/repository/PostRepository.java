@@ -10,12 +10,12 @@ import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 public interface PostRepository {
 	void save(Post post);
 
-	void update(Long id, String title, String content);
+//	void update(Long id, String title, String content);
 	void delete(Long id);
 
 	List<PostPreDto> search(PostSearchCondition postSearchCondition, Long pageSize);
 
-	void updateViewCount(Long id, int viewCount);
+//	void updateViewCount(Long id, int viewCount);
 
 	Long findMemberIdByPostID(Long id);
 

@@ -52,4 +52,12 @@ public class Member {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public boolean isRightPassword(String password) {
+		return this.password.equals(password);
+	}
+
+	public boolean isSameName(String name) {
+		return this.name.equals(name);
+	}
 }

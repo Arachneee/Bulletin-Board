@@ -54,7 +54,6 @@ public class JdbcPostRepository implements PostRepository {
         return findWithCommentsById(id);
     }
 
-    @Override
     public void update(Long postId, String title, String content) {
         String sql = "update post set title = :title, content = :content where post_id = :post_id";
 
@@ -122,7 +121,6 @@ public class JdbcPostRepository implements PostRepository {
     }
 
 
-    @Override
     public void updateViewCount(Long postId, int viewCount) {
         String sql = "update post set view_count = :viewCount where post_id = :postId";
 

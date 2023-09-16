@@ -12,7 +12,6 @@ public interface CommentRepository {
 
 	Comment findById(Long id);
 
-	void update(Long id, String content);
 	void delete(Long id);
 
 	Long findMemberIdByCommentId(Long commentId);

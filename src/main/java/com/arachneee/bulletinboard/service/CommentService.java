@@ -14,8 +14,6 @@ import com.arachneee.bulletinboard.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +30,8 @@ public class CommentService {
 	}
 
 	public void update(Long commentId, String content) {
-		commentRepository.update(commentId, content);
+		Comment comment = commentRepository.findById(commentId);
+		comment.update(content);
 	}
 
 	public boolean isNotRightMember(Long memberId, Long commentId) {

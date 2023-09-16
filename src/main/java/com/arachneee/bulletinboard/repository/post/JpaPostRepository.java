@@ -32,11 +32,6 @@ public class JpaPostRepository implements PostRepository {
 		return em.find(Post.class, id);
 	}
 
-	@Override
-	public void update(Long id, String title, String content) {
-		Post post = em.find(Post.class, id);
-		post.update(title, content);
-	}
 
 	@Override
 	public void delete(Long id) {
@@ -86,11 +81,6 @@ public class JpaPostRepository implements PostRepository {
 		}
 	}
 
-	@Override
-	public void updateViewCount(Long id, int viewCount) {
-		Post post = em.find(Post.class, id);
-		post.view();
-	}
 
 	@Override
 	public Long findMemberIdByPostID(Long id) {

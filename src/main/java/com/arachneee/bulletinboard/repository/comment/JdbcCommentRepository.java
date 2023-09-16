@@ -54,7 +54,6 @@ public class JdbcCommentRepository implements CommentRepository {
 		return template.queryForObject(sql, param, commentRowMapper());
 	}
 
-	@Override
 	public void update(Long id, String content) {
 		String sql = "update comment set content = :content where comment_id = :id";
 

@@ -8,17 +8,18 @@ import com.arachneee.bulletinboard.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.function.Predicate;
+
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class LoginService {
 
 	private final MemberRepository memberRepository;
 
 	public Member login(String loginId, String password) {
 		return memberRepository.findByLoginId(loginId)
-			.filter(member -> member.getPassword().equals(password))
+			.filter(member -> member.isRightPassword(password))
 			.orElse(null);
 	}
-
 }

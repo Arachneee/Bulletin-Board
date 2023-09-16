@@ -23,7 +23,7 @@ public class MemoryPostRepository implements PostRepository {
 	private static final Map<Long, Post> postTable = new ConcurrentHashMap<>();
 	private long sequence = 0L;
 
-	@Override
+
 	public void updateViewCount(Long id, int viewCount) {
 		Post findPost = postTable.get(id);
 		findPost.view();
@@ -56,7 +56,7 @@ public class MemoryPostRepository implements PostRepository {
 		return new ArrayList<>(postTable.values());
 	}
 
-	@Override
+
 	public void update(Long id, String title, String content) {
 		Post findPost = postTable.get(id);
 		findPost.update(title, content);

@@ -6,6 +6,7 @@ import java.util.*;
 import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 
+import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -53,7 +54,7 @@ public class PostController {
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("previous", presentPage == 1L);
-		model.addAttribute("next", postService.isLastPage(postSearchCondition.getSearchCode(), postSearchCondition.getSearchString(), presentPage));
+		model.addAttribute("next", postService.isLastPage(postSearchCondition, presentPage));
 
 		return "post/posts";
 	}
@@ -104,7 +105,7 @@ public class PostController {
 
 		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("postViewDto", postViewDto);
-		model.addAttribute("show", member.getName().equals(postViewDto.getName()));
+		model.addAttribute("show", member.isSameName(postViewDto.getName()));
 		model.addAttribute("commentContent", "");
 		model.addAttribute("memberName", member.getName());
 		model.addAttribute("commentSearchCondition", commentSearchCondition);
@@ -151,8 +152,7 @@ public class PostController {
 	@GetMapping("/{id}/delete")
 	public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 						 @PathVariable Long id,
-						 PostSearchCondition postSearchCondition,
-						 Model model) {
+						 PostSearchCondition postSearchCondition) {
 
 		if (postService.isNotRightMember(member.getId(), id)) {
 			return "redirect:/posts/{id}";

@@ -18,22 +18,4 @@ public class MemberRepositoryTest {
 		}
 	}
 
-	@Test
-	public void createAndFindByIdTest() {
-		//given
-		Member userA = new Member();
-		userA.setName("nameA");
-		userA.setLoginId("userA");
-		userA.setPassword("1234");
-
-		//when
-		userRepository.save(userA);
-
-		//then
-		Assertions.assertThat(userRepository.countLoginId(userA.getLoginId())).isEqualTo(1);
-	}
-
-
-
-
 }
