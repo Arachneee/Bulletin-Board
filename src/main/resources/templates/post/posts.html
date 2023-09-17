@@ -12,8 +12,8 @@
         <div class="row">
             <div class="col-2">
                 <select th:field="*{searchCode}" class="form-select">
-                    <option th:each="searchCode : ${searchCodes}" th:value="${searchCode.code}"
-                            th:text="${searchCode.displayName}">FAST</option>
+                    <option th:each="searchCode : ${postSearchCodes}" th:value="${searchCode.name()}"
+                            th:text="${searchCode.getLabel()}">FAST</option>
                 </select>
             </div>
             <div class="col-8">
@@ -27,8 +27,8 @@
         <div class="row justify-content-between">
             <div class="col-2">
                 <select th:field="*{sortCode}" class="form-select">
-                    <option th:each="sortCode : ${sortCodes}" th:value="${sortCode.code}"
-                            th:text="${sortCode.displayName}">최신순</option>
+                    <option th:each="sortCode : ${postSortCodes}" th:value="${sortCode.name()}"
+                            th:text="${sortCode.getLabel()}">최신순</option>
                 </select>
             </div>
             <div class="col-2">

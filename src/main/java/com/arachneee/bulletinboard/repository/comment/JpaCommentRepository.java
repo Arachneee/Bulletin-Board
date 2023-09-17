@@ -1,7 +1,7 @@
 package com.arachneee.bulletinboard.repository.comment;
 
 
-import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
+import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 

@@ -2,7 +2,7 @@ package com.arachneee.bulletinboard.repository.post;
 
 import java.util.List;
 
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 

@@ -2,8 +2,8 @@ package com.arachneee.bulletinboard.web.controller;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.service.CommentService;
-import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
+import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import com.arachneee.bulletinboard.web.form.CommentAddForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 import jakarta.validation.Valid;

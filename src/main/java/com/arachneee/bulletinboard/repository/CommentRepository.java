@@ -2,8 +2,7 @@ package com.arachneee.bulletinboard.repository;
 
 
 import com.arachneee.bulletinboard.domain.Comment;
-import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
-import com.arachneee.bulletinboard.web.dto.CommentViewDto;
+import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 
 import java.util.List;
 

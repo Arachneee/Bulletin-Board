@@ -7,6 +7,8 @@ import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
+import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -20,8 +22,6 @@ import com.arachneee.bulletinboard.service.PostService;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,6 +55,8 @@ public class PostController {
 		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("previous", presentPage == 1L);
 		model.addAttribute("next", postService.isLastPage(postSearchCondition, presentPage));
+		model.addAttribute("postSortCodes", PostSortCode.values());
+		model.addAttribute("postSearchCodes", PostSearchCode.values());
 
 		return "post/posts";
 	}
@@ -99,7 +101,9 @@ public class PostController {
 			return null;
 		}
 
-		PostViewDto postViewDto = postService.viewAndFindPostViewDto(id, member.getId(), commentSearchCondition);
+		postService.view(id);
+
+		PostViewDto postViewDto = postService.findPostViewDto(id, member.getId(), commentSearchCondition);
 
 		log.info("PostViewDto = {} ", postViewDto);
 
@@ -111,6 +115,7 @@ public class PostController {
 		model.addAttribute("commentSearchCondition", commentSearchCondition);
 		model.addAttribute("previous", commentPage == 1);
 		model.addAttribute("next", postService.isLastCommentPage(id, commentPage));
+		model.addAttribute("commentSortCodes", CommentSortCode.values());
 
 		return "post/post";
 	}
@@ -162,52 +167,47 @@ public class PostController {
 		return "redirect:/posts?" + postSearchCondition.toQueryString();
 	}
 
-	@ModelAttribute("sortCodes")
-	public List<SortCode> sortCodes() {
-		List<SortCode> sortCodes = new ArrayList<>();
-		sortCodes.add(new SortCode("NEW", "최신순"));
-		sortCodes.add(new SortCode("OLD", "오래된순"));
-		sortCodes.add(new SortCode("VIEW", "조회순"));
-		return sortCodes;
+
+	public enum CommentSortCode {
+		NEW("최신순"), OLD("등록순");
+
+		private final String label;
+
+		CommentSortCode(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
 	}
 
-	@ModelAttribute("searchCodes")
-	public List<SearchCode> searchCodes() {
-		List<SearchCode> searchCodes = new ArrayList<>();
-		searchCodes.add(new SearchCode("TITLE", "제목"));
-		searchCodes.add(new SearchCode("CONTENT", "내용"));
-		searchCodes.add(new SearchCode("NAME", "작성자"));
-		return searchCodes;
+	public enum PostSearchCode {
+		TITLE("제목"), CONTENT("내용"), NAME("작성자");
+
+		private final String label;
+
+		PostSearchCode(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
 	}
 
-	@ModelAttribute("commentSortCodes")
-	public List<CommentSortCode> commentSortCodes() {
-		List<CommentSortCode> commentSortCodes = new ArrayList<>();
-		commentSortCodes.add(new CommentSortCode("NEW", "최신순"));
-		commentSortCodes.add(new CommentSortCode("OLD", "등록순"));
-		return commentSortCodes;
+	public enum PostSortCode {
+		NEW("최신순"), OLD("오래된순"), VIEW("조회순");
+
+		private final String label;
+
+		PostSortCode(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+
 	}
-
-	@Getter
-	@AllArgsConstructor
-	static class CommentSortCode {
-		private String code;
-		private String displayName;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	static class SortCode {
-		private String code;
-		private String displayName;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	static class SearchCode {
-
-		private String code;
-		private String displayName;
-	}
-
 }

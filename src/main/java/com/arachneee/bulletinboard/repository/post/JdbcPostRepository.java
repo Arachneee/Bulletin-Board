@@ -6,7 +6,8 @@ import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -84,7 +85,8 @@ public class JdbcPostRepository implements PostRepository {
         log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
         Long skipPageSize = (page - 1L) * pageSize;
 
-        String sql = "select post_id, title, create_time, view_count, member.name as name from post join member on post.member_id = member.member_id " +
+        String sql = "select post_id as id, title, create_time, view_count, member.name as name from post " +
+                     "join member on post.member_id = member.member_id " +
                      "where " + getSearchSql(searchCode) + " like '%" + searchString + "%' " +
                      "order by " + getSortSql(sortCode) + " " +
                      "limit " + skipPageSize + "," + pageSize;
@@ -133,7 +135,9 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public Long findMemberIdByPostID(Long postId) {
-        String sql = "select post.member_id from post join member on post.member_id = member.member_id where post.post_id = :postId";
+        String sql = "select post.member_id from post" +
+                    " join member on post.member_id = member.member_id" +
+                    " where post.post_id = :postId";
         Map<String, Object> param = Map.of("postId", postId);
 
         return template.queryForObject(sql, param, Long.class);

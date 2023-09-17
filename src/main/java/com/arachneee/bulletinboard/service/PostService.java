@@ -7,6 +7,8 @@ import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.CommentRepository;
 import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.dto.PostEditDto;
+import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,13 +43,14 @@ public class PostService {
 		return PostEditDto.from(post);
 	}
 
-	// TODO: 비지니스 로직과 DTO 반환을 분리
 	@Transactional
-	public PostViewDto viewAndFindPostViewDto(Long postId, Long memberId, CommentSearchCondition commentSearchCondition) {
-		Post post = postRepository.findWithMemberById(postId);
-
+	public void view(Long postId) {
+		Post post = postRepository.findById(postId);
 		post.view();
+	}
 
+	public PostViewDto findPostViewDto(Long postId, Long memberId, CommentSearchCondition commentSearchCondition) {
+		Post post = postRepository.findWithMemberById(postId);
 		List<Comment> comments = commentRepository.findCommentsByPostId(postId, commentSearchCondition, COMMENT_PAGE_SIZE);
 
 		PostViewDto postViewDto = PostViewDto.from(post);

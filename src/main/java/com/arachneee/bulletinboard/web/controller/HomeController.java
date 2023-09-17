@@ -1,8 +1,6 @@
 package com.arachneee.bulletinboard.web.controller;
 
 import com.arachneee.bulletinboard.web.argumentresolver.Login;
-import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

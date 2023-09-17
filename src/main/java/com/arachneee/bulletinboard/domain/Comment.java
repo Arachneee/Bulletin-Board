@@ -19,7 +19,7 @@ public class Comment {
 	private Long id;
 
 	@Lob
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private String content;
 
 	@ManyToOne(fetch = LAZY)

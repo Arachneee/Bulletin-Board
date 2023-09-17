@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import org.springframework.stereotype.Repository;
 
 import com.arachneee.bulletinboard.domain.Post;

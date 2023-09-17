@@ -1,6 +1,5 @@
 package com.arachneee.bulletinboard.web.controller;
 
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.arachneee.bulletinboard.web.dto;
+package com.arachneee.bulletinboard.web.search;
 
 import lombok.Data;
 

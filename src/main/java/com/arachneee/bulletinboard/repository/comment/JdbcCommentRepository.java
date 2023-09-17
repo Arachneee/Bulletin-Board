@@ -4,7 +4,7 @@ import javax.sql.DataSource;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
-import com.arachneee.bulletinboard.web.dto.CommentSearchCondition;
+import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -75,7 +75,9 @@ public class JdbcCommentRepository implements CommentRepository {
 
 	@Override
 	public Long findMemberIdByCommentId(Long commentId) {
-		String sql = "select comment.member_id from comment join member on comment.member_id = member.member_id where comment.comment_id = :commentId";
+		String sql = "select comment.member_id from comment" +
+					" join member on comment.member_id = member.member_id" +
+					" where comment.comment_id = :commentId";
 		Map<String, Object> param = Map.of("commentId", commentId);
 
 		return template.queryForObject(sql, param, Long.class);
@@ -83,7 +85,8 @@ public class JdbcCommentRepository implements CommentRepository {
 
 	@Override
 	public String findContentById(Long commentId) {
-		String sql = "select content from comment where comment_id = :commentId";
+		String sql = "select content from comment" +
+				" where comment_id = :commentId";
 		Map<String, Object> param = Map.of("commentId", commentId);
 
 		return template.queryForObject(sql, param, String.class);

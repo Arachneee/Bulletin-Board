@@ -16,13 +16,13 @@ public class Member {
 	@Column(name = "member_id")
 	private Long id;
 
-	@Column(nullable = true, length = 30)
+	@Column(nullable = false, length = 30)
 	private String loginId;
 
-	@Column(nullable = true, length = 30)
+	@Column(nullable = false, length = 30)
 	private String password;
 
-	@Column(nullable = true, length = 30)
+	@Column(nullable = false, length = 30)
 	private String name;
 
 	protected Member() {

@@ -43,9 +43,9 @@
   <div>
     <select style="width: 200px;" onchange="if(this.value) location.href=(this.value);" class="form-select" th:object="${postSearchCondition}">
       <option th:each="commentSortCode : ${commentSortCodes}"
-              th:value="@{/posts/{id}(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page}, commentSortCode=${commentSortCode.code})}"
-              th:text="${commentSortCode.displayName}"
-              th:selected="${commentSortCode.code} == ${commentSearchCondition.commentSortCode}">댓글 정렬</option>
+              th:value="@{/posts/{id}(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page}, commentSortCode=${commentSortCode.name()})}"
+              th:text="${commentSortCode.getLabel()}"
+              th:selected="${commentSortCode.name()} == ${commentSearchCondition.commentSortCode}">댓글 정렬</option>
     </select>
   </div>
   <div th:object="${postViewDto}">

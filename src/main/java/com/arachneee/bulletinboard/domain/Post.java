@@ -26,11 +26,11 @@ public class Post {
 	@Column(name = "post_id")
 	private Long id;
 
-	@Column(nullable = true, length = 100)
+	@Column(nullable = false, length = 100)
 	private String title;
 
 	@Lob
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private String content;
 
 	@ManyToOne(fetch = LAZY)

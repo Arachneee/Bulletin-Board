@@ -3,6 +3,7 @@ package com.arachneee.bulletinboard.repository.member;
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 @Slf4j
 @Repository
+//@Primary
 public class JdbcMemberRepository implements MemberRepository {
 
     private final NamedParameterJdbcTemplate template;

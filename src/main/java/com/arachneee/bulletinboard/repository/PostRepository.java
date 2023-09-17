@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-import com.arachneee.bulletinboard.web.dto.PostSearchCondition;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 
 
 public interface PostRepository {
