@@ -32,14 +32,51 @@
       <label for="content">내용</label>
       <p><textarea id="content" th:cols="40" rows="20" class="form-control" th:value="*{content}" th:text="*{content}" readonly></textarea></p>
     </div>
-    <hr class="my-2">
-    <div class="text-start">
-      <h4>
-        <span>댓글</span>
-      </h4>
-    </div>
   </div>
 
+  <span th:if="${bestComment.isPresent()}">
+    <div class="text-start">
+      <h4>
+        <span>베스트 댓글</span>
+      </h4>
+    </div>
+    <table class="table" >
+      <tread>
+        <tr>
+          <th>등록 시간</th>
+          <th>작성자</th>
+          <th>내용</th>
+          <th>공감수</th>
+          <th>공감</th>
+        </tr>
+      </tread>
+      <tbody>
+        <tr>
+          <td style="width: 110px;" th:text="${#temporals.format(bestComment.get().createTime, 'yyyy-MM-dd HH:mm')}">등록 시간</td>
+        <td style="width: 90px;" th:text="${bestComment.get().name}">작성자</td>
+        <td style="width: 500px;word-break: break-all;">
+          <p th:text="${bestComment.get().content}">내용</p>
+        </td>
+        <td style="width: 80px;" th:text="${bestComment.get().empathyCount}">공감수</td>
+        <div th:object="${postSearchCondition}">
+          <span th:if="${!bestComment.get().isEmpathy}">
+            <td style="width: 10px;">
+              <button class="w-100 btn btn-primary btn-sm"
+                      th:onclick="|location.href='@{/posts/{id}/comments/{commentId}/empathy(id=${postViewDto.id}, commentSortCode=${commentSearchCondition.commentSortCode}, commentPage=${commentSearchCondition.commentPage}, commentId=${bestComment.get().id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                      type="button">공감</button>
+            </td>
+          </span>
+        </tr>
+      </tbody>
+    </table>
+  </span>
+
+  <hr class="my-2">
+  <div class="text-start">
+    <h5>
+      <span>댓글</span>
+    </h5>
+  </div>
   <div>
     <select style="width: 200px;" onchange="if(this.value) location.href=(this.value);" class="form-select" th:object="${postSearchCondition}">
       <option th:each="commentSortCode : ${commentSortCodes}"
@@ -48,6 +85,8 @@
               th:selected="${commentSortCode.name()} == ${commentSearchCondition.commentSortCode}">댓글 정렬</option>
     </select>
   </div>
+
+
   <div th:object="${postViewDto}">
     <table class="table">
       <tread>

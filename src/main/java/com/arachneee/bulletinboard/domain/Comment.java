@@ -99,4 +99,9 @@ public class Comment {
 	public boolean isWriter(Long memberId) {
 		return member.getId().equals(memberId);
 	}
+
+	public int empathyCountDiff(final Comment other) {
+		return this.getEmpathyCount() - other.getEmpathyCount();
+	}
+
 }

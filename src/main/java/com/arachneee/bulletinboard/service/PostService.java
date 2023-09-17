@@ -1,6 +1,7 @@
 package com.arachneee.bulletinboard.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.arachneee.bulletinboard.domain.Comment;
@@ -84,4 +85,5 @@ public class PostService {
 	public boolean isLastCommentPage(Long postId, Integer commentPage) {
 		return commentRepository.countByPostId(postId) <= ((long) commentPage * COMMENT_PAGE_SIZE);
 	}
+
 }

@@ -12,6 +12,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -77,5 +78,17 @@ public class JpaCommentRepository implements CommentRepository {
 		return em.createQuery(jpql, Long.class)
 				.setParameter("postId", postId)
 				.getSingleResult();
+	}
+
+	@Override
+	public List<Comment> findEmpathyComments(Long postId) {
+		String jpql = "select c from Comment c" +
+				" join fetch c.member" +
+				" join fetch c.commentEmpathies" +
+				" where c.post.id = :postId and c.commentEmpathies is not empty";
+
+		return em.createQuery(jpql, Comment.class)
+				.setParameter("postId", postId)
+				.getResultList();
 	}
 }

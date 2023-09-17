@@ -3,6 +3,8 @@ package com.arachneee.bulletinboard.web.controller;
 import java.io.IOException;
 import java.util.*;
 
+import com.arachneee.bulletinboard.domain.Comment;
+import com.arachneee.bulletinboard.service.CommentService;
 import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 
@@ -25,6 +27,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PostController {
 
 	private final PostService postService;
+	private final CommentService commentService;
 
 	@GetMapping("")
 	public String posts(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
@@ -105,8 +109,19 @@ public class PostController {
 
 		PostViewDto postViewDto = postService.findPostViewDto(id, member.getId(), commentSearchCondition);
 
+		Optional<CommentViewDto> bestComment = Optional.empty();
+
+		if (commentPage == 1) {
+			Optional<Comment> comment = commentService.getBestComment(id);
+
+			if (comment.isPresent()) {
+				bestComment = Optional.of(CommentViewDto.from(comment.get(), member.getId()));
+			}
+		}
+
 		log.info("PostViewDto = {} ", postViewDto);
 
+		model.addAttribute("bestComment", bestComment);
 		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("postViewDto", postViewDto);
 		model.addAttribute("show", member.isSameName(postViewDto.getName()));

@@ -17,6 +17,7 @@ import com.arachneee.bulletinboard.repository.CommentRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class JdbcCommentRepository implements CommentRepository {
@@ -134,5 +135,18 @@ public class JdbcCommentRepository implements CommentRepository {
 		Map<String, Object> param = Map.of("postId", postId);
 
 		return template.queryForObject(sql, param, Long.class);
+	}
+
+	@Override
+	public List<Comment> findEmpathyComments(Long postId) {
+		String sql = "select * from comment_empathy ce" +
+				" left join comment c on ce.comment_id = c.comment_id" +
+				" left join post p on ce.member_id = p.post_id" +
+				" left join member m on c.member_id = m.member_id" +
+				" where ce.post_id = :postId and count(ce.comment_empathy_id) != 0";
+
+		Map<String, Object> param = Map.of("postId", postId);
+
+		return template.query(sql, param, commentRowMapper());
 	}
 }
