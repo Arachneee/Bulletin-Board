@@ -22,8 +22,12 @@ public class PostPreDto {
 		this.viewCount = viewCount;
 	}
 
-	public static PostPreDto from(Post post) {
-		return new PostPreDto(post.getId(), post.getTitle(), post.getMember().getName(), post.getCreateTime(), post.getViewCount());
+	public PostPreDto(Post post) {
+		id = post.getId();
+		title = post.getTitle();
+		name = post.getMember().getName();
+		createTime = post.getCreateTime();
+		viewCount = post.getViewCount();
 	}
 
 	private void setId(Long id) {

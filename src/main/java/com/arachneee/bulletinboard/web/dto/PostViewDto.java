@@ -2,13 +2,11 @@ package com.arachneee.bulletinboard.web.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.arachneee.bulletinboard.domain.Post;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+
 
 
 @Data
@@ -23,16 +21,12 @@ public class PostViewDto {
 	private List<CommentViewDto> comments;
 
 
-	public static PostViewDto from(Post post) {
-		PostViewDto postViewDto = new PostViewDto();
-
-		postViewDto.setId(post.getId());
-		postViewDto.setTitle(post.getTitle());
-		postViewDto.setContent(post.getContent());
-		postViewDto.setName(post.getMember().getName());
-		postViewDto.setCreateTime(post.getCreateTime());
-		postViewDto.setViewCount(post.getViewCount());
-
-		return postViewDto;
+	public PostViewDto(Post post) {
+		id = post.getId();
+		title = post.getTitle();
+		content = post.getContent();
+		name = post.getMember().getName();
+		createTime = post.getCreateTime();
+		viewCount = post.getViewCount();
 	}
 }

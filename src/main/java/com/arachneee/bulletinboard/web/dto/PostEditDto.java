@@ -24,7 +24,10 @@ public class PostEditDto {
 		this.content = content;
 	}
 
-	public static PostEditDto from(Post post) {
-		return new PostEditDto(post.getId(), post.getTitle(), post.getContent());
+	public PostEditDto(Post post) {
+		id = post.getId();
+		title = post.getTitle();
+		content = post.getContent();
 	}
+
 }

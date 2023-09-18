@@ -87,7 +87,7 @@ public class MemoryPostRepository implements PostRepository {
 		return findAll().stream()
 			.filter(post -> isSearchCondition(searchString, searchCode, post))
 			.sorted((post1, post2) -> comparePost(sortCode, post1, post2))
-			.map(post -> PostPreDto.from(post))
+			.map(PostPreDto::new)
 				.skip(skipPageSize)
 				.limit(pageSize)
 			.collect(Collectors.toList());

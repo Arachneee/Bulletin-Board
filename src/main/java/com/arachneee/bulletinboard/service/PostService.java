@@ -41,7 +41,7 @@ public class PostService {
 
 	public PostEditDto findPostEditDto(Long id) {
 		Post post = postRepository.findById(id);
-		return PostEditDto.from(post);
+		return new PostEditDto(post);
 	}
 
 	@Transactional
@@ -54,7 +54,7 @@ public class PostService {
 		Post post = postRepository.findWithMemberById(postId);
 		List<Comment> comments = commentRepository.findCommentsByPostId(postId, commentSearchCondition, COMMENT_PAGE_SIZE);
 
-		PostViewDto postViewDto = PostViewDto.from(post);
+		PostViewDto postViewDto = new PostViewDto(post);
 
 		postViewDto.setComments(comments.stream()
 										.map(comment -> CommentViewDto.from(comment, memberId))
