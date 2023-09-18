@@ -104,10 +104,11 @@ public class CommentController {
 
     @GetMapping("/{commentId}/empathy")
     public String empathy(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                          @PathVariable Long postId,
                           PostSearchCondition postSearchCondition,
                           CommentSearchCondition commentSearchCondition,
                           @PathVariable Long commentId) {
+
+
 
         commentService.empathy(commentId, member);
 
