@@ -34,21 +34,29 @@ RestFul API, Spring data JPA로 변경한 버전은 아래 링크를 확인해�
 
 **1. 게시글 목록**
 ![게시글 목록](https://github.com/Arachneee/Bulletin-Board/assets/66822642/9e2da600-e153-4055-a290-6bfe974ac5e9)
+
 로그인한 사용자만 게시글을 볼 수 있다.
 전체 목록을 페이징 처리하여 조회한다.
 
 **2. 게시글 등록**
+![게시글 작성](https://github.com/Arachneee/Bulletin-Board/assets/66822642/38c24bc1-7a5d-4f4c-9f53-542c6700550d)
 
 로그인 한 사용자만 새로운 글을 작성할 수 있다.
 작성 후 목록 화면으로 redirect 한다.
 
 **3. 게시글 보기**
+![게시글 보기](https://github.com/Arachneee/Bulletin-Board/assets/66822642/be18cc35-e77d-4e70-aef6-bbe11d036113)
+
 본인이 작성한 글만 수정 및 삭제가 가능하다.
 
 **4. 게시글 수정 화면**
-제목과 내용만 수정할 수 있다.
+![게시글 수정](https://github.com/Arachneee/Bulletin-Board/assets/66822642/52600fe2-ffdd-46ee-b0b2-5c3bbab5ef24)
+
+제목과 내용만 수정할 수 있다. 
 
 **5. 게시글 검색 화면**
+
+
 검색 키워드에 포함된 글을 페이징하여 보여준다.
 
 </details>
