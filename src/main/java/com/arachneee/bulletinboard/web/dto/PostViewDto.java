@@ -6,10 +6,10 @@ import java.util.List;
 import com.arachneee.bulletinboard.domain.Post;
 
 import lombok.Data;
-
-
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PostViewDto {
 
 	private Long id;

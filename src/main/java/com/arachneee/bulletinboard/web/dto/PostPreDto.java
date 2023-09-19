@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 
 import com.arachneee.bulletinboard.domain.Post;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter
+@NoArgsConstructor
 public class PostPreDto {
 
 	private Long id;

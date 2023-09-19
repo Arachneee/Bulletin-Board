@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import com.arachneee.bulletinboard.domain.Comment;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
+@NoArgsConstructor
 public class CommentViewDto {
 
 	private Long id;

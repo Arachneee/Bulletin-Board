@@ -34,6 +34,30 @@
     </div>
   </div>
 
+  <span th:unless="${!show}">
+      <div class="row" th:object="${postSearchCondition}">
+        <div class="col">
+          <button class="w-100 btn btn-primary btn-lg"
+                  th:onclick="|location.href='@{/posts/{id}/edit(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                  type="button">수정</button>
+        </div>
+        <div class="col">
+          <button class="w-100 btn btn-danger btn-lg"
+                  th:onclick="|location.href='@{/posts/{id}/delete(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+                  type="button">삭제</button>
+        </div>
+      </div>
+      <hr class="my-2">
+    </span>
+
+<div class="col" th:object="${postSearchCondition}">
+  <button class="w-100 btn btn-secondary btn-lg"
+          onclick="location.href=history.back()"
+          th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
+          type="button">목록</button>
+</div>
+  <hr class="my-2">
+
   <span th:if="${bestComment.isPresent()}">
     <div class="text-start">
       <h4>
@@ -169,29 +193,9 @@
       </div>
     </form>
     <hr class="my-2">
-    <span th:unless="${!show}">
-      <div class="row" th:object="${postSearchCondition}">
-        <div class="col">
-          <button class="w-100 btn btn-primary btn-lg"
-                  th:onclick="|location.href='@{/posts/{id}/edit(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-                  type="button">수정</button>
-        </div>
-        <div class="col">
-          <button class="w-100 btn btn-danger btn-lg"
-                  th:onclick="|location.href='@{/posts/{id}/delete(id=${postViewDto.id}, searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-                  type="button">삭제</button>
-        </div>
-      </div>
-      <hr class="my-2">
-    </span>
-  </div>
-    <div class="col" th:object="${postSearchCondition}">
-      <button class="w-100 btn btn-secondary btn-lg"
-              onclick="location.href=history.back()"
-              th:onclick="|location.href='@{/posts(searchCode=*{searchCode}, searchString=*{searchString}, sortCode=*{sortCode}, page=*{page})}'|"
-              type="button">목록</button>
-    </div>
-  <hr class="my-2">
-</div> <!-- /container -->
+
+
+</div>
+</div><!-- /container -->
 </body>
 </html>
