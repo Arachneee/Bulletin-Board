@@ -1,13 +1,11 @@
 package com.arachneee.bulletinboard.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.repository.CommentRepository;
 import com.arachneee.bulletinboard.web.dto.*;
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import org.springframework.stereotype.Service;
@@ -39,9 +37,8 @@ public class PostService {
 		return postRepository.search(postSearchCondition, PAGE_SIZE);
 	}
 
-	public PostEditDto findPostEditDto(Long id) {
-		Post post = postRepository.findById(id);
-		return new PostEditDto(post);
+	public Post findPost(Long id) {
+		return postRepository.findById(id);
 	}
 
 	@Transactional

@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.util.*;
 
 import com.arachneee.bulletinboard.domain.Comment;
+import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.service.CommentService;
 import com.arachneee.bulletinboard.web.dto.*;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
 
-import com.arachneee.bulletinboard.web.dto.PostEditDto;
+import com.arachneee.bulletinboard.web.form.PostEditForm;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import jakarta.servlet.http.HttpServletRequest;
@@ -143,8 +144,11 @@ public class PostController {
 		if (postService.isNotRightMember(member.getId(), id)) {
 			return "redirect:/posts/{id}";
 		}
+		Post post = postService.findPost(id);
+		log.info("post : {}, {}", post.getTitle(), post.getContent());
 
-		model.addAttribute("postEditDto", postService.findPostEditDto(id));
+		model.addAttribute("postEditForm", new PostEditForm(post));
+
 		log.info("Get : post edit 호출");
 
 		return "post/editPostForm";
@@ -153,19 +157,21 @@ public class PostController {
 	@PostMapping("/{id}/edit")
 	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 					   @PathVariable Long id,
-					   @Valid PostEditDto postEditDto,
 					   PostSearchCondition postSearchCondition,
+					   @Valid PostEditForm postEditForm,
 					   BindingResult bindingResult) {
 
-		if (postService.isNotRightMember(member.getId(), id)) {
-			return "redirect:/posts/{id}";
-		}
+		log.info("Post edit 호출");
 
 		if (bindingResult.hasErrors()) {
 			return "post/editPostForm";
 		}
 
-		postService.update(id, postEditDto.getTitle(), postEditDto.getContent());
+		if (postService.isNotRightMember(member.getId(), id)) {
+			return "redirect:/posts/{id}";
+		}
+
+		postService.update(id, postEditForm.getTitle(), postEditForm.getContent());
 		return "redirect:/posts/{id}?" + postSearchCondition.toQueryString();
 	}
 
