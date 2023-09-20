@@ -6,7 +6,7 @@
 
 처음 배운 Spring 과 Jpa 에 익숙해지기 위해 시작한 첫 프로젝트입니다.<br>
 RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 확인해주세요.
-[RestFul API 버전](https://github.com/Arachneee/Bulletin-Board-API)
+[RestFul API 버전(미완성)](https://github.com/Arachneee/Bulletin-Board-API)
 
 ### 2. 프로젝트 기능
 
@@ -107,7 +107,7 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 �
 <summary>패키지 구조 보기</summary>  
 
 ```markdown
-src.main.java.arachneee.bulletinboard:.
+src.main.java.arachneee.bulletinboard:
 │  BulletinboardApplication.java
 │  
 ├─domain
@@ -187,6 +187,13 @@ src.main.java.arachneee.bulletinboard:.
 ### 2. DB 설계
 ![ERD](https://github.com/Arachneee/Bulletin-Board/assets/66822642/c45c356a-e117-4f58-8210-993d68d0140a)
 
+## 고민한 내용
+- 검색조건을 유지할 수 있는 방법은 무엇일까?
+- DTO와 FORM객체의 차이가 무엇이고 어느 레이어까지 사용해야 하는가?
+- @ModelAttribute가 어떻게 동작하는가?
+- 비정상적인 접근을 어떻게 제어할까?
+
+
 ## 마치며
 
 ### 1. 프로젝트 보완사항
@@ -199,14 +206,20 @@ src.main.java.arachneee.bulletinboard:.
 따라서 Spring Data Jpa와 QueryDsl로 변경할 계획입니다.
 
 
-### 2. ToDo
+#### ToDo
 - RestFul API 로 설계 변경
 - Spring Data JPA, QueryDsl 로 변경
 - Spring Sequrity 도입 보안 강화
 - 로그처리 AOP 설계
 - MySql 로 변경
-- 대댓글 추가
+- 대댓글 기능 추가
+- 첨부파일 기능 추가
 - MyPage 추가
-- 쪽지보내기 추가
+- 쪽지보내기 기능 추가
 
-
+### 2. 후기
+독학으로 Spring을 처음 공부하고 혼자 프로젝트를 수행하면서 학습한 이론을 프로젝트로 적용하는 것의 중요성을 알았습니다.<br>
+이론에서 배운 내용을 실제 프로젝트에서 적용하면서 Spring과 JPA에 익숙해 질 수 있었고 동작하는 과정을 직접 보면서 동작원리를 이해하기 쉬었습니다.  <br>
+또한 여러 오류를 접하고 해결하면서 내부 동작 메커니즘을 이해하는 것의 중요성을 알 수 있었습니다.<br>
+Spring과 JPA는 많은 기능이 추상화 되어있어 내부적으로 어떻게 동작할지 생각하며 코드를 짜는 것이 오류를 줄일 수 있는 방법임을 알게 되었습니다.<br>
+프로젝트를 하며 고민한 내용을 정리하면서 내가 부족한 부분이 무엇이고 어떤 학습을 해야할 지 알 수 있었습니다.<br>
