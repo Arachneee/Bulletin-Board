@@ -4,9 +4,9 @@
 ## 들어가며
 ### 1. 프로젝트 소개
 
-처음 배운 Spring 과 Jpa 에 익숙해지기 위해 시작한 첫 프로젝트입니다.
-RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 아래 링크를 확인해주세요.
-[리펙토링 버전](https://github.com/Arachneee/Bulletin-Board-API)
+처음 배운 Spring 과 Jpa 에 익숙해지기 위해 시작한 첫 프로젝트입니다.<br>
+RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 확인해주세요.
+[RestFul API 버전](https://github.com/Arachneee/Bulletin-Board-API)
 
 ### 2. 프로젝트 기능
 
@@ -94,7 +94,7 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 아래 링�
 **4. 공감**
 댓글의 작성자와 이미 공감한 사람은 공감할 수 없다.
 공감수가 가장 많은 댓글이 베스트 댓글로 선정된다. 
-공감 후 현재 페이지를 redirect 한다.
+공감 후 현재 페이지를 redirect 한다.<br>
 ![댓글](https://github.com/Arachneee/Bulletin-Board/assets/66822642/3803b476-256a-42ea-ad2b-64f072030e83)
 
 
@@ -104,8 +104,8 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 아래 링�
 ## 구조 및 설계
 ### 1. 패키지 구조
 <details>
-```bash
 <summary>패키지 구조 보기</summary>  
+```bash
 src.main.java.arachneee.bulletinboard:.
 │  BulletinboardApplication.java
 │  
@@ -184,20 +184,28 @@ src.main.java.arachneee.bulletinboard:.
  <br/> 
 
 ### 2. DB 설계
+![ERD](https://github.com/Arachneee/Bulletin-Board/assets/66822642/c45c356a-e117-4f58-8210-993d68d0140a)
 
 ## 마치며
 
 ### 1. 프로젝트 보완사항
-RestFul API로 설계하지 못하였고 
+회원가입, 게시글, 댓글, 공감 기능을 Spring, JPA, Thymeleaf로 구현하였는데 화면에서 해야할 일을 서버에서 처리하면서 
+역할의 구분이 제대로 이루어 지지 않았습니다. 그래서 Controller의 역할이 너무 많아 졌습니다.
+따라서 이 프로젝트를 RestFul API로 전부 변경할 계획입니다.
 
-## TODOLIST
-### RestFul API 로 설계 변경
-### Spring Data JPA 로 변경, Page 처리
-### QueryDsl 로 동적 쿼리 변경
-### Spring Sequrity 추가
-### 로그처리 AOP 설계
-### MySql 로 변경
-### 대댓글 추가
-### MyPage 추가
-### 쪽지보내기 추가
+또한 JdbcTemplate를 JPA로 변경하면서 Sql을 하드코딩하는 작업이 줄었으나 화면에 특화된 Repository를 설계하면서 DAO의 역할이 너무 많아 졌음을 느꼈고 
+동적 쿼리를 수행하는 코드의 가독성, Paging 처리의 번거로움 느꼈습니다.
+따라서 Spring Data Jpa와 QueryDsl로 변경할 계획입니다.
+
+
+### 2. ToDo
+- RestFul API 로 설계 변경
+- Spring Data JPA, QueryDsl 로 변경
+- Spring Sequrity 도입 보안 강화
+- 로그처리 AOP 설계
+- MySql 로 변경
+- 대댓글 추가
+- MyPage 추가
+- 쪽지보내기 추가
+
 
