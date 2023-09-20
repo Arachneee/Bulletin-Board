@@ -107,7 +107,7 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링 한 버전은 링크를 
 <summary>패키지 구조 보기</summary>  
 
 ```markdown
-src.main.java.arachneee.bulletinboard:
+src.main.java.com.arachneee.bulletinboard:
 │  BulletinboardApplication.java
 │  
 ├─domain
