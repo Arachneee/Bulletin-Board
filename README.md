@@ -4,7 +4,7 @@
 ## 들어가며
 ### 1. 프로젝트 소개
 
-처음 배운 Spring 과 Jpa 에 익숙해지기 위해 시작한 첫 프로젝트입니다.<br>
+처음 배운 Spring 과 Jpa 에 익숙해지기 위해 시작한 게시판 프로젝트입니다.<br>
 RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 확인해주세요.
 [RestFul API 버전(미완성)](https://github.com/Arachneee/Bulletin-Board-API)
 
