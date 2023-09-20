@@ -81,18 +81,22 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 아래 링�
     <summary>댓글 관련</summary>   
 
 **1. 댓글 작성 화면**
-![댓글작성](https://github.com/Arachneee/Bulletin-Board/assets/66822642/6c89970b-6140-4869-99e0-e42ba67cb527)
 댓글 작성시 현재 페이지를 redirect 한다.
+![댓글작성](https://github.com/Arachneee/Bulletin-Board/assets/66822642/6c89970b-6140-4869-99e0-e42ba67cb527)
+
 
 **2. 댓글 수정 삭제**   
-![댓글 수정](https://github.com/Arachneee/Bulletin-Board/assets/66822642/5897dfbf-c32d-4f6f-b597-e36cbae72f5a)
 자신의 댓글만 수정/삭제할 수 없다.   
 수정/삭제 완료 후 현재 페이지를 redirect 한다.
+![댓글 수정](https://github.com/Arachneee/Bulletin-Board/assets/66822642/5897dfbf-c32d-4f6f-b597-e36cbae72f5a)
+
 
 **4. 공감**
-![댓글](https://github.com/Arachneee/Bulletin-Board/assets/66822642/3803b476-256a-42ea-ad2b-64f072030e83)
 댓글의 작성자와 이미 공감한 사람은 공감할 수 없다.
-공감수가 가장 많은 댓글이 베스트 댓글로 선정된다. 공감 후 현재 페이지를 redirect 한다.
+공감수가 가장 많은 댓글이 베스트 댓글로 선정된다. 
+공감 후 현재 페이지를 redirect 한다.
+![댓글](https://github.com/Arachneee/Bulletin-Board/assets/66822642/3803b476-256a-42ea-ad2b-64f072030e83)
+
 
 </details>
 <br/>   
@@ -100,7 +104,7 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 아래 링�
 ## 구조 및 설계
 ### 1. 패키지 구조
 <details>
-
+```bash
 <summary>패키지 구조 보기</summary>  
 src.main.java.arachneee.bulletinboard:.
 │  BulletinboardApplication.java
@@ -175,6 +179,7 @@ src.main.java.arachneee.bulletinboard:.
     │      
     └─session
             SessionConst.java
+```
  </details>   
  <br/> 
 
