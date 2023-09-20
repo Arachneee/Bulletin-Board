@@ -4,8 +4,8 @@
 ## 들어가며
 ### 1. 프로젝트 소개
 
-처음 배운 Spring 과 Jpa 에 익숙해지기 위해 시작한 게시판 프로젝트입니다.<br>
-RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 확인해주세요.
+처음 배운 Spring 과 JPA 에 익숙해지기 위해 시작한 게시판 프로젝트입니다.<br>
+RestFul API, Spring data JPA, QueryDsl 로 리펙토링 한 버전은 링크를 확인해 주세요.
 [RestFul API 버전(미완성)](https://github.com/Arachneee/Bulletin-Board-API)
 
 ### 2. 프로젝트 기능
@@ -85,7 +85,7 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 �
 ![댓글작성](https://github.com/Arachneee/Bulletin-Board/assets/66822642/6c89970b-6140-4869-99e0-e42ba67cb527)
 
 
-**2. 댓글 수정 삭제**<br>   
+**2. 댓글 수정/삭제**<br>   
 자신의 댓글만 수정/삭제할 수 없다.   
 수정/삭제 완료 후 현재 페이지를 redirect 한다.
 ![댓글 수정](https://github.com/Arachneee/Bulletin-Board/assets/66822642/5897dfbf-c32d-4f6f-b597-e36cbae72f5a)
@@ -197,8 +197,8 @@ src.main.java.arachneee.bulletinboard:
 ## 마치며
 
 ### 1. 프로젝트 보완사항
-회원가입, 게시글, 댓글, 공감 기능을 Spring, JPA, Thymeleaf로 구현하였는데 화면에서 해야할 일을 서버에서 처리하면서 
-역할의 구분이 제대로 이루어 지지 않았습니다. 그래서 Controller의 역할이 너무 많아 졌습니다.<br>
+회원가입, 게시글, 댓글, 공감 기능을 Spring, JPA, Thymeleaf로 구현하였는데 화면에서 해야 할 일을 서버에서 처리하면서 
+역할의 구분이 제대로 이루어지지 않았습니다. 그래서 Controller의 역할이 너무 많아졌습니다.<br>
 따라서 이 프로젝트를 RestFul API로 전부 변경할 계획입니다.
 
 또한 JdbcTemplate를 JPA로 변경하면서 Sql을 하드코딩하는 작업이 줄었으나 화면에 특화된 Repository를 설계하면서 DAO의 역할이 너무 많아졌음을 느꼈고 
