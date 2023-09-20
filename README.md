@@ -191,7 +191,7 @@ src.main.java.arachneee.bulletinboard:
 - 검색조건을 유지할 수 있는 방법은 무엇일까?
 - DTO와 FORM객체의 차이가 무엇이고 어느 레이어까지 사용해야 하는가?
 - @ModelAttribute가 어떻게 동작하는가?
-- 비정상적인 접근을 어떻게 제어할까?
+- 조회쿼리 성능을 어떻게 최적화 할까?
 
 
 ## 마치며
