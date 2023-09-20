@@ -1,28 +1,22 @@
 package com.arachneee.bulletinboard.repository.post;
 
+import com.arachneee.bulletinboard.domain.Post;
+import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import com.arachneee.bulletinboard.web.search.PostSearchCondition;
-import org.springframework.stereotype.Repository;
-
-import com.arachneee.bulletinboard.domain.Post;
-import com.arachneee.bulletinboard.repository.PostRepository;
-import com.arachneee.bulletinboard.web.dto.PostPreDto;
-
-
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Repository
 public class MemoryPostRepository implements PostRepository {
 
 	private static final Map<Long, Post> postTable = new ConcurrentHashMap<>();
 	private long sequence = 0L;
-
 
 	public void updateViewCount(Long id, int viewCount) {
 		Post findPost = postTable.get(id);
@@ -48,11 +42,9 @@ public class MemoryPostRepository implements PostRepository {
 	public void save(Post post) {
 		post.setId(++sequence);
 		postTable.put(post.getId(), post);
-		log.info("post save={}",post.getId());
 	}
 
 	public List<Post> findAll() {
-		log.info("MemoryPostRepository findAll 현재 총 수량={}",postTable.size());
 		return new ArrayList<>(postTable.values());
 	}
 
@@ -78,9 +70,6 @@ public class MemoryPostRepository implements PostRepository {
 		String searchCode = postSearchCondition.getSearchCode();
 		String sortCode = postSearchCondition.getSortCode();
 		Long page = postSearchCondition.getPage();
-
-
-		log.info("searchString = {} searchCode = {} sortCode = {}", searchString, searchCode, sortCode);
 
 		Long skipPageSize = (page - 1L) * pageSize;
 

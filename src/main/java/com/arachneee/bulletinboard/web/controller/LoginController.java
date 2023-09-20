@@ -1,24 +1,19 @@
 package com.arachneee.bulletinboard.web.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.service.LoginService;
 import com.arachneee.bulletinboard.web.form.LoginForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
-
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
@@ -38,19 +33,15 @@ public class LoginController {
 			return "login/loginForm";
 		}
 
-		log.info("로그인 시도");
 		Member member = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
 
 		if (member == null) {
 			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-			log.info("로그인 실패");
 			return "login/loginForm";
 		}
 
 		request.getSession()
 				.setAttribute(SessionConst.LOGIN_MEMBER, member);
-
-		log.info("로그인 성공={}", redirectURL);
 
 		return "redirect:" + redirectURL;
 	}

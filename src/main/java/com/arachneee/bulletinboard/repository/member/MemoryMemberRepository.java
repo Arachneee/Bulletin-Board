@@ -1,16 +1,15 @@
 package com.arachneee.bulletinboard.repository.member;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.stereotype.Repository;
-
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.repository.MemberRepository;
+import org.springframework.stereotype.Repository;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Slf4j
 @Repository
 public class MemoryMemberRepository implements MemberRepository {
 
@@ -20,13 +19,9 @@ public class MemoryMemberRepository implements MemberRepository {
 	public void save(Member member) {
 		member.setId(++sequence);
 		memberTable.put(member.getId(), member);
-		log.info("save member id={}", member.getId());
-
-		return;
 	}
 
 	public Member findById(Long id) {
-		log.info("find member id={}", id);
 		return memberTable.get(id);
 	}
 

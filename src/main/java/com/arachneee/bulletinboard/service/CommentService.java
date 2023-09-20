@@ -1,25 +1,20 @@
 package com.arachneee.bulletinboard.service;
 
 
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.CommentEmpathy;
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.CommentEmpathyRepository;
-import lombok.extern.slf4j.Slf4j;
+import com.arachneee.bulletinboard.repository.CommentRepository;
+import com.arachneee.bulletinboard.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arachneee.bulletinboard.domain.Comment;
-import com.arachneee.bulletinboard.domain.Member;
-import com.arachneee.bulletinboard.domain.Post;
-import com.arachneee.bulletinboard.repository.CommentRepository;
-import com.arachneee.bulletinboard.repository.PostRepository;
-
-import lombok.RequiredArgsConstructor;
-
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -64,9 +59,6 @@ public class CommentService {
 
 	public Optional<Comment> getBestComment(Long postId) {
 		List<Comment> empathyComments = commentRepository.findEmpathyComments(postId);
-		for (Comment empathyComment : empathyComments) {
-			log.info("작성자, 내용, 공감수 = {} {} {}", empathyComment.getMember().getName(), empathyComment.getContent(),  empathyComment.getEmpathyCount());
-		}
 
 		return empathyComments.stream()
 				.max(Comment::empathyCountDiff);

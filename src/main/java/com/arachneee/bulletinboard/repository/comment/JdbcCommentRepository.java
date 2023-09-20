@@ -1,9 +1,9 @@
 package com.arachneee.bulletinboard.repository.comment;
 
-import javax.sql.DataSource;
-
+import com.arachneee.bulletinboard.domain.Comment;
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
+import com.arachneee.bulletinboard.repository.CommentRepository;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,12 +12,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.arachneee.bulletinboard.domain.Comment;
-import com.arachneee.bulletinboard.repository.CommentRepository;
-
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public class JdbcCommentRepository implements CommentRepository {

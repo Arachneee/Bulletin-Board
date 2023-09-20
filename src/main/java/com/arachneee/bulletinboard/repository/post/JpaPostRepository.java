@@ -1,20 +1,16 @@
 package com.arachneee.bulletinboard.repository.post;
 
-import java.util.List;
-
-import com.arachneee.bulletinboard.web.search.PostSearchCondition;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Repository;
-
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-
+import com.arachneee.bulletinboard.web.search.PostSearchCondition;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 
-@Slf4j
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 @Primary

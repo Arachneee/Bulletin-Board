@@ -5,9 +5,7 @@ import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.PostRepository;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
-
 import com.arachneee.bulletinboard.web.search.PostSearchCondition;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,11 +14,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Repository
 public class JdbcPostRepository implements PostRepository {
     private final NamedParameterJdbcTemplate template;
@@ -82,7 +78,6 @@ public class JdbcPostRepository implements PostRepository {
         String sortCode = postSearchCondition.getSortCode();
         Long page = postSearchCondition.getPage();
 
-        log.info("Repository : searchForm = {}, {}, {}", searchCode, searchString, sortCode);
         Long skipPageSize = (page - 1L) * pageSize;
 
         String sql = "select post_id as id, title, create_time, view_count, member.name as name from post " +

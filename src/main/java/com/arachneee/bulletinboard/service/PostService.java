@@ -1,23 +1,22 @@
 package com.arachneee.bulletinboard.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.arachneee.bulletinboard.domain.Comment;
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.repository.CommentRepository;
-import com.arachneee.bulletinboard.web.dto.*;
+import com.arachneee.bulletinboard.repository.PostRepository;
+import com.arachneee.bulletinboard.web.dto.CommentViewDto;
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import com.arachneee.bulletinboard.web.search.PostSearchCondition;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arachneee.bulletinboard.domain.Member;
-import com.arachneee.bulletinboard.domain.Post;
-import com.arachneee.bulletinboard.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

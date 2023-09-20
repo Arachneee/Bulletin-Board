@@ -1,16 +1,7 @@
 package com.arachneee.bulletinboard.web;
 
-import org.springframework.stereotype.Component;
-
-import com.arachneee.bulletinboard.repository.MemberRepository;
-import com.arachneee.bulletinboard.repository.PostRepository;
-import com.arachneee.bulletinboard.service.PostService;
-
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-
-@Component
-@RequiredArgsConstructor
+//@Component
+//@RequiredArgsConstructor
 public class TestDataInit {
 	//
 	// private final MemberRepository memberRepository;

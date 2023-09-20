@@ -1,35 +1,32 @@
 package com.arachneee.bulletinboard.web.controller;
 
-import java.io.IOException;
-import java.util.*;
-
 import com.arachneee.bulletinboard.domain.Comment;
+import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.service.CommentService;
-import com.arachneee.bulletinboard.web.dto.*;
+import com.arachneee.bulletinboard.service.PostService;
+import com.arachneee.bulletinboard.web.dto.CommentViewDto;
+import com.arachneee.bulletinboard.web.dto.PostPreDto;
+import com.arachneee.bulletinboard.web.dto.PostViewDto;
 import com.arachneee.bulletinboard.web.form.PostAddForm;
-
 import com.arachneee.bulletinboard.web.form.PostEditForm;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import com.arachneee.bulletinboard.web.search.PostSearchCondition;
+import com.arachneee.bulletinboard.web.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.arachneee.bulletinboard.domain.Member;
-import com.arachneee.bulletinboard.service.PostService;
-import com.arachneee.bulletinboard.web.session.SessionConst;
-
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -68,7 +65,6 @@ public class PostController {
 
 	@GetMapping("/add")
 	public String addPostForm(PostAddForm postAddForm) {
-		log.info("Get : /post/add 호출");
 		return "post/addPostForm";
 	}
 
@@ -77,15 +73,11 @@ public class PostController {
 						   @Valid PostAddForm postAddForm,
 						   BindingResult bindingResult) {
 
-		log.info("Post : /post/add 호출");
-
 		if (bindingResult.hasErrors()) {
 			return "post/addPostForm";
 		}
 
 		postService.save(postAddForm.getTitle(), postAddForm.getContent(), member);
-		log.info("post save 완료");
-
 		return "redirect:/posts";
 	}
 
@@ -96,8 +88,6 @@ public class PostController {
 					   CommentSearchCondition commentSearchCondition,
 					   HttpServletResponse response,
 					   Model model) throws IOException {
-
-		log.info("commentSearchCondition = {}, {}", commentSearchCondition.getCommentSortCode(), commentSearchCondition.getCommentPage());
 
 		Integer commentPage = commentSearchCondition.getCommentPage();
 
@@ -119,8 +109,6 @@ public class PostController {
 				bestComment = Optional.of(CommentViewDto.from(comment.get(), member.getId()));
 			}
 		}
-
-		log.info("PostViewDto = {} ", postViewDto);
 
 		model.addAttribute("bestComment", bestComment);
 		model.addAttribute("postSearchCondition", postSearchCondition);
@@ -145,11 +133,8 @@ public class PostController {
 			return "redirect:/posts/{id}";
 		}
 		Post post = postService.findPost(id);
-		log.info("post : {}, {}", post.getTitle(), post.getContent());
 
 		model.addAttribute("postEditForm", new PostEditForm(post));
-
-		log.info("Get : post edit 호출");
 
 		return "post/editPostForm";
 	}
@@ -160,8 +145,6 @@ public class PostController {
 					   PostSearchCondition postSearchCondition,
 					   @Valid PostEditForm postEditForm,
 					   BindingResult bindingResult) {
-
-		log.info("Post edit 호출");
 
 		if (bindingResult.hasErrors()) {
 			return "post/editPostForm";

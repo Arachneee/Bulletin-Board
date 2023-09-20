@@ -1,15 +1,11 @@
 package com.arachneee.bulletinboard.service;
 
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.arachneee.bulletinboard.domain.Member;
-import com.arachneee.bulletinboard.repository.MemberRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -26,8 +22,6 @@ public class MemberService {
 	}
 
 	public void save(String loginId, String password, String name) {
-		log.info("JpaMemberService save 실행 시작");
 		memberRepository.save(Member.create(loginId, password, name));
-		log.info("JpaMemberService save 실행 종료");
 	}
 }

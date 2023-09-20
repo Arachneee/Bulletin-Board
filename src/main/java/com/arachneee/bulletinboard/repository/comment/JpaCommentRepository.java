@@ -1,18 +1,15 @@
 package com.arachneee.bulletinboard.repository.comment;
 
 
+import com.arachneee.bulletinboard.domain.Comment;
+import com.arachneee.bulletinboard.repository.CommentRepository;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-import com.arachneee.bulletinboard.domain.Comment;
-import com.arachneee.bulletinboard.repository.CommentRepository;
-
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

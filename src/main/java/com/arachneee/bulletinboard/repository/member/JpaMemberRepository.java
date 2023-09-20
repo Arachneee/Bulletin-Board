@@ -1,20 +1,16 @@
 package com.arachneee.bulletinboard.repository.member;
 
 
-import java.util.List;
-import java.util.Optional;
-
+import com.arachneee.bulletinboard.domain.Member;
+import com.arachneee.bulletinboard.repository.MemberRepository;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-import com.arachneee.bulletinboard.domain.Member;
-import com.arachneee.bulletinboard.repository.MemberRepository;
+import java.util.List;
+import java.util.Optional;
 
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 @Primary
@@ -24,9 +20,7 @@ public class JpaMemberRepository implements MemberRepository {
 
 	@Override
 	public void save(Member member) {
-		log.info("JpaMemberRepository save 실행 시작");
 		em.persist(member);
-		log.info("JpaMemberRepository save 실행 종료");
 	}
 
 	@Override
