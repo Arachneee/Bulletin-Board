@@ -105,7 +105,7 @@ RestFul API, Spring data JPA, QueryDsl 로 리펙토링한 버전은 링크를 �
 ### 1. 패키지 구조
 <details>
 <summary>패키지 구조 보기</summary>  
-```bash
+```
 src.main.java.arachneee.bulletinboard:.
 │  BulletinboardApplication.java
 │  
