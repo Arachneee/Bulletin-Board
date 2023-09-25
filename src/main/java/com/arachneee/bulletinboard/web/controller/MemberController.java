@@ -51,7 +51,7 @@ public class MemberController {
 		return false;
 	}
 
-	private static boolean isSamePassword(String password, String passwordRe) {
+	private boolean isSamePassword(String password, String passwordRe) {
 		return !password.equals(passwordRe);
 	}
 
