@@ -5,6 +5,7 @@ import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.domain.Post;
 import com.arachneee.bulletinboard.service.CommentService;
 import com.arachneee.bulletinboard.service.PostService;
+import com.arachneee.bulletinboard.web.argumentresolver.Login;
 import com.arachneee.bulletinboard.web.dto.CommentViewDto;
 import com.arachneee.bulletinboard.web.dto.PostPreDto;
 import com.arachneee.bulletinboard.web.dto.PostViewDto;
@@ -36,7 +37,7 @@ public class PostController {
 	private final CommentService commentService;
 
 	@GetMapping("")
-	public String posts(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public String posts(@Login Member member,
 						PostSearchCondition postSearchCondition,
 						HttpServletResponse response,
 						HttpServletRequest request,
@@ -69,7 +70,7 @@ public class PostController {
 	}
 
 	@PostMapping("/add")
-	public String savePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public String savePost(@Login Member member,
 						   @Valid PostAddForm postAddForm,
 						   BindingResult bindingResult) {
 
@@ -82,7 +83,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}")
-	public String post(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public String post(@Login Member member,
 					   @PathVariable Long id,
 					   PostSearchCondition postSearchCondition,
 					   CommentSearchCondition commentSearchCondition,
@@ -125,7 +126,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}/edit")
-	public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public String editForm(@Login Member member,
 						   @PathVariable Long id,
 						   Model model) {
 
@@ -140,7 +141,7 @@ public class PostController {
 	}
 
 	@PostMapping("/{id}/edit")
-	public String edit(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public String edit(@Login Member member,
 					   @PathVariable Long id,
 					   PostSearchCondition postSearchCondition,
 					   @Valid PostEditForm postEditForm,
@@ -159,7 +160,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}/delete")
-	public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public String delete(@Login Member member,
 						 @PathVariable Long id,
 						 PostSearchCondition postSearchCondition) {
 

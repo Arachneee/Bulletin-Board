@@ -2,6 +2,7 @@ package com.arachneee.bulletinboard.web.controller;
 
 import com.arachneee.bulletinboard.domain.Member;
 import com.arachneee.bulletinboard.service.CommentService;
+import com.arachneee.bulletinboard.web.argumentresolver.Login;
 import com.arachneee.bulletinboard.web.form.CommentAddForm;
 import com.arachneee.bulletinboard.web.search.CommentSearchCondition;
 import com.arachneee.bulletinboard.web.search.PostSearchCondition;
@@ -22,7 +23,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("")
-    public String saveComment(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+    public String saveComment(@Login Member member,
                               @PathVariable Long postId,
                               @RequestParam("commentContent") String commentContent,
                               PostSearchCondition postSearchCondition,
@@ -37,7 +38,7 @@ public class CommentController {
     }
 
     @GetMapping("/{commentId}/edit")
-    public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+    public String editForm(@Login Member member,
                            @PathVariable Long postId,
                            @PathVariable Long commentId,
                            PostSearchCondition postSearchCondition,
@@ -54,7 +55,7 @@ public class CommentController {
     }
 
     @PostMapping("/{commentId}/edit")
-    public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+    public String editForm(@Login Member member,
                            @PathVariable Long commentId,
                            @Valid CommentAddForm commentAddForm,
                            PostSearchCondition postSearchCondition,
@@ -74,7 +75,7 @@ public class CommentController {
     }
 
     @GetMapping("/{commentId}/delete")
-    public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+    public String delete(@Login Member member,
                          PostSearchCondition postSearchCondition,
                          CommentSearchCondition commentSearchCondition,
                          @PathVariable Long commentId) {
@@ -88,7 +89,7 @@ public class CommentController {
     }
 
     @GetMapping("/{commentId}/empathy")
-    public String empathy(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+    public String empathy(@Login Member member,
                           PostSearchCondition postSearchCondition,
                           CommentSearchCondition commentSearchCondition,
                           @PathVariable Long commentId) {
