@@ -26,8 +26,7 @@ public class CommentController {
                               @PathVariable Long postId,
                               @RequestParam("commentContent") String commentContent,
                               PostSearchCondition postSearchCondition,
-                              CommentSearchCondition commentSearchCondition,
-                              Model model) {
+                              CommentSearchCondition commentSearchCondition) {
 
         if (StringUtils.isEmptyOrWhitespace(commentContent)) {
             return "redirect:/posts/{postId}";
@@ -56,7 +55,6 @@ public class CommentController {
 
     @PostMapping("/{commentId}/edit")
     public String editForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                           @PathVariable Long postId,
                            @PathVariable Long commentId,
                            @Valid CommentAddForm commentAddForm,
                            PostSearchCondition postSearchCondition,
@@ -77,7 +75,6 @@ public class CommentController {
 
     @GetMapping("/{commentId}/delete")
     public String delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
-                         @PathVariable Long postId,
                          PostSearchCondition postSearchCondition,
                          CommentSearchCondition commentSearchCondition,
                          @PathVariable Long commentId) {
