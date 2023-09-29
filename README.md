@@ -5,8 +5,8 @@
 ### 1. 프로젝트 소개
 
 처음 배운 Spring 과 JPA 에 익숙해지기 위해 시작한 게시판 프로젝트입니다.<br>
-RestFul API, Spring data JPA, QueryDsl 로 리펙토링 한 버전은 링크를 확인해 주세요.
-[RestFul API 버전(미완성)](https://github.com/Arachneee/Bulletin-Board-API)
+Rest API, Spring data JPA, QueryDsl 로 리펙토링 한 버전은 링크를 확인해 주세요.
+[Rest API 버전](https://github.com/Arachneee/Bulletin-Board-API)
 
 ### 2. 프로젝트 기능
 
