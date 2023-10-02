@@ -23,7 +23,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/add")
-	public String saveMember(@Valid MemberAddForm memberAddForm, BindingResult bindingResult) {
+	public String createMember(@Valid MemberAddForm memberAddForm, BindingResult bindingResult) {
 		if (bindingResult.hasErrors() || validateMemberAddForm(memberAddForm, bindingResult)) {
 			return "members/addMemberForm";
 		}
