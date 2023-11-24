@@ -20,39 +20,39 @@ public class LoginController {
 
 	private final LoginService loginService;
 
-	@GetMapping("/login")
-	public String loginForm(LoginForm loginForm) {
-		return "login/loginForm";
-	}
-
-	@PostMapping("/login")
-	public String login(@Valid LoginForm loginForm, BindingResult bindingResult,
-						@RequestParam(defaultValue = "/") String redirectURL,
-						HttpServletRequest request) {
-		if (bindingResult.hasErrors()) {
-			return "login/loginForm";
-		}
-
-		Member member = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
-
-		if (member == null) {
-			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-			return "login/loginForm";
-		}
-
-		request.getSession()
-				.setAttribute(SessionConst.LOGIN_MEMBER, member);
-
-		return "redirect:" + redirectURL;
-	}
-
-	@PostMapping("/logout")
-	public String logout(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
-		}
-
-		return "redirect:/";
-	}
+//	@GetMapping("/login")
+//	public String loginForm(LoginForm loginForm) {
+//		return "login/loginForm";
+//	}
+//
+//	@PostMapping("/login")
+//	public String login(@Valid LoginForm loginForm, BindingResult bindingResult,
+//						@RequestParam(defaultValue = "/") String redirectURL,
+//						HttpServletRequest request) {
+//		if (bindingResult.hasErrors()) {
+//			return "login/loginForm";
+//		}
+//
+//		Member member = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
+//
+//		if (member == null) {
+//			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+//			return "login/loginForm";
+//		}
+//
+//		request.getSession()
+//				.setAttribute(SessionConst.LOGIN_MEMBER, member);
+//
+//		return "redirect:" + redirectURL;
+//	}
+//
+//	@PostMapping("/logout")
+//	public String logout(HttpServletRequest request) {
+//		HttpSession session = request.getSession(false);
+//		if (session != null) {
+//			session.invalidate();
+//		}
+//
+//		return "redirect:/";
+//	}
 }

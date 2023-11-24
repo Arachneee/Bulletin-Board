@@ -109,7 +109,7 @@ public class JdbcCommentRepository implements CommentRepository {
 
 	private RowMapper<Comment> commentRowMapper() {
 		return (rs, rowNum) -> {
-			Member member = Member.create(rs.getString("m.loginId"), rs.getString("m.password"), rs.getString("m.name"));
+			Member member = Member.create(rs.getString("m.loginId"), rs.getString("m.password"), rs.getString("m.name"), rs.getString("m.role"));
 
 			Post post = Post.createRowMap(rs.getString("p.title"),
 					rs.getString("p.content"),

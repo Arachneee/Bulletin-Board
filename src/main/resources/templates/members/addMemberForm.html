@@ -51,6 +51,12 @@
              th:errorclass="field-error">
       <div class="field-error" th:errors="*{name}" />
     </div>
+    <div>
+      <label for="role">권한</label>
+      <input type="text" id="role" th:field="*{role}" class="form-control"
+             th:errorclass="field-error">
+      <div class="field-error" th:errors="*{role}" />
+    </div>
     <hr class="my-4">
     <div class="row">
       <div class="col">

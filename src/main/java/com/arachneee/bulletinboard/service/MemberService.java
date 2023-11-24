@@ -21,7 +21,7 @@ public class MemberService {
 		return memberRepository.countName(name) >= 1;
 	}
 
-	public void save(String loginId, String password, String name) {
-		memberRepository.save(Member.create(loginId, password, name));
+	public void save(String loginId, String password, String name, String role) {
+		memberRepository.save(Member.create(loginId, password, name, role));
 	}
 }

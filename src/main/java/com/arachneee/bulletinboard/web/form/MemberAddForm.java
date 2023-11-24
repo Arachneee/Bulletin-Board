@@ -21,4 +21,5 @@ public class MemberAddForm {
 	@NotBlank
 	@Length(max=30)
 	private String name;
+	private String role;
 }

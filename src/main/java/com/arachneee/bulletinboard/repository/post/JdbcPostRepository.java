@@ -164,7 +164,7 @@ public class JdbcPostRepository implements PostRepository {
 
     private RowMapper<Post> postMapper() {
         return (rs, rowNum) -> {
-            Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"));
+            Member member = Member.create(rs.getString("loginId"), rs.getString("password"), rs.getString("name"), rs.getString("role"));
 
             Post post = Post.createRowMap(rs.getString("title"),
                 rs.getString("p.content"),

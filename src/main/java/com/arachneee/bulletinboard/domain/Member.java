@@ -6,10 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 @Entity
-@Getter
+@Data
 public class Member {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,20 +21,23 @@ public class Member {
 	@Column(nullable = false, length = 30)
 	private String loginId;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false)
 	private String password;
 
 	@Column(nullable = false, length = 30)
 	private String name;
 
+	private String role;
+
 	protected Member() {
 	}
 
-	public static Member create(String loginId, String password, String name) {
+	public static Member create(String loginId, String password, String name, String role) {
 		Member member = new Member();
 		member.setLoginId(loginId);
 		member.setPassword(password);
 		member.setName(name);
+		member.setRole(role);
 
 		return member;
 	}
@@ -47,6 +52,10 @@ public class Member {
 
 	private void setName(String name) {
 		this.name = name;
+	}
+
+	private void setRole(String role) {
+		this.role = role;
 	}
 
 	public void setId(Long id) {

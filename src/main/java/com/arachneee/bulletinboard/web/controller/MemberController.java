@@ -4,6 +4,7 @@ import com.arachneee.bulletinboard.service.MemberService;
 import com.arachneee.bulletinboard.web.form.MemberAddForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
 
 	private final MemberService memberService;
+	private final PasswordEncoder passwordEncoder;
 
 	@GetMapping("/add")
 	public String addMemberForm(MemberAddForm memberAddForm) {
@@ -27,7 +29,10 @@ public class MemberController {
 		if (bindingResult.hasErrors() || validateMemberAddForm(memberAddForm, bindingResult)) {
 			return "members/addMemberForm";
 		}
-		memberService.save(memberAddForm.getLoginId(), memberAddForm.getPassword(), memberAddForm.getName());
+
+		String encodedPassword = passwordEncoder.encode( memberAddForm.getPassword());
+
+		memberService.save(memberAddForm.getLoginId(),encodedPassword, memberAddForm.getName(), memberAddForm.getRole());
 		return "redirect:/";
 	}
 
