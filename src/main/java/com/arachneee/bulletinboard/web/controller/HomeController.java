@@ -11,14 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class HomeController {
 	@GetMapping("/")
-	public String home(@Login Member loginMember,
-					   Model model) {
-
-		if (loginMember == null) {
-			return "loginHome";
-		}
-
-		model.addAttribute("member", loginMember);
-		return "redirect:/posts";
+	public String home() {
+		return "home";
 	}
 }

@@ -18,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,11 +40,10 @@ public class PostController {
 
 	@GetMapping("")
 	public String posts(@Login Member member,
-						PostSearchCondition postSearchCondition,
+			PostSearchCondition postSearchCondition,
 						HttpServletResponse response,
 						HttpServletRequest request,
 						Model model) throws IOException {
-
 		Long presentPage = postSearchCondition.getPage();
 
 		if (presentPage < 1L) {
@@ -54,6 +55,7 @@ public class PostController {
 
 		model.addAttribute("queryString", request.getQueryString());
 		model.addAttribute("memberName", member.getName());
+		model.addAttribute("role", member.getRole());
 		model.addAttribute("postPreDtoList", postPreDtoList);
 		model.addAttribute("postSearchCondition", postSearchCondition);
 		model.addAttribute("previous", presentPage == 1L);
@@ -73,7 +75,6 @@ public class PostController {
 	public String savePost(@Login Member member,
 						   @Valid PostAddForm postAddForm,
 						   BindingResult bindingResult) {
-
 		if (bindingResult.hasErrors()) {
 			return "post/addPostForm";
 		}
@@ -117,6 +118,7 @@ public class PostController {
 		model.addAttribute("show", member.isSameName(postViewDto.getName()));
 		model.addAttribute("commentContent", "");
 		model.addAttribute("memberName", member.getName());
+		model.addAttribute("role", member.getRole());
 		model.addAttribute("commentSearchCondition", commentSearchCondition);
 		model.addAttribute("previous", commentPage == 1);
 		model.addAttribute("next", postService.isLastCommentPage(id, commentPage));
@@ -129,7 +131,6 @@ public class PostController {
 	public String editForm(@Login Member member,
 						   @PathVariable Long id,
 						   Model model) {
-
 		if (postService.isNotRightMember(member.getId(), id)) {
 			return "redirect:/posts/{id}";
 		}

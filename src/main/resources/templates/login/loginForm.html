@@ -19,22 +19,18 @@
   <div class="py-5 text-center">
     <h2>로그인</h2>
   </div>
-  <form th:action th:object="${loginForm}" method="post">
-    <div th:if="${#fields.hasGlobalErrors()}">
-      <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-         th:text="${err}"> 전체 오류 메시지</p>
-    </div>
+  <div th:if="${error}">
+    <span th:text="${exception}"></span>
+  </div>
+  <form th:action="@{/login_proc}" method="post">
+    <input th:type="hidden" th:value="secret" name="secret_key">
     <div>
       <label for="loginId">로그인 ID</label>
-      <input type="text" id="loginId" th:field="*{loginId}" class="form-control"
-             th:errorclass="field-error">
-      <div class="field-error" th:errors="*{loginId}" />
+      <input type="text" id="loginId" name="loginId" class="form-control">
     </div>
     <div>
       <label for="password">비밀번호</label>
-      <input type="password" id="password" th:field="*{password}"
-             class="form-control" th:errorclass="field-error">
-      <div class="field-error" th:errors="*{password}" />
+      <input type="password" id="password" name="password" class="form-control">
     </div>
     <hr class="my-4">
     <div class="row">

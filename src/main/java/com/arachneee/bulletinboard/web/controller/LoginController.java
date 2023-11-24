@@ -5,10 +5,15 @@ import com.arachneee.bulletinboard.service.LoginService;
 import com.arachneee.bulletinboard.web.form.LoginForm;
 import com.arachneee.bulletinboard.web.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +23,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class LoginController {
 
-	private final LoginService loginService;
+//	private final LoginService loginService;
 
-//	@GetMapping("/login")
-//	public String loginForm(LoginForm loginForm) {
-//		return "login/loginForm";
-//	}
-//
+	@GetMapping("/login")
+	public String login(@RequestParam(value = "error", required = false) String error,
+						@RequestParam(value = "exception", required = false) String exception, Model model) {
+		model.addAttribute("error", error);
+		model.addAttribute("exception", exception);
+
+		return "login/loginForm";
+	}
+
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null) {
+			new SecurityContextLogoutHandler().logout(request, response, authentication);
+		}
+		return "redirect:/login";
+	}
+
+	@GetMapping("/denied")
+	public String accessDenied(@RequestParam(value = "exception", required = false) String exception, Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Member member = (Member) authentication.getPrincipal();
+
+
+		model.addAttribute("name", member.getName());
+		model.addAttribute("role", member.getRole());
+		model.addAttribute("memberName", member.getName());
+		model.addAttribute("exception", exception);
+
+		return "denied";
+	}
+
 //	@PostMapping("/login")
 //	public String login(@Valid LoginForm loginForm, BindingResult bindingResult,
 //						@RequestParam(defaultValue = "/") String redirectURL,

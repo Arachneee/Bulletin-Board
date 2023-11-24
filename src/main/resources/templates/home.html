@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="utf-8">
   <link th:href="@{/css/bootstrap.min.css}"
@@ -10,7 +11,27 @@
   <div class="py-5 text-center">
     <h2>홈 화면</h2>
   </div>
+
+  <hr class="my-4">
   <div class="row">
+    <div class="col" sec:authorize="isAnonymous()">
+      <button class="w-100 btn btn-secondary btn-lg" type="button"
+              th:onclick="|location.href='@{/members/add}'|">
+        회원 가입
+      </button>
+    </div>
+    <div class="col" sec:authorize="isAnonymous()">
+      <button class="w-100 btn btn-primary btn-lg"
+              onclick="location.href='items.html'"
+              th:onclick="|location.href='@{/login}'|" type="button">
+        로그인
+      </button>
+    </div>
+  </div>
+  <hr class="my-4">
+
+
+  <div class="row" sec:authorize="isAuthenticated()">
     <div class="col">
       <button class="w-100 btn btn-primary btn-lg" type="button"
               th:onclick="|location.href='@{/posts}'|">
@@ -28,8 +49,8 @@
 </div>
 <hr class="my-4">
 <div class="container" style="max-width: 800px">
-  <div class="row">
-    <h4 class="mb-3" th:text="|로그인: ${member.name}|">로그인 사용자 이름</h4>
+  <div class="row" sec:authorize="isAuthenticated()">
+<!--    <h4 class="mb-3" th:text="|로그인: ${member.name}|">로그인 사용자 이름</h4>-->
     <div class="col">
       <form th:action="@{/logout}" method="post">
         <button class="w-100 btn btn-secondary btn-lg" type="submit">
