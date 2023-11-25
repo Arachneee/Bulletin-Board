@@ -20,6 +20,7 @@ Rest API, Spring data JPA, QueryDsl 로 리펙토링 한 CSR 버전은 링크를
 #### 프레임워크 / 라이브러리
 - Java 17
 - SpringBoot 3.3.1
+- Spring Security 6.1.3
 - JdbcTemplate
 - JPA
 - Thymeleaf
@@ -197,9 +198,9 @@ src.main.java.com.arachneee.bulletinboard:
 
 
 ## ToDo
+- [x] Spring Security 도입
 - RestFul API 로 설계 변경
 - Spring Data JPA, QueryDsl 로 변경
-- Spring Security 도입
 - 로그처리 AOP 설계
 - MySql 로 변경
 - 대댓글 기능 추가
