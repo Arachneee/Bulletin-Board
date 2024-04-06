@@ -189,14 +189,6 @@ src.main.java.com.arachneee.bulletinboard:
 ### 2. DB 설계
 ![ERD](https://github.com/Arachneee/Bulletin-Board/assets/66822642/c45c356a-e117-4f58-8210-993d68d0140a)
 
-
-## 고민한 내용
-- [검색조건을 유지할 수 있는 방법은 무엇일까?](https://velog.io/@jhg2819/Spring-%EA%B2%80%EC%83%89%EC%A1%B0%EA%B1%B4%EC%9D%84-%EC%9C%A0%EC%A7%80%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%BC%EA%B9%8C)
-- [DTO와 FORM객체의 차이가 무엇이고 어느 레이어까지 사용해야 하는가?](https://velog.io/@jhg2819/Spring-DTO%EC%99%80-FORM%EA%B0%9D%EC%B2%B4%EC%9D%98-%EC%B0%A8%EC%9D%B4)
-- [@ModelAttribute가 어떻게 동작하는가?](https://velog.io/@jhg2819/Spring-ModelAttribute%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%A0%EA%B9%8C)
-- [조회쿼리 성능을 어떻게 최적화 할까?](https://velog.io/@jhg2819/JPA-%EC%A1%B0%ED%9A%8C%EC%BF%BC%EB%A6%AC-%EC%84%B1%EB%8A%A5%EC%9D%84-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%B5%9C%EC%A0%81%ED%99%94-%ED%95%A0%EA%B9%8C)
-
-
 ## ToDo
 - [x] Spring Security 도입
 - RestFul API 로 설계 변경
@@ -207,6 +199,3 @@ src.main.java.com.arachneee.bulletinboard:
 - 첨부파일 기능 추가
 - MyPage 추가
 - 쪽지보내기 기능 추가
-
-## 후기
-[후기](https://velog.io/@jhg2819/%ED%9B%84%EA%B8%B0-%EC%B2%AB-%EA%B2%8C%EC%8B%9C%ED%8C%90-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9B%84%EA%B8%B0)
