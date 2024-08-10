@@ -1,0 +1,34 @@
+name: Close Issue on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  close-issue:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Close associated issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: |
+          # Extract issue number from PR description or body
+          ISSUE_NUMBER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/issues?state=open&labels=pr-${{ github.event.pull_request.number }}" \
+            | jq '.[0].number')
+
+          # Check if an issue number was found
+          if [ -n "$ISSUE_NUMBER" ]; then
+            echo "Closing issue #$ISSUE_NUMBER"
+            curl -s -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d '{"state": "closed"}' \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER"
+          else
+            echo "No associated issue found."
+          fi
