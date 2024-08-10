@@ -13,22 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Close associated issue
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: Extract issue number from PR body
+        id: extract_issue
         run: |
-          # Extract issue number from PR description or body
-          ISSUE_NUMBER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/issues?state=open&labels=pr-${{ github.event.pull_request.number }}" \
-            | jq '.[0].number')
+          # Fetch PR body
+          PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GIT_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}" \
+            | jq -r '.body')
 
-          # Check if an issue number was found
-          if [ -n "$ISSUE_NUMBER" ]; then
-            echo "Closing issue #$ISSUE_NUMBER"
-            curl -s -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              -d '{"state": "closed"}' \
-              "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER"
-          else
-            echo "No associated issue found."
-          fi
+          # Extract issue number from PR body using regex (customize if needed)
+          ISSUE_NUMBER=$(echo "$PR_BODY" | grep -oP '#\d+' | head -1 | sed 's/#//')
+
+          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+      - name: Close associated issue
+        if: env.ISSUE_NUMBER != ''
+        run: |
+          echo "Closing issue #${{ env.ISSUE_NUMBER }}"
+          curl -s -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d '{"state": "closed"}' \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ env.ISSUE_NUMBER }}"
